@@ -1,0 +1,20 @@
+{
+  "suggest.echodocSupport": true,
+  "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
+  "eslint.nodePath": "/usr/local/bin/eslint",
+  "tsserver.trace.server": "verbose",
+  "typescript.referencesCodeLens.enable": true,
+  "diagnostic.errorSign": "e",
+  "diagnostic.warningSign": "w",
+  "diagnostic.infoSign": "i",
+
+  "list.insertMappings": {
+    "<C-n>": "normal:j",
+    "<C-p>": "normal:k"
+  },
+
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+
+  "python.jediEnabled": false
+
+}

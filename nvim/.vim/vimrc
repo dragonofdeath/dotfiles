@@ -1,0 +1,576 @@
+" ============================================================================
+" Vim-plug initialization
+" http://fisadev.github.io/fisa-vim-config/
+
+let vim_plug_just_installed = 0
+let vim_plug_path = expand('~/.vim/autoload/plug.vim')
+if !filereadable(vim_plug_path)
+    echo "Installing Vim-plug..."
+    echo ""
+    silent !mkdir -p ~/.vim/autoload
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    let vim_plug_just_installed = 1
+endif
+
+" manually load vim-plug the first time
+if vim_plug_just_installed
+    :execute 'source '.fnameescape(vim_plug_path)
+endif
+
+" Plugins ---------------------------------------{{{
+
+call plug#begin('~/.vim/plugged')
+
+" Plug 'mhinz/vim-startify'
+" let g:startify_session_persistence = 1
+
+Plug 'https://github.com/morhetz/gruvbox.git'
+Plug 'https://github.com/othree/html5.vim.git'
+Plug 'tpope/vim-commentary'
+Plug 'suy/vim-context-commentstring'
+Plug 'meain/vim-package-info', { 'do': 'npm install' }
+
+Plug 'https://github.com/edkolev/tmuxline.vim.git'
+Plug 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
+Plug 'https://github.com/vim-airline/vim-airline.git'
+let g:airline#extensions#coc#enabled = 1
+
+Plug 'https://github.com/plasticboy/vim-markdown.git'
+
+" git
+Plug 'https://github.com/tpope/vim-fugitive.git'
+Plug 'junegunn/gv.vim'
+Plug 'https://github.com/airblade/vim-gitgutter.git'
+
+Plug 'https://github.com/tpope/vim-repeat.git'
+Plug 'https://github.com/tpope/vim-surround.git'
+Plug 'https://github.com/tpope/vim-sleuth.git'
+Plug 'https://github.com/tpope/vim-unimpaired.git'
+Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
+Plug 'cakebaker/scss-syntax.vim'
+
+Plug 'mrk21/yaml-vim'
+
+" typescript 
+Plug 'HerringtonDarkholme/yats.vim' " syntax
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+set signcolumn=yes
+let g:coc_global_extensions = [
+\ 'coc-json',
+\ 'coc-tsserver',
+\ 'coc-html',
+\ 'coc-css',
+\ 'coc-yaml',
+\ 'coc-highlight',
+\ 'coc-rust-analyzer',
+\ 'coc-tabnine',
+\ 'coc-vimlsp',
+\ ]
+
+Plug 'machakann/vim-highlightedyank'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+
+Plug 'jparise/vim-graphql'
+
+Plug 'tpope/vim-vinegar'
+Plug 'wellle/targets.vim'
+
+" Scratch buffer
+Plug 'mtth/scratch.vim'
+
+Plug 'janko/vim-test'
+
+call plug#end()
+
+" ============================================================================
+" Install plugins the first time vim runs
+
+if vim_plug_just_installed
+    echo "Installing Bundles, please ignore key map error messages"
+    :PlugInstall
+endif
+
+" ============================================================================
+autocmd FileType gitcommit setlocal spell
+
+" Basic options ----------------------------------------{{{
+set nocompatible
+
+syntax on
+filetype plugin indent on
+
+" leader mapping
+let mapleader = ' '
+
+" make backspace work like most other programs
+set backspace=2
+set history=200
+
+"set keyword for temporatry higlite switch off
+set hls
+set incsearch
+
+set number
+" set relativenumber
+set mouse=a
+set autoindent
+set nowrap
+
+set expandtab
+set shiftwidth=2
+
+set list          " Display unprintable characters f12 - switches
+set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars mapping
+
+set foldmethod=syntax
+set foldlevel=20
+
+colorscheme gruvbox
+"g:gruvbox_contrast_dark="soft"
+
+set background=dark
+" For VimGutter
+set updatetime=400
+" }}}
+
+" allow close unsaved buffer
+set hidden
+" Mappings ----------------------------------------{{{
+nnoremap <leader>l :<C-u>nohlsearch<CR>
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+let g:php_syntax_extensions_enabled = ["php","module"]
+" jsx syntax highlight for js files on
+let g:jsx_ext_required = 0
+
+" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_inactive_collapse=1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_extensions = ['tmuxline', 'netrw', 'quickfix']
+
+" hard time
+" let g:hardtime_default_on = 1
+" let g:hardtime_allow_different_key = 1
+" let g:hardtime_maxcount = 8
+
+let g:list_of_normal_keys = ["h", "j", "k", "l"]
+let g:list_of_visual_keys = ["h", "j", "k", "l"]
+
+nnoremap <S-s> :w<CR>
+
+" use system clipboard
+set clipboard+=unnamedplus
+
+" the silver search on grep
+set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column\ --vimgrep
+set grepformat=%f:%l:%c:%m,%f:%l:%m
+
+noremap <S-h> ^
+noremap <S-l> $
+
+" vimrc editing
+nnoremap <leader>vs :so $MYVIMRC<cr>
+nnoremap <leader>vo :vsp $MYVIMRC<cr>
+nnoremap <leader>ve :vsp ~/.vim/vimrc<cr>
+" find maps
+nnoremap <leader>fw :grep
+vnoremap <leader>fw "py:<c-u>grep <c-r>p<cr>
+nnoremap <leader>e :GFiles<cr>
+nnoremap <leader>a :FZF<cr>
+nnoremap <leader>b :Buffers<cr>
+
+nnoremap <leader>gg :GitGutterToggle<cr>
+
+nnoremap <silent> tc :tabc<cr>
+" some abbreviations
+iabbrev lenght length
+
+autocmd FileType typescript,typescript.tsx,javascript,jsx :iabbrev <buffer> re return
+
+onoremap a} :<c-u>execute "normal! ?{\r0v/}\r$"<cr>
+
+" fzf -- {{{
+    imap <c-x><c-f> <plug>(fzf-complete-path)
+" }}}
+
+function! GetRelPathForCfile(current, filepath)
+  let f = system('realpath --relative-to="' . a:current . '" "' . a:filepath . '"')
+  let f = substitute(f, '\n\+$', '', '')
+
+  if strpart(f, 0, 3) == '../' || strpart(f, 0, 2) == './'
+    "echom 'string is ok'
+  else
+    let f = './' . f
+  endif
+
+  if strpart(f, strlen(f) - 3) ==? '.js' || strpart(f, strlen(f) - 3) ==? '.ts'
+    let f = strpart(f, 0, strlen(f) - 3)
+  endif
+
+  if strpart(f, strlen(f) - 4) ==? '.jsx' || strpart(f, strlen(f) - 4) ==? '.tsx'
+    let f = strpart(f, 0, strlen(f) - 4)
+  endif
+
+  let @f = f
+endfunction
+
+nnoremap <leader>fj :<c-u>call GetRelPathForCfile(expand('%:h'), expand('<cfile>'))<cr>:<c-u>execute "normal! vi'\"fp"<cr>
+nnoremap <leader>fp vi':s/src\/dynamic-audience\(.*\)\(\.jsx\?\)/platform\1/g<cr>
+
+" grep commands
+vnoremap <leader>fo :<c-u>call <SID>GrepOperator(0, visualmode())<cr>
+vnoremap <leader>fd :<c-u>call <SID>GrepOperator(1, visualmode())<cr>
+
+function! s:GrepOperator(inCurrentDir, ...)
+  let type = get(a:, 1, 0)
+
+  let saved_register = @@
+  if type ==# 'v'
+    execute "normal! `<v`>y"
+  elseif type ==# 'char'
+    execute "normal! `[v`]y"
+  else
+    return
+  endif
+
+  let dirToSearch = a:inCurrentDir ? " " . expand("%:h") : ""
+
+  silent execut ":grep! " . shellescape(@@) . dirToSearch
+  copen
+  let @@ = saved_register
+endfunction
+
+"splits
+set splitright
+set splitbelow
+
+function! OpenSplit(direction)
+  let sr = &splitright
+  let sb = &splitbelow
+
+  if a:direction ==# 'h' || a:direction ==# 'l'
+    if a:direction ==# 'h'
+      set nosplitright
+    else
+      set splitright
+    endif
+
+    execute 'vsp'
+  elseif a:direction ==# 'k' || a:direction ==# 'j'
+    if a:direction ==# 'j'
+      set splitbelow
+    else
+      set nosplitbelow
+    endif
+
+    execute 'sp'
+    " . expand('%:h')
+  endif
+
+  let &splitright = sr
+  let &splitbelow = sb
+endfunction
+
+noremap Q :q<cr>
+
+" splits
+noremap <leader>sh :call OpenSplit('h')<cr>
+noremap <leader>sl :call OpenSplit('l')<cr>
+noremap <leader>sk :call OpenSplit('k')<cr>
+noremap <leader>sj :call OpenSplit('j')<cr>
+noremap <leader>sfh :call OpenSplit('h')<cr>gf
+noremap <leader>sfl :call OpenSplit('l')<cr>gf
+noremap <leader>sfk :call OpenSplit('k')<cr>gf
+noremap <leader>sfj :call OpenSplit('j')<cr>gf
+noremap <leader>sth :call OpenSplit('h')<cr>:term<cr>i
+noremap <leader>stl :call OpenSplit('l')<cr>:term<cr>i
+noremap <leader>stk :call OpenSplit('k')<cr>:term<cr>i
+noremap <leader>stj :call OpenSplit('j')<cr>:term<cr>i
+noremap <leader>srh :call OpenSplit('h')<cr>:e.<cr>
+noremap <leader>srl :call OpenSplit('l')<cr>:e.<cr>
+noremap <leader>srk :call OpenSplit('k')<cr>:e.<cr>
+noremap <leader>srj :call OpenSplit('j')<cr>:e.<cr>
+
+
+" Make Y behave more like other operators.
+nnoremap Y y$
+
+" Save cursor position for reopening.
+au BufReadPost *
+  \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+  \   exe "normal! g'\"" |
+  \ endif
+
+set nospell
+set ignorecase
+set smartcase
+set scrolljump=5                " lines to scroll when cursor leaves screen
+set scrolloff=3                 " minimum lines to keep above and below cursor
+set gdefault                    " the /g flag on :s substitutions
+set tabstop=4
+
+" fugitive
+noremap <leader>gb :Gblame<CR>
+noremap <leader>gs :Gstatus<CR>
+noremap <leader>gd :Gdiff<CR>
+noremap <leader>ge :Gedit<CR>
+noremap <leader>gl :0Gclog!<CR>
+noremap <leader>gc :Gcommit<CR>
+noremap <leader>gw :Gwrite<CR>
+noremap <leader>gpf :Git push --forse<CR>
+noremap <leader>gpb :Git pub<CR>
+
+augroup filetype_git
+    autocmd!
+    autocmd FileType git :norm zM<CR>
+augroup END
+
+" tabs
+noremap ]r :tabnext<cr>
+noremap [r :tabprev<cr>
+noremap ]R :tablast<cr>
+noremap ]R :tabnext<cr>
+noremap <leader>re :tabe.<cr>
+
+" quifix and location toggle
+function! GetBufferList()
+  redir =>buflist
+  silent! ls!
+  redir END
+  return buflist
+endfunction
+
+function! ToggleList(bufname, pfx)
+  let buflist = GetBufferList()
+  for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
+    if bufwinnr(bufnum) != -1
+      exec(a:pfx.'close')
+      return
+    endif
+  endfor
+  if a:pfx == 'l' && len(getloclist(0)) == 0
+      echohl ErrorMsg
+      echo "Location List is Empty."
+      return
+  endif
+  let winnr = winnr()
+  exec(a:pfx.'open')
+  if winnr() != winnr
+    wincmd p
+  endif
+endfunction
+
+" shotcuts for location and quickfix windows
+nmap <silent> <leader>w :call ToggleList("Location List", 'l')<CR>
+nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
+
+let g:used_javascript_libs = 'jquery,underscore,angular,react,jasmine,chai'
+" clean white space
+nnoremap <silent> <leader>ss :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+
+" git diff options
+set diffopt=filler,vertical
+
+" terminal escape
+tnoremap <Esc> <C-\><C-n>
+
+set inccommand=split
+" select just pasted text
+nnoremap gp `[v`]
+
+" hls colors
+highlight Search ctermbg=black ctermfg=yellow cterm=underline
+
+"so ~/.vim/eslintfix.vim
+"nnoremap <leader>z mF:%!eslint_d --stdin --stdin-filename % --fix-to-stdout<CR>`F
+
+"expand/colapse javascript object
+" noremap <leader>oe :<c-u>execute "normal! va{:s/,/,\\r\r`<a\r"<cr>:execute "normal! va}vgea,\r"<cr>=%:nohl<cr>
+" noremap <leader>oc va{J:.s/,\s}/ }<cr>
+
+"expand/colapse short function
+vnoremap <leader>fe v`<i{<cr>return <esc>`>a<cr>}<esc>=%
+noremap <leader>fc va{v`<d/return<cr>dw`>x
+
+" Active vindow has x
+" set cursorline
+" set cursorcolumn
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter * set cursorline
+    autocmd WinEnter * set cursorcolumn
+    autocmd WinLeave * set nocursorline
+    autocmd WinLeave * set nocursorcolumn
+augroup END
+
+"====[ Show when lines extend past column 80 ]=================================>-<=====================
+
+highlight ColorColumn ctermfg=208 ctermbg=Black
+
+function! MarkMargin (on)
+    if exists('b:MarkMargin')
+        try
+            call matchdelete(b:MarkMargin)
+        catch /./
+        endtry
+        unlet b:MarkMargin
+    endif
+    if a:on
+        let b:MarkMargin = matchadd('ColorColumn', '\%111v\s*\S', 110)
+    endif
+endfunction
+
+augroup MarkMargin
+    autocmd!
+    autocmd  BufEnter  *       :call MarkMargin(1)
+augroup END
+
+" refactor expression to var
+nnoremap <leader>r ".pIconst <esc>A = <esc>""p=`]`]A;<esc>
+
+" vim importJS
+nnoremap <leader>ij :ImportJSWord<cr>
+nnoremap <leader>ii :ImportJSFix<cr>
+nnoremap <leader>ig :ImportJSGoto<cr>
+
+" vim-test
+nmap <silent><leader>xt :TestNearest<cr>
+nmap <silent><leader>xf :TestFile<cr>
+nmap <silent><leader>xl :TestLast<cr>
+" Coc
+" Some servers have issues with backup files
+set nobackup
+set nowritebackup
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Highlight symbol under cursor on CursorHold
+"autocmd CursorHold * :call echo("abc")
+autocmd CursorHold * call CocActionAsync('highlight')
+highlight CocHighlightText ctermbg=black ctermfg=yellow
+
+nmap <silent>gd <Plug>(coc-definition)
+nmap <silent>gy <Plug>(coc-type-definition)
+nmap <leader>tf <Plug>(coc-codeaction)
+nmap <leader>tc <Plug>(coc-fix-current)
+nmap <leader>tl <Plug>(coc-codelens-action)
+nmap <leader>te <Plug>(coc-diagnostic-info)
+nmap <leader>tg <Plug>(coc-declaration)
+nmap <leader>tj <Plug>(coc-refactor)
+nmap <silent> <leader>su <Plug>(coc-float-jump) :topleft sp<cr>:execute('resize ' . (line('$') + 2))<cr>
+nmap ]g <Plug>(coc-diagnostic-next-error)
+nmap [g <Plug>(coc-diagnostic-prev-error)
+
+nmap <leader>tr <Plug>(coc-rename)
+nmap <leader>ta <Plug>(coc-references)
+nmap <leader>tt :call CocAction('doHover')<cr>
+nmap <leader>z <Plug>(coc-format)
+
+" Introduce function text object
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+nnoremap <leader>ts  :<C-u>CocList -I symbols<cr>
+
+" Use <TAB> for selections ranges.
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
+" nmap <silent> <TAB> <Plug>(coc-range-select)
+vmap <silent> <TAB> <Plug>(coc-range-select)
+
+nmap <silent><leader>tm <Plug>(coc-codeaction-selected)<cr>
+
+nnoremap <leader>to :CocCommand tsserver.organizeImports<cr>:CocCommand eslint.executeAutofix<cr>
+nnoremap <leader>tw :CocCommand tsserver.watchBuild<cr>
+
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+
+augroup filetype_javascript
+    autocmd!
+    autocmd FileType javascript.tsx nmap <buffer> <C-m> <Plug>(coc-definition)
+    autocmd FileType javascript nmap <buffer> <C-m> <Plug>(coc-definition)
+    autocmd FileType javascript.tsx nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
+    autocmd FileType javascript nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
+augroup END
+
+augroup filetype_typescript
+    autocmd!
+    autocmd FileType typescript.tsx nmap <buffer> <C-m> <Plug>(coc-definition)
+    autocmd FileType typescriptreact nmap <buffer> <C-m> <Plug>(coc-definition)
+    autocmd FileType typescript nmap <buffer> <C-m> <Plug>(coc-definition)
+    autocmd FileType typescript.tsx nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
+    autocmd FileType typescriptreact nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
+    autocmd FileType typescript nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
+augroup END
+
+augroup filetype_rust
+    autocmd!
+    autocmd FileType rust nmap <buffer> <C-m> <Plug>(coc-definition)
+    " autocmd FileType rust nnoremap <silent> <leader>z <cr>
+augroup END
+
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim nmap <buffer> <C-m> <Plug>(coc-definition)
+augroup END
+
+"enhanced jumplist
+function! GotoJump()
+  jumps
+  let j = input("Please select your jump: ")
+  if j != ''
+    let pattern = '\v\c^\+'
+    if j =~ pattern
+      let j = substitute(j, pattern, '', 'g')
+      execute "normal " . j . "\<c-i>"
+    else
+      execute "normal " . j . "\<c-o>"
+    endif
+  endif
+endfunction
+
+nmap <Leader>j :call GotoJump()<CR>
+
+"replace the word under cursor
+nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
+
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+
+highlight DiffAdd    cterm=italic ctermfg=223 ctermbg=239 gui=none guifg=bg guibg=Red
+highlight DiffDelete cterm=italic ctermfg=223 ctermbg=239 gui=none guifg=bg guibg=Red
+highlight DiffChange cterm=italic ctermfg=223 ctermbg=239 gui=none guifg=bg guibg=Red
+highlight DiffText   cterm=italic ctermfg=223 ctermbg=130 gui=none guifg=bg guibg=Red
+
+" tmux
+let g:tmux_navigator_disable_when_zoomed = 1
+" Solves netrw using <C-L><C-H> which is used for jumping windows
+" https://github.com/christoomey/vim-tmux-navigator/issues/53
+augroup navigator_netrw_fix
+  autocmd!
+  autocmd FileType netrw nmap <buffer> <silent> <c-l> :TmuxNavigateRight<cr>
+augroup END
+
+nnoremap <leader>oe :e .env<cr>

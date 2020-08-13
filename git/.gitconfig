@@ -1,0 +1,20 @@
+[user]
+	name = dragonofdeath
+	email = dragon@of.death
+[credential]
+	helper = cache --timeout=3600
+[alias]
+	lg = log --decorate --oneline --graph --all
+	pub = !git push -u origin `git rev-parse --abbrev-ref HEAD`
+	pf = push -f
+	co = checkout
+	cb = checkout -b
+	cbm = !git checkout master && git pull && git checkout -b
+	prb = pull --rebase origin master
+	rbi = rebase -i origin/master
+[core]
+	editor = nvim
+	excludesfile = /Users/vk/.gitignore_global
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[rerere]
+	enabled = true
