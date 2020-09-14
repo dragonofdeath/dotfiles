@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# `norm` command allows to execute vim normal mode whilst piping with other commands.
+#
+# for example
+#
+# echo hello | norm A world
+# $ hello world
+
+# `norm all` will execute normal mode on all line, just like `:%norm` in vim does
+
+if [ $1 == "all" ]; then
+  shift
+  command="%norm $@"
+else
+  command="norm gg$@"
+fi
+
+(vim - -esbnN -c "$command" -c 'w!/dev/fd/3|q!' >/dev/null) 3>&1
+
+
+/Users/vaidask/.cargo/bin
+/usr/local/lib/ruby/gems/2.7.0/bin
+/Users/vaidask/.pyenv/shims
+/Users/vaidask/.pyenv/bin
+/var/folders/sf/5gvz2bdx0pd5kts88nwp5y3r0000gp/T/fnm-shell-2562788/bin
+~/dotfiles/bin
+/usr/local/opt/ruby/bin
+/usr/local/bin
+/usr/local/sbin
+/usr/sbin
+/sbin
+/usr/bin
+/bin
+/Users/vaidask/bin/
+/usr/local/opt/fzf/bin

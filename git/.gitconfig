@@ -1,26 +1,34 @@
 [user]
-	name = dragonofdeath
-	email = dragon@of.death
+  name = Vaidas Kublinskas
+  email = vaidask@wix.com
 [credential]
-	helper = cache --timeout=3600
+  helper = cache --timeout=3600
 [alias]
-	lg = log --decorate --oneline --graph --all
-	pub = !git push -u origin `git rev-parse --abbrev-ref HEAD`
-	pf = push -f
-	co = checkout
-	cb = checkout -b
-	cbm = !git checkout master && git pull && git checkout -b
-	prb = pull --rebase origin master
-	rbi = rebase -i origin/master
+  lg = log --decorate --oneline --graph --all
+  pub = !git push -u origin `git rev-parse --abbrev-ref HEAD`
+  pf = push -f
+  co = checkout
+  cb = checkout -b
+  cbm = !git checkout master && git pull && git checkout -b
+  prb = pull --rebase origin master
+  rbi = rebase -i origin/master
 [core]
-	editor = nvim
-	excludesfile = /Users/vk/.gitignore_global
-	pager = diff-so-fancy | less --tabs=4 -RFX
+  editor = nvim
+  excludesfile = /Users/vk/.gitignore_global
+  pager = diff-so-fancy | less --tabs=4 -RFX
 [rerere]
-	enabled = true
+  enabled = true
 [merge]
   tool = vimdiff
 [mergetool]
   prompt = true
 [mergetool "vimdiff"]
   cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[pull]
+  ff = only
+[branch]
+  autosetuprebase = always
+[branch "master"]
+  rebase = true
+[branch "upstream"]
+  rebase = true
