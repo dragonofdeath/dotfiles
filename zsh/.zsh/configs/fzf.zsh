@@ -12,6 +12,7 @@ fi
 # ------------
 source "/usr/local/opt/fzf/shell/key-bindings.zsh"
 
+FZF_CTRL_T_COMMAND='ag -g ""'
 # fbr - checkout git branch
 fbr() {
   local branches branch

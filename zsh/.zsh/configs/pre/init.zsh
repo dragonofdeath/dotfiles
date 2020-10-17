@@ -24,6 +24,8 @@ setopt HIST_EXPIRE_DUPS_FIRST  # allow dups, but expire old ones when I hit HIST
 setopt EXTENDED_HISTORY        # save timestamp and runtime information
 
 alias vim=nvim
+alias n=nvim
+alias kurwa="killall -9 node"
 alias flushdns="sudo killall -HUP mDNSResponder;sudo killall mDNSResponderHelper;sudo dscacheutil -flushcache"
 alias ag=rg
 alias ll="lsd -Al"

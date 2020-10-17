@@ -82,15 +82,15 @@ colors:
     white:   '0xeee8d5'
 
   # Bright colors
-  bright:
-    black:   '0x002b36'
-    red:     '0xcb4b16'
-    green:   '0x586e75'
-    yellow:  '0x657b83'
-    blue:    '0x839496'
-    magenta: '0x6c71c4'
-    cyan:    '0x93a1a1'
-    white:   '0xfdf6e3'
+  # bright:
+  #   black:   '0x002b36'
+  #   red:     '0xcb4b16'
+  #   green:   '0x586e75'
+  #   yellow:  '0x657b83'
+  #   # blue:    '0xFFFFFF'
+  #   magenta: '0x6c71c4'
+  #   cyan:    '0x93a1a1'
+  #   white:   '0xfdf6e3'
 
 #https://github.com/alacritty/alacritty/issues/2017#issuecomment-581707489
 key_bindings:
@@ -219,3 +219,8 @@ key_bindings:
   - { key: Equals,      mods: Control, action: IncreaseFontSize             }
   - { key: Subtract,    mods: Control, action: DecreaseFontSize             }
 alt_send_esc: false
+
+mouse:
+  url:
+    launcher:
+      program: open

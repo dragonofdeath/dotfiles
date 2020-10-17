@@ -41,6 +41,7 @@ Plug 'https://github.com/plasticboy/vim-markdown.git'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'junegunn/gv.vim'
 Plug 'https://github.com/airblade/vim-gitgutter.git'
+Plug 'rhysd/git-messenger.vim'
 
 Plug 'https://github.com/tpope/vim-repeat.git'
 Plug 'https://github.com/tpope/vim-surround.git'
@@ -51,10 +52,12 @@ Plug 'cakebaker/scss-syntax.vim'
 
 Plug 'mrk21/yaml-vim'
 
-" typescript 
+" typescript
 Plug 'HerringtonDarkholme/yats.vim' " syntax
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-set signcolumn=yes
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+
+set signcolumn=number
 let g:coc_global_extensions = [
 \ 'coc-json',
 \ 'coc-tsserver',
@@ -66,6 +69,10 @@ let g:coc_global_extensions = [
 \ 'coc-rust-analyzer',
 \ 'coc-tabnine',
 \ 'coc-vimlsp',
+\ 'coc-snippets',
+\ 'coc-react-refactor',
+\ 'coc-yank',
+\ 'coc-lists',
 \ ]
 
 Plug 'machakann/vim-highlightedyank'
@@ -81,6 +88,9 @@ Plug 'wellle/targets.vim'
 Plug 'mtth/scratch.vim'
 
 Plug 'janko/vim-test'
+
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'jxnblk/vim-mdx-js'
 
 call plug#end()
 
@@ -141,10 +151,6 @@ set hidden
 nnoremap <leader>l :<C-u>nohlsearch<CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-let g:php_syntax_extensions_enabled = ["php","module"]
-" jsx syntax highlight for js files on
-let g:jsx_ext_required = 0
-
 " airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
@@ -161,7 +167,7 @@ let g:airline_extensions = ['tmuxline', 'netrw', 'quickfix']
 let g:list_of_normal_keys = ["h", "j", "k", "l"]
 let g:list_of_visual_keys = ["h", "j", "k", "l"]
 
-nnoremap <S-s> :w<CR>
+nnoremap <S-s> :write \| edit \| TSBufEnable highlight<CR>
 
 " use system clipboard
 set clipboard+=unnamedplus
@@ -177,10 +183,11 @@ noremap <S-l> $
 nnoremap <leader>vs :so $MYVIMRC<cr>
 nnoremap <leader>vo :vsp $MYVIMRC<cr>
 nnoremap <leader>ve :vsp ~/.vim/vimrc<cr>
+nnoremap <leader>vn :CocCommand snippets.editSnippets<cr>
 " find maps
 nnoremap <leader>fw :grep
 vnoremap <leader>fw "py:<c-u>grep <c-r>p<cr>
-nnoremap <leader>e :GFiles<cr>
+nnoremap <leader>e :Files src<cr>
 nnoremap <leader>a :FZF<cr>
 nnoremap <leader>b :Buffers<cr>
 
@@ -460,19 +467,27 @@ nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
 nmap <leader>tf <Plug>(coc-codeaction)
 nmap <leader>tc <Plug>(coc-fix-current)
-nmap <leader>tl <Plug>(coc-codelens-action)
+"nmap <leader>tl <Plug>(coc-codelens-action)
 nmap <leader>te <Plug>(coc-diagnostic-info)
 nmap <leader>tg <Plug>(coc-declaration)
-nmap <leader>tj <Plug>(coc-refactor)
+map <leader>tj <Plug>(coc-refactor)
 nmap <silent> <leader>su <Plug>(coc-float-jump) :topleft sp<cr>:execute('resize ' . (line('$') + 2))<cr>
 nmap ]g <Plug>(coc-diagnostic-next-error)
 nmap [g <Plug>(coc-diagnostic-prev-error)
 
-nmap <leader>tr <Plug>(coc-rename)
+nmap <leader>tr <Plug>(coc-rename) " RENAME
 nmap <leader>ta <Plug>(coc-references)
 nmap <leader>tt :call CocAction('doHover')<cr>
 nmap <leader>z <Plug>(coc-format)
 
+nmap <leader>tl :CocList<cr>
+
+" noremap <leader>t :CocList forgot >t<cr>
+" noremap <leader>o :CocList forgot >o<cr>
+" vnoremap <leader>o :CocList forgot >o<cr>
+" noremap <leader>g :CocList forgot >g<cr>
+
+nmap <silent> <leader>td :CocDiagnostics<cr>
 " Introduce function text object
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
@@ -489,14 +504,16 @@ nnoremap <leader>ts  :<C-u>CocList -I symbols<cr>
 vmap <silent> <TAB> <Plug>(coc-range-select)
 
 nmap <silent><leader>tm <Plug>(coc-codeaction-selected)<cr>
+xmap <silent><leader>tm <Plug>(coc-codeaction-selected)<cr>
+xmap <silent><leader>tp <Plug>(coc-codeaction)<cr>
+
+nnoremap <silent> <leader>ty  :<C-u>CocList -A --normal yank<cr>
+xnoremap <silent> <leader>ty  :<C-u>CocList -A --normal yank<cr>
+
+imap <tab> <Plug>(coc-snippets-expand-jump)
 
 nnoremap <leader>to :CocCommand tsserver.organizeImports<cr>:CocCommand eslint.executeAutofix<cr>
 nnoremap <leader>tw :CocCommand tsserver.watchBuild<cr>
-
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
 
 augroup filetype_javascript
     autocmd!
@@ -575,3 +592,7 @@ augroup navigator_netrw_fix
 augroup END
 
 nnoremap <leader>oe :e .env<cr>
+nnoremap <leader>op :e package.json<cr>
+nnoremap <leader>ot :e tsconfig.json<cr>
+
+packadd cfilter
