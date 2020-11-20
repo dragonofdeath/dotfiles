@@ -21,9 +21,6 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-" Plug 'mhinz/vim-startify'
-" let g:startify_session_persistence = 1
-
 Plug 'https://github.com/morhetz/gruvbox.git'
 Plug 'tpope/vim-commentary'
 Plug 'suy/vim-context-commentstring' " needed for vim-commentary
@@ -187,33 +184,6 @@ nnoremap <silent> tc :tabc<cr>
 " some abbreviations
 iabbrev lenght length
 
-" fzf -- {{{
-    imap <c-x><c-f> <plug>(fzf-complete-path)
-" }}}
-
-function! GetRelPathForCfile(current, filepath)
-  let f = system('realpath --relative-to="' . a:current . '" "' . a:filepath . '"')
-  let f = substitute(f, '\n\+$', '', '')
-
-  if strpart(f, 0, 3) == '../' || strpart(f, 0, 2) == './'
-    "echom 'string is ok'
-  else
-    let f = './' . f
-  endif
-
-  if strpart(f, strlen(f) - 3) ==? '.js' || strpart(f, strlen(f) - 3) ==? '.ts'
-    let f = strpart(f, 0, strlen(f) - 3)
-  endif
-
-  if strpart(f, strlen(f) - 4) ==? '.jsx' || strpart(f, strlen(f) - 4) ==? '.tsx'
-    let f = strpart(f, 0, strlen(f) - 4)
-  endif
-
-  let @f = f
-endfunction
-
-nnoremap <leader>fj :<c-u>call GetRelPathForCfile(expand('%:h'), expand('<cfile>'))<cr>:<c-u>execute "normal! vi'\"fp"<cr>
-
 " grep commands
 vnoremap <leader>fo :<c-u>call <SID>GrepOperator(0, visualmode())<cr>
 vnoremap <leader>fd :<c-u>call <SID>GrepOperator(1, visualmode())<cr>
@@ -310,6 +280,8 @@ set tabstop=4
 noremap <leader>gb :Gblame<CR>
 noremap <leader>gs :Gstatus<CR>
 noremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gdh :diffget //2<CR>
+nnoremap <leader>gdl :diffget //3<CR>
 noremap <leader>ge :Gedit<CR>
 noremap <leader>gl :0Gclog!<CR>
 noremap <leader>gc :Gcommit<CR>
@@ -378,20 +350,6 @@ nnoremap gp `[v`]
 " hls colors
 highlight Search ctermbg=black ctermfg=yellow cterm=underline
 
-"so ~/.vim/eslintfix.vim
-"nnoremap <leader>z mF:%!eslint_d --stdin --stdin-filename % --fix-to-stdout<CR>`F
-
-"expand/colapse javascript object
-" noremap <leader>oe :<c-u>execute "normal! va{:s/,/,\\r\r`<a\r"<cr>:execute "normal! va}vgea,\r"<cr>=%:nohl<cr>
-" noremap <leader>oc va{J:.s/,\s}/ }<cr>
-
-"expand/colapse short function
-vnoremap <leader>fe v`<i{<cr>return <esc>`>a<cr>}<esc>=%
-noremap <leader>fc va{v`<d/return<cr>dw`>x
-
-" Active vindow has x
-" set cursorline
-" set cursorcolumn
 augroup BgHighlight
     autocmd!
     autocmd WinEnter * set cursorline
@@ -424,11 +382,6 @@ augroup END
 
 " refactor expression to var
 nnoremap <leader>r ".pIconst <esc>A = <esc>""p=`]`]A;<esc>
-
-" vim importJS
-nnoremap <leader>ij :ImportJSWord<cr>
-nnoremap <leader>ii :ImportJSFix<cr>
-nnoremap <leader>ig :ImportJSGoto<cr>
 
 " vim-test
 nmap <silent><leader>xt :TestNearest<cr>
@@ -466,11 +419,6 @@ nmap <leader>tt :call CocAction('doHover')<cr>
 nmap <leader>z <Plug>(coc-format)
 
 nmap <leader>tl :CocList<cr>
-
-" noremap <leader>t :CocList forgot >t<cr>
-" noremap <leader>o :CocList forgot >o<cr>
-" vnoremap <leader>o :CocList forgot >o<cr>
-" noremap <leader>g :CocList forgot >g<cr>
 
 nmap <silent> <leader>td :CocDiagnostics<cr>
 " Introduce function text object
@@ -581,3 +529,5 @@ nmap <leader>op :e package.json<cr>
 nnoremap <leader>ot :e tsconfig.json<cr>
 
 packadd cfilter
+
+source ~/.vim/scripts/fzf_js_import.vim

@@ -14,6 +14,8 @@ echo "Setuping neovim"
 npm install -g neovim
 pip install pynvim
 pip3 install pynvim
+
+mkdir -p $HOME/.vim
 stow nvim
 
 echo "Stow other"
