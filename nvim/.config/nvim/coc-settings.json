@@ -1,20 +1,43 @@
 {
   "suggest.echodocSupport": true,
-  "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
+  "eslint.filetypes": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "javascriptreact"
+  ],
   "eslint.nodePath": "/usr/local/bin/eslint",
   "tsserver.trace.server": "verbose",
   "typescript.referencesCodeLens.enable": true,
   "diagnostic.errorSign": "e",
   "diagnostic.warningSign": "w",
   "diagnostic.infoSign": "i",
-
   "list.insertMappings": {
     "<C-n>": "normal:j",
     "<C-p>": "normal:k"
   },
   "codeLens.enable": false,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
-
   "snippets.userSnippetsDirectory": "~/.config/nvim/UltiSnips",
-  "snippets.ultisnips.directories": ["~/.config/nvim/UltiSnips"],
+  "snippets.ultisnips.directories": [
+    "~/.config/nvim/UltiSnips"
+  ],
+
+  "languageserver": {
+    "elmLS": {
+      "command": "elm-language-server",
+      "filetypes": [
+        "elm"
+      ],
+      "rootPatterns": [
+        "elm.json"
+      ],
+      "initializationOptions": {
+        "elmPath": "elm",
+        "elmFormatPath": "elm-format",
+        "elmTestPath": "elm-test",
+        "elmAnalyseTrigger": "change"
+      }
+    }
+  }
 }

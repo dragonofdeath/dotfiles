@@ -25,6 +25,8 @@ Plug 'https://github.com/morhetz/gruvbox.git'
 Plug 'tpope/vim-commentary'
 Plug 'suy/vim-context-commentstring' " needed for vim-commentary
 Plug 'meain/vim-package-info', { 'do': 'npm install' }
+Plug 'haya14busa/is.vim'
+Plug 'bronson/vim-visual-star-search'
 
 Plug 'https://github.com/edkolev/tmuxline.vim.git'
 Plug 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
@@ -48,6 +50,8 @@ Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
 " typescript
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+
+Plug 'andys8/vim-elm-syntax'
 
 set signcolumn=number
 let g:coc_global_extensions = [
@@ -144,11 +148,11 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_inactive_collapse=1
+" let g:airline_inactive_collapse=1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline_extensions = ['tmuxline', 'netrw', 'quickfix']
-let g:airline#extensions#coc#enabled = 1
+let g:airline_extensions = ['tmuxline', 'netrw', 'quickfix', 'coc']
+" let g:airline#extensions#coc#enabled = 1
 
 " Save with treesitter reset
 nnoremap <S-s> :write \| edit \| TSBufEnable highlight<CR>
@@ -156,24 +160,28 @@ nnoremap <S-s> :write \| edit \| TSBufEnable highlight<CR>
 " use system clipboard
 set clipboard+=unnamedplus
 
-" the silver search on grep
-set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column\ --vimgrep
+" the rg search on grep
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden\ --glob\ \"!**/.git/**\"
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 
 noremap <S-h> ^
 noremap <S-l> $
 noremap <C-6> <C-^>
 
-" vimrc editing
+" system config editing
 nnoremap <leader>vs :so $MYVIMRC<cr>
 nnoremap <leader>vo :vsp $MYVIMRC<cr>
 nnoremap <leader>ve :vsp ~/.vim/vimrc<cr>
 nnoremap <leader>vn :CocCommand snippets.editSnippets<cr>
+nnoremap <leader>vd :vsp ~/dotfiles/<cr>
+
 " find maps
 nnoremap <leader>fw :grep
 nnoremap <leader>fr :CocSearch <c-r><c-w><cr>
 vnoremap <leader>fw "py:<c-u>grep <c-r>p<cr>
-nnoremap <leader>e :Files src<cr>
+
+let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
+nnoremap <leader>e :Files<cr>
 nnoremap <leader>a :FZF<cr>
 nnoremap <leader>b :Buffers<cr>
 
@@ -185,58 +193,12 @@ nnoremap <silent> tc :tabc<cr>
 iabbrev lenght length
 
 " grep commands
-vnoremap <leader>fo :<c-u>call <SID>GrepOperator(0, visualmode())<cr>
-vnoremap <leader>fd :<c-u>call <SID>GrepOperator(1, visualmode())<cr>
+vnoremap <leader>fo :<c-u>call GrepOperator(0, visualmode())<cr>
+vnoremap <leader>fd :<c-u>call GrepOperator(1, visualmode())<cr>
 
-function! s:GrepOperator(inCurrentDir, ...)
-  let type = get(a:, 1, 0)
-
-  let saved_register = @@
-  if type ==# 'v'
-    execute "normal! `<v`>y"
-  elseif type ==# 'char'
-    execute "normal! `[v`]y"
-  else
-    return
-  endif
-
-  let dirToSearch = a:inCurrentDir ? " " . expand("%:h") : ""
-
-  silent execut ":grep! " . shellescape(@@) . dirToSearch
-  copen
-  let @@ = saved_register
-endfunction
-
-"splits
+" default split position
 set splitright
 set splitbelow
-
-function! OpenSplit(direction)
-  let sr = &splitright
-  let sb = &splitbelow
-
-  if a:direction ==# 'h' || a:direction ==# 'l'
-    if a:direction ==# 'h'
-      set nosplitright
-    else
-      set splitright
-    endif
-
-    execute 'vsp'
-  elseif a:direction ==# 'k' || a:direction ==# 'j'
-    if a:direction ==# 'j'
-      set splitbelow
-    else
-      set nosplitbelow
-    endif
-
-    execute 'sp'
-    " . expand('%:h')
-  endif
-
-  let &splitright = sr
-  let &splitbelow = sb
-endfunction
 
 noremap Q :q<cr>
 
@@ -257,7 +219,6 @@ noremap <leader>srh :call OpenSplit('h')<cr>:e.<cr>
 noremap <leader>srl :call OpenSplit('l')<cr>:e.<cr>
 noremap <leader>srk :call OpenSplit('k')<cr>:e.<cr>
 noremap <leader>srj :call OpenSplit('j')<cr>:e.<cr>
-
 
 " Make Y behave more like other operators.
 nnoremap Y y$
@@ -301,39 +262,10 @@ noremap ]R :tablast<cr>
 noremap ]R :tabnext<cr>
 noremap <leader>re :tabe.<cr>
 
-" quifix and location toggle
-function! GetBufferList()
-  redir =>buflist
-  silent! ls!
-  redir END
-  return buflist
-endfunction
-
-function! ToggleList(bufname, pfx)
-  let buflist = GetBufferList()
-  for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
-    if bufwinnr(bufnum) != -1
-      exec(a:pfx.'close')
-      return
-    endif
-  endfor
-  if a:pfx == 'l' && len(getloclist(0)) == 0
-      echohl ErrorMsg
-      echo "Location List is Empty."
-      return
-  endif
-  let winnr = winnr()
-  exec(a:pfx.'open')
-  if winnr() != winnr
-    wincmd p
-  endif
-endfunction
-
 " shotcuts for location and quickfix windows
 nmap <silent> <leader>w :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
-let g:used_javascript_libs = 'jquery,underscore,angular,react,jasmine,chai'
 " clean white space
 nnoremap <silent> <leader>ss :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
 
@@ -356,28 +288,6 @@ augroup BgHighlight
     autocmd WinEnter * set cursorcolumn
     autocmd WinLeave * set nocursorline
     autocmd WinLeave * set nocursorcolumn
-augroup END
-
-"====[ Show when lines extend past column 80 ]=================================>-<=====================
-
-highlight ColorColumn ctermfg=208 ctermbg=Black
-
-function! MarkMargin (on)
-    if exists('b:MarkMargin')
-        try
-            call matchdelete(b:MarkMargin)
-        catch /./
-        endtry
-        unlet b:MarkMargin
-    endif
-    if a:on
-        let b:MarkMargin = matchadd('ColorColumn', '\%111v\s*\S', 110)
-    endif
-endfunction
-
-augroup MarkMargin
-    autocmd!
-    autocmd  BufEnter  *       :call MarkMargin(1)
 augroup END
 
 " refactor expression to var
@@ -448,67 +358,42 @@ imap <tab> <Plug>(coc-snippets-expand-jump)
 nnoremap <leader>to :CocCommand tsserver.organizeImports<cr>:CocCommand eslint.executeAutofix<cr>
 nnoremap <leader>tw :CocCommand tsserver.watchBuild<cr>
 
-augroup filetype_javascript
+augroup ctrl_m_definition
     autocmd!
-    autocmd FileType javascript.tsx nmap <buffer> <C-m> <Plug>(coc-definition)
-    autocmd FileType javascript nmap <buffer> <C-m> <Plug>(coc-definition)
-    autocmd FileType javascript.tsx nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
-    autocmd FileType javascript nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
+    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx,rust,stylable,vim nmap <buffer> <C-m> <Plug>(coc-definition)
+    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
 augroup END
-
-augroup filetype_typescript
-    autocmd!
-    autocmd FileType typescript.tsx nmap <buffer> <C-m> <Plug>(coc-definition)
-    autocmd FileType typescriptreact nmap <buffer> <C-m> <Plug>(coc-definition)
-    autocmd FileType typescript nmap <buffer> <C-m> <Plug>(coc-definition)
-    autocmd FileType typescript.tsx nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
-    autocmd FileType typescriptreact nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
-    autocmd FileType typescript nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
-augroup END
-
-augroup filetype_rust
-    autocmd!
-    autocmd FileType rust nmap <buffer> <C-m> <Plug>(coc-definition)
-    " autocmd FileType rust nnoremap <silent> <leader>z <cr>
-augroup END
-
-augroup filetype_vim
-    autocmd!
-    autocmd FileType vim nmap <buffer> <C-m> <Plug>(coc-definition)
-augroup END
-
-"enhanced jumplist
-function! GotoJump()
-  jumps
-  let j = input("Please select your jump: ")
-  if j != ''
-    let pattern = '\v\c^\+'
-    if j =~ pattern
-      let j = substitute(j, pattern, '', 'g')
-      execute "normal " . j . "\<c-i>"
-    else
-      execute "normal " . j . "\<c-o>"
-    endif
-  endif
-endfunction
-
-nmap <Leader>j :call GotoJump()<CR>
 
 "replace the word under cursor
-nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
+" nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
+" TODO work on visual mode: xnoremap <leader>* :<C-u>%s/\<<c-r><c-w>\>//g<left><left>
 
-" Search for selected text, forwards or backwards.
-vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <silent> # :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R><C-R>=substitute(
-  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+" use ag for recursive searching so we don't find 10,000 useless hits inside node_modules
+"nnoremap <leader>* :call ag#Ag('grep', '--literal ' . shellescape(expand("<cword>")))<CR>
+" vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:call ag#Ag('grep', '--literal ' . shellescape(@/))<CR>
 
+nnoremap  <leader>* :execute 'grep' '--fixed-strings' shellescape(expand("<cword>"))<CR><CR>:copen<CR>
+vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'grep' '--fixed-strings' shellescape(@/)<CR><CR>:copen<CR>
+
+" Type a replacement term and press . to repeat the replacement again. Useful
+" for replacing a few instances of the term (comparable to multiple cursors).
+nnoremap <silent> c* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+xnoremap <silent> c* "sy:let @/=@s<CR>cgn
+
+" :h tcsh-style
+cnoremap <C-A> <Home>
+" cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
+" alt-b
+cnoremap <Char-0x1B>b <S-Left>
+cnoremap <Esc>f <S-Right>
+
+" Allow passing optional flags into the Rg command.
+"   Example: :Rg myterm -g '*.md'
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \ "rg --column --line-number --no-heading --color=always --smart-case " .
+  \ <q-args>, 1, fzf#vim#with_preview(), <bang>0)
 
 highlight DiffAdd    cterm=italic ctermfg=223 ctermbg=239 gui=none guifg=bg guibg=Red
 highlight DiffDelete cterm=italic ctermfg=223 ctermbg=239 gui=none guifg=bg guibg=Red
@@ -531,3 +416,7 @@ nnoremap <leader>ot :e tsconfig.json<cr>
 packadd cfilter
 
 source ~/.vim/scripts/fzf_js_import.vim
+source ~/.vim/scripts/toggle_list.vim
+source ~/.vim/scripts/open_split.vim
+source ~/.vim/scripts/grep_operator.vim
+source ~/.vim/scripts/mark_margin.vim

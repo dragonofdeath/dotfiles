@@ -78,3 +78,9 @@ function gitstats {
 # COPYFILE_DISABLE to prevent several of the system-supplied programs (including tar) from giving special meaning to ._* archive members.
 # https://superuser.com/questions/259703/get-mac-tar-to-stop-putting-filenames-in-tar-archives
 export COPYFILE_DISABLE=1
+
+md ()
+{
+    mkdir -p -- "$1" &&
+      cd -P -- "$1"
+}

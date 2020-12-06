@@ -23,7 +23,7 @@ endfunction
 
 function! JsFzfImport()
   return fzf#vim#complete#path(
-        \ "git ls-files --cached --others --exclude-standard",
+        \ "fd",
         \ fzf#wrap({ 'reducer': function('s:generate_relative_js')})
         \ )
 endfunction
