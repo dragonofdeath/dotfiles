@@ -80,6 +80,8 @@ Plug 'wellle/targets.vim'
 " Scratch buffer
 Plug 'mtth/scratch.vim'
 
+Plug 'vimwiki/vimwiki'
+
 Plug 'janko/vim-test'
 
 Plug 'nvim-treesitter/nvim-treesitter'
@@ -219,6 +221,9 @@ noremap <leader>srh :call OpenSplit('h')<cr>:e.<cr>
 noremap <leader>srl :call OpenSplit('l')<cr>:e.<cr>
 noremap <leader>srk :call OpenSplit('k')<cr>:e.<cr>
 noremap <leader>srj :call OpenSplit('j')<cr>:e.<cr>
+
+nnoremap <leader>id :read !date -u +"\%Y-\%m-\%d \%A"<cr>
+nnoremap <leader>iw :read !date +"Week \%U"<cr>
 
 " Make Y behave more like other operators.
 nnoremap Y y$
@@ -420,3 +425,4 @@ source ~/.vim/scripts/toggle_list.vim
 source ~/.vim/scripts/open_split.vim
 source ~/.vim/scripts/grep_operator.vim
 source ~/.vim/scripts/mark_margin.vim
+
