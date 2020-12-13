@@ -22,6 +22,11 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'https://github.com/morhetz/gruvbox.git'
+Plug 'ericbn/vim-solarized'
+Plug 'ulwlu/elly.vim'
+Plug 'cormacrelf/vim-colors-github'
+Plug 'ayu-theme/ayu-vim'
+
 Plug 'tpope/vim-commentary'
 Plug 'suy/vim-context-commentstring' " needed for vim-commentary
 Plug 'meain/vim-package-info', { 'do': 'npm install' }
@@ -132,9 +137,25 @@ set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars map
 set foldmethod=syntax
 set foldlevel=20
 
-colorscheme gruvbox
-
+"" ========== Theme ==========
+set termguicolors
+colorscheme elly
 set background=dark
+hi User1 guifg=#3D424D
+hi ModeMsg guifg=#3D424D
+hi DiffAdd gui=NONE guifg=NONE guibg=#012800
+hi DiffText gui=NONE guifg=NONE guibg=#012800
+hi DiffChange gui=NONE guifg=NONE guibg=#5D4826
+hi DiffDelete gui=bold guifg=#340001 guibg=#340001
+
+" hi Error guifg=#Ad7576
+
+hi ErrorMsg guifg=#Ad7576
+hi WarningMsg guifg=#9b9257
+
+hi CocErrorSign guifg=#Ad7576
+hi CocWarningSign guifg=#9b9257
+hi CocInfoSign guifg=#9b9257
 
 " For VimGutter
 set updatetime=400
@@ -154,6 +175,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_extensions = ['tmuxline', 'netrw', 'quickfix', 'coc']
+let g:airline_theme='elly'
 " let g:airline#extensions#coc#enabled = 1
 
 " Save with treesitter reset
@@ -245,7 +267,7 @@ set tabstop=4
 " fugitive
 noremap <leader>gb :Gblame<CR>
 noremap <leader>gs :Gstatus<CR>
-noremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gd :Gdiff<CR>
 nnoremap <leader>gdh :diffget //2<CR>
 nnoremap <leader>gdl :diffget //3<CR>
 noremap <leader>ge :Gedit<CR>
@@ -285,7 +307,7 @@ set inccommand=split
 nnoremap gp `[v`]
 
 " hls colors
-highlight Search ctermbg=black ctermfg=yellow cterm=underline
+" highlight Search ctermbg=black ctermfg=yellow cterm=underline
 
 augroup BgHighlight
     autocmd!
@@ -399,11 +421,6 @@ command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \ "rg --column --line-number --no-heading --color=always --smart-case " .
   \ <q-args>, 1, fzf#vim#with_preview(), <bang>0)
-
-highlight DiffAdd    cterm=italic ctermfg=223 ctermbg=239 gui=none guifg=bg guibg=Red
-highlight DiffDelete cterm=italic ctermfg=223 ctermbg=239 gui=none guifg=bg guibg=Red
-highlight DiffChange cterm=italic ctermfg=223 ctermbg=239 gui=none guifg=bg guibg=Red
-highlight DiffText   cterm=italic ctermfg=223 ctermbg=130 gui=none guifg=bg guibg=Red
 
 " tmux
 let g:tmux_navigator_disable_when_zoomed = 1

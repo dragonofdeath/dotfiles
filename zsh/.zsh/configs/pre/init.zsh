@@ -9,11 +9,11 @@ compinit -C
 setopt auto_cd
 
 # use vim as the visual editor
-export TERM=xterm-256color
+export TERM=alacritty
 export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin:$HOME/bin/"
 export VISUAL=vim
 export EDITOR=vim
-export PAGER=more
+export PAGER=less
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export HISTFILE=$HOME/.zhistory       # enable history saving on shell exit
@@ -42,7 +42,6 @@ bindkey '^[[B' down-line-or-search
 autoload -U select-word-style
 select-word-style bash
 
-# expand functions in the prompt
 #setopt prompt_subst
 
 # automatically pushd
@@ -54,8 +53,8 @@ setopt AUTOCD
 setopt AUTOPUSHD PUSHDMINUS PUSHDSILENT PUSHDTOHOME
 setopt cdablevars
 
-export CLICOLOR=1
-export LSCOLORS=ExFxBxDxCxegedabagacad
+# export CLICOLOR=1
+# export LSCOLORS=ExFxBxDxCxegedabagacad
 
 # Enable extended globbing
 setopt EXTENDED_GLOB

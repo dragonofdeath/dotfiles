@@ -1,1 +1,1 @@
-PROMPT='%B%F{24}%~%f%b %# '
+PROMPT='%B%F{green}%~%f%b %# '
