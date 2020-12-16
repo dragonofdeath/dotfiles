@@ -14,6 +14,7 @@ export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/s
 export VISUAL=vim
 export EDITOR=vim
 export PAGER=less
+export MANPAGER="nvim -c MANPAGER -"
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export HISTFILE=$HOME/.zhistory       # enable history saving on shell exit

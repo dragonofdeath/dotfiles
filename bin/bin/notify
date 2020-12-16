@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+CMD="display notification \"${2}\" with title \"Terminal notify\"";
+sleep $1 && osascript -e "${CMD}" &>/dev/null & disown;

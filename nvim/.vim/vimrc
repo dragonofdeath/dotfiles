@@ -32,6 +32,7 @@ Plug 'suy/vim-context-commentstring' " needed for vim-commentary
 Plug 'meain/vim-package-info', { 'do': 'npm install' }
 Plug 'haya14busa/is.vim'
 Plug 'bronson/vim-visual-star-search'
+Plug 'lambdalisue/vim-manpager'
 
 Plug 'https://github.com/edkolev/tmuxline.vim.git'
 Plug 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
@@ -157,6 +158,16 @@ hi CocErrorSign guifg=#Ad7576
 hi CocWarningSign guifg=#9b9257
 hi CocInfoSign guifg=#9b9257
 
+" cursor
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
+
+" Optionally reset the cursor on start:
+augroup myCmds
+au!
+autocmd VimEnter * silent !echo -ne "\e[2 q"
+augroup END
+
 " For VimGutter
 set updatetime=400
 " }}}
@@ -190,7 +201,7 @@ set grepformat=%f:%l:%c:%m,%f:%l:%m
 
 noremap <S-h> ^
 noremap <S-l> $
-noremap <C-6> <C-^>
+noremap <C-6> :e#
 
 " system config editing
 nnoremap <leader>vs :so $MYVIMRC<cr>
