@@ -170,6 +170,7 @@ key_bindings:
   - { key: R,           mods: Alt,             chars: "\x1Br"           }
   - { key: R,           mods: Alt|Shift,       chars: "\x1BR"           }
   - { key: S,           mods: Alt,             chars: "\x1Bs"           }
+  - { key: S,           mods: Command,         chars: "\x1B-"           }
   - { key: S,           mods: Alt|Shift,       chars: "\x1BS"           }
   - { key: T,           mods: Alt,             chars: "\x1Bt"           }
   - { key: T,           mods: Alt|Shift,       chars: "\x1BT"           }

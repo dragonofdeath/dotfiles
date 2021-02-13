@@ -32,7 +32,6 @@ Plug 'suy/vim-context-commentstring' " needed for vim-commentary
 Plug 'meain/vim-package-info', { 'do': 'npm install' }
 Plug 'haya14busa/is.vim'
 Plug 'bronson/vim-visual-star-search'
-Plug 'lambdalisue/vim-manpager'
 
 Plug 'https://github.com/edkolev/tmuxline.vim.git'
 Plug 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
@@ -40,6 +39,7 @@ Plug 'https://github.com/vim-airline/vim-airline.git'
 
 " git
 Plug 'https://github.com/tpope/vim-fugitive.git'
+Plug 'https://github.com/tpope/vim-rhubarb'
 Plug 'junegunn/gv.vim'
 Plug 'https://github.com/airblade/vim-gitgutter.git'
 Plug 'rhysd/git-messenger.vim'
@@ -50,6 +50,8 @@ Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-sleuth.git'
 Plug 'https://github.com/tpope/vim-unimpaired.git'
 Plug 'tpope/vim-vinegar'
+
+Plug 'justinmk/vim-sneak'
 
 Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
 
@@ -75,6 +77,7 @@ let g:coc_global_extensions = [
 \ 'coc-react-refactor',
 \ 'coc-yank',
 \ 'coc-lists',
+\ 'coc-fzf-preview',
 \ ]
 
 Plug 'machakann/vim-highlightedyank'
@@ -191,6 +194,8 @@ let g:airline_theme='elly'
 
 " Save with treesitter reset
 nnoremap <S-s> :write \| edit \| TSBufEnable highlight<CR>
+" <Command-S> is bound to <M--> in alacritty config
+nnoremap <M--> :write \| edit \| TSBufEnable highlight<CR>
 
 " use system clipboard
 set clipboard+=unnamedplus
@@ -198,6 +203,17 @@ set clipboard+=unnamedplus
 " the rg search on grep
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden\ --glob\ \"!**/.git/**\"
 set grepformat=%f:%l:%c:%m,%f:%l:%m
+
+" command! -bang -nargs=* Rg
+"   \ call fzf#vim#grep(
+"   \   'rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1,
+"   \   fzf#vim#with_preview(), <bang>0)
+
+" command! -bang -nargs=* Rg
+"       call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --hidden --glob !**/.git/**" . <q-args>, 1, fzf#vim#with_preview(), <bang>0)
+"   \ call fzf#vim#grep(
+"   \   'rg --column --line-number --no-heading --color=always --smart-case --hidden\ --glob\ \"!**/.git/**\ -- '.shellescape(<q-args>), 1,
+"   \   fzf#vim#with_preview(), <bang>0)
 
 noremap <S-h> ^
 noremap <S-l> $
@@ -210,26 +226,50 @@ nnoremap <leader>ve :vsp ~/.vim/vimrc<cr>
 nnoremap <leader>vn :CocCommand snippets.editSnippets<cr>
 nnoremap <leader>vd :vsp ~/dotfiles/<cr>
 
-" find maps
-nnoremap <leader>fw :grep
-nnoremap <leader>fr :CocSearch <c-r><c-w><cr>
-vnoremap <leader>fw "py:<c-u>grep <c-r>p<cr>
-
 let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
 nnoremap <leader>e :Files<cr>
-nnoremap <leader>a :FZF<cr>
+nnoremap <leader>a :Files<cr>
 nnoremap <leader>b :Buffers<cr>
 
-nnoremap <leader>gg :GitGutterToggle<cr>
+let g:fzf_preview_command = 'bat --color=always --plain {-1}'
+let g:fzf_preview_filelist_command = 'fd -H -E .git'
+" https://www.reddit.com/r/vim/comments/kaedj9/implemented_fzfpreviewvim_with_gitdelta_in_vim/
+let g:fzf_preview_git_status_preview_command = "git diff --color=always -- {-1}"
+    "\ "[[ $(git diff --cached -- {-1}) != \"\" ]] && git diff --cached --color=always -- {-1} | delta || " .
+    "\ "[[ $(git diff -- {-1}) != \"\" ]] && git diff --color=always -- {-1} "
+    "\ g:fzf_preview_command
+
+let g:fzf_preview_fzf_preview_window_option = 'up:60%'
+
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
+let g:fzf_preview_window = ['up:70%', 'ctrl-/']
+
+nmap <Leader>f [fzf-p]
+xmap <Leader>f [fzf-p]
+
+" nnoremap <leader>e :<C-u>CocCommand fzf-preview.DirectoryFiles<CR>
+nnoremap <silent> [fzf-p]p     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
+nnoremap <silent> [fzf-p]gs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
+nnoremap <silent> [fzf-p]ga    :<C-u>CocCommand fzf-preview.GitActions<CR>
+nnoremap <silent> [fzf-p]b     :<C-u>CocCommand fzf-preview.Buffers<CR>
+nnoremap <silent> [fzf-p]B     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
+nnoremap <silent> [fzf-p]o     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
+nnoremap <silent> [fzf-p]<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
+nnoremap <silent> [fzf-p]g;    :<C-u>CocCommand fzf-preview.Changes<CR>
+nnoremap <silent> [fzf-p]/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
+nnoremap <silent> [fzf-p]*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+nnoremap          [fzf-p]gr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
+xnoremap          [fzf-p]gr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+nnoremap <silent> [fzf-p]t     :<C-u>CocCommand fzf-preview.BufferTags<CR>
+nnoremap <silent> [fzf-p]q     :<C-u>CocCommand fzf-preview.QuickFix<CR>
+nnoremap <silent> [fzf-p]l     :<C-u>CocCommand fzf-preview.LocationList<CR>
+
+nnoremap <leader>gg :GFiles?<cr>
 
 nnoremap <silent> tc :tabc<cr>
 
 " some abbreviations
 iabbrev lenght length
-
-" grep commands
-vnoremap <leader>fo :<c-u>call GrepOperator(0, visualmode())<cr>
-vnoremap <leader>fd :<c-u>call GrepOperator(1, visualmode())<cr>
 
 " default split position
 set splitright
@@ -293,13 +333,6 @@ augroup filetype_git
     autocmd FileType git :norm zM<CR>
 augroup END
 
-" tabs
-noremap ]r :tabnext<cr>
-noremap [r :tabprev<cr>
-noremap ]R :tablast<cr>
-noremap ]R :tabnext<cr>
-noremap <leader>re :tabe.<cr>
-
 " shotcuts for location and quickfix windows
 nmap <silent> <leader>w :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
@@ -309,6 +342,7 @@ nnoremap <silent> <leader>ss :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar
 
 " git diff options
 set diffopt=filler,vertical
+set diffopt+=algorithm:patience
 
 " terminal escape
 tnoremap <Esc> <C-\><C-n>
@@ -345,9 +379,9 @@ set nowritebackup
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Highlight symbol under cursor on CursorHold
-"autocmd CursorHold * :call echo("abc")
+" autocmd CursorHold * :echo("abc")
 autocmd CursorHold * call CocActionAsync('highlight')
-highlight CocHighlightText ctermbg=black ctermfg=yellow
+highlight CocHighlightText gui=NONE guifg=NONE guibg=#3D2806
 
 nmap <silent>gd <Plug>(coc-definition)
 nmap <silent>gy <Plug>(coc-type-definition)
@@ -410,8 +444,8 @@ augroup END
 "nnoremap <leader>* :call ag#Ag('grep', '--literal ' . shellescape(expand("<cword>")))<CR>
 " vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:call ag#Ag('grep', '--literal ' . shellescape(@/))<CR>
 
-nnoremap  <leader>* :execute 'grep' '--fixed-strings' shellescape(expand("<cword>"))<CR><CR>:copen<CR>
-vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'grep' '--fixed-strings' shellescape(@/)<CR><CR>:copen<CR>
+nnoremap  <leader>* :execute 'Rg' '--fixed-strings' shellescape(expand("<cword>"))<CR>
+vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'Rg' '--fixed-strings' shellescape(@/)<CR>
 
 " Type a replacement term and press . to repeat the replacement again. Useful
 " for replacing a few instances of the term (comparable to multiple cursors).
@@ -454,3 +488,9 @@ source ~/.vim/scripts/open_split.vim
 source ~/.vim/scripts/grep_operator.vim
 source ~/.vim/scripts/mark_margin.vim
 
+"camellcase
+nnoremap ,c viwgu:s/_\([a-z]\)/\u\1/g<CR>
+
+nmap <Leader>- <Plug>VimwikiRemoveHeaderLevel
+
+set noswapfile

@@ -43,3 +43,6 @@ _load_settings "$HOME/.zsh/configs"
 
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
+export PATH="$PATH:$HOME/.local/bin"
+
+source "$HOME/.bazelenv"

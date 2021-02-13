@@ -22,7 +22,7 @@ function! s:generate_relative_js(path)
 endfunction
 
 function! JsFzfImport()
-  return fzf#vim#complete#path(
+  return Fzf#vim#complete#path(
         \ "fd",
         \ fzf#wrap({ 'reducer': function('s:generate_relative_js')})
         \ )

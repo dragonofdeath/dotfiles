@@ -1,0 +1,2 @@
+git checkout -- yarn.lock
+yarn install && git add yarn.lock && git rebase --continue

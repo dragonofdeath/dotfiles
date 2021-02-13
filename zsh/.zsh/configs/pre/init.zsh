@@ -26,10 +26,12 @@ setopt EXTENDED_HISTORY        # save timestamp and runtime information
 
 alias vim=nvim
 alias n=nvim
+alias mn="nvim -u ~/.config/nvim/minit.vim"
 alias kurwa="killall -9 node"
-alias flushdns="sudo killall -HUP mDNSResponder;sudo killall mDNSResponderHelper;sudo dscacheutil -flushcache"
 alias ag=rg
 alias ll="lsd -Al"
+alias yarn=midgard-yarn
+alias s="source ~/.zshrc"
 
 autoload -U promptinit && promptinit
 prompt redhat
@@ -38,6 +40,10 @@ bindkey -e
 
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
+
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^F" edit-command-line
 
 # use bash wordchars
 autoload -U select-word-style
@@ -84,3 +90,5 @@ md ()
     mkdir -p -- "$1" &&
       cd -P -- "$1"
 }
+
+zmodload zsh/mapfile
