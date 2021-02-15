@@ -1,0 +1,9 @@
+#!/bin/bash
+
+file=`mktemp`
+tmux capture-pane -e -pS -5000 > $file
+line=`cat $file | ghead -n -10 | rg 🐏 -n | gtail -1 | sed 's/\([0-9]*\).*/\1/g'`
+last_command_output_file=`mktemp`
+cat $file | gtail -n "+${line}" > $last_command_output_file
+
+tmux new-window -n:mywindow "nvim -u ~/.config/nvim/minit.vim '+ term cat $last_command_output_file'"

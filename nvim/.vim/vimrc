@@ -49,8 +49,8 @@ Plug 'https://github.com/tpope/vim-repeat.git'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-sleuth.git'
 Plug 'https://github.com/tpope/vim-unimpaired.git'
-Plug 'tpope/vim-vinegar'
-
+" Plug 'tpope/vim-vinegar'
+Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-sneak'
 
 Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
@@ -494,3 +494,5 @@ nnoremap ,c viwgu:s/_\([a-z]\)/\u\1/g<CR>
 nmap <Leader>- <Plug>VimwikiRemoveHeaderLevel
 
 set noswapfile
+
+let g:dirvish_mode = ':sort ,^.*[\/],'

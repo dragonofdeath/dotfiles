@@ -1,15 +1,5 @@
 #!/bin/bash
 
-# $HOME/bin/vim-edit-tmux-output
 file=`mktemp`
-# file_all="/tmp/abc"
 tmux capture-pane -e -pS -15000 > $file
-# line=`cat $file | ghead -n -10 | rg 🐏 -n | gtail -1 | sed 's/\([0-9]*\).*/\1/g'`
-# echo $line
-# file_part="/tmp/cde"
-# echo "$line"
-# cat $file | gtail -n "+$line" > $file_part
-# exho "+$line" > $file_part
-
-
 tmux new-window -n:mywindow "nvim -u ~/.config/nvim/minit.vim '+ term cat $file'"

@@ -11,10 +11,10 @@ setopt auto_cd
 # use vim as the visual editor
 export TERM=alacritty
 export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin:$HOME/bin/"
-export VISUAL=vim
-export EDITOR=vim
+export VISUAL='nvim -u ~/.config/nvim/minit.vim'
+export EDITOR='nvim -u ~/.config/nvim/minit.vim'
 export PAGER=less
-export MANPAGER="nvim -c MANPAGER -"
+export MANPAGER="nvim -u ~/.config/nvim/minit.vim -c MANPAGER -"
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export HISTFILE=$HOME/.zhistory       # enable history saving on shell exit

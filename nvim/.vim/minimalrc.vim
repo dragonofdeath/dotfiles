@@ -1,4 +1,4 @@
-clll plug#begin('~/.vim/plugged')
+call plug#begin('~/.vim/plugged')
 
 Plug 'machakann/vim-highlightedyank'
 Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
