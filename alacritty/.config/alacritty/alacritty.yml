@@ -230,7 +230,7 @@ key_bindings:
   - { key: Grave,       mods: Alt,             chars: "\x1B`"           }
   - { key: Grave,       mods: Alt|Shift,       chars: "\x1B~"           }
   - { key: Equals,      mods: Control, action: IncreaseFontSize             }
-  - { key: Subtract,    mods: Control, action: DecreaseFontSize             }
+  - { key: Minus,    mods: Control, action: DecreaseFontSize             }
 alt_send_esc: false
 
 mouse:
