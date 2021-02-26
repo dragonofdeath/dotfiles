@@ -100,6 +100,11 @@ Plug 'janko/vim-test'
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'jxnblk/vim-mdx-js'
 
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-symbols.nvim'
+
 call plug#end()
 
 " ============================================================================
