@@ -21,7 +21,9 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'liuchengxu/vim-which-key'
+"Plug 'liuchengxu/vim-which-key'
+Plug 'sindrets/diffview.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
 
 Plug 'https://github.com/morhetz/gruvbox.git'
 Plug 'ericbn/vim-solarized'
@@ -334,13 +336,13 @@ set tabstop=4
 
 " fugitive
 noremap <leader>gb :Gblame<CR>
-noremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gd :Gdiff<CR>
+noremap <leader>gs :Git<CR>
+nnoremap <leader>gd :DiffviewOpen<CR>
 nnoremap <leader>gdh :diffget //2<CR>
 nnoremap <leader>gdl :diffget //3<CR>
 noremap <leader>ge :Gedit<CR>
 noremap <leader>gl :0Gclog!<CR>
-noremap <leader>gc :Gcommit<CR>
+noremap <leader>gc :Git commit<CR>
 noremap <leader>gw :Gwrite<CR>
 noremap <leader>gpf :Git push --forse<CR>
 noremap <leader>gpb :Git pub<CR>
