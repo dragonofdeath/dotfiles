@@ -21,6 +21,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'liuchengxu/vim-which-key'
+
 Plug 'https://github.com/morhetz/gruvbox.git'
 Plug 'ericbn/vim-solarized'
 Plug 'ulwlu/elly.vim'
@@ -65,6 +67,7 @@ Plug 'andys8/vim-elm-syntax'
 
 Plug 'mfussenegger/nvim-dap'
 
+Plug 'andymass/vim-visput'
 set signcolumn=number
 let g:coc_global_extensions = [
 \ 'coc-json',
@@ -107,6 +110,7 @@ Plug 'nvim-telescope/telescope-symbols.nvim'
 
 call plug#end()
 
+nnoremap <silent> <leader> :WhichKey ' '<CR>
 " ============================================================================
 " Install plugins the first time vim runs
 
@@ -239,6 +243,10 @@ let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
 nnoremap <leader>e :Files<cr>
 nnoremap <leader>a :Files<cr>
 nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>/ :BLines<cr>
+nnoremap <leader>h :History<cr>
+nnoremap <leader>H :Helptags<cr>
+nnoremap <leader>: :Commands<cr>
 
 let g:fzf_preview_command = 'bat --color=always --plain {-1}'
 let g:fzf_preview_filelist_command = 'fd -H -E .git'
@@ -544,3 +552,9 @@ let g:test#custom_strategies = {'jest': function('JestStrategy')}
 function! g:DovishDelete(target) abort
   return 'rm ' . a:target
 endfunction
+
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
+hi clear SpellBad
+hi SpellBad cterm=underline

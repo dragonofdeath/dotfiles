@@ -12,6 +12,7 @@
   cbm = !git checkout master && git pull && git checkout -b
   prb = pull --rebase origin master
   rbi = rebase -i origin/master
+  s = status
 [core]
   editor = nvim
   excludesfile = /Users/vk/.gitignore_global

@@ -46,3 +46,4 @@ _load_settings "$HOME/.zsh/configs"
 export PATH="$PATH:$HOME/.local/bin"
 
 source "$HOME/.bazelenv"
+[ -f "/Users/vaidask/.ghcup/env" ] && source "/Users/vaidask/.ghcup/env" # ghcup-env
