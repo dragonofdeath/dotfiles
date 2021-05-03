@@ -506,6 +506,9 @@ source ~/.vim/scripts/toggle_list.vim
 source ~/.vim/scripts/open_split.vim
 source ~/.vim/scripts/grep_operator.vim
 source ~/.vim/scripts/mark_margin.vim
+source ~/.vim/scripts/git.vim
+
+nnoremap  <leader>gv :call git#git_diffview_commit()<CR>
 
 "camellcase
 nnoremap ,c viwgu:s/_\([a-z]\)/\u\1/g<CR>
