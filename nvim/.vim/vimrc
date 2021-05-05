@@ -451,7 +451,7 @@ nnoremap <leader>tw :CocCommand tsserver.watchBuild<cr>
 
 augroup ctrl_m_definition
     autocmd!
-    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx,rust,stylable,vim nmap <buffer> <C-m> <Plug>(coc-definition)
+    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx,rust,stylable,vim,haskell nmap <buffer> <C-m> <Plug>(coc-definition)
     autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
 augroup END
 
