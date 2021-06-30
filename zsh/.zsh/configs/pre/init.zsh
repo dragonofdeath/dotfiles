@@ -27,14 +27,15 @@ setopt EXTENDED_HISTORY        # save timestamp and runtime information
 alias vim=nvim
 alias n=nvim
 alias mn="nvim -u ~/.config/nvim/minit.vim"
-alias kurwa="killall -9 node; killall -9 watchman"
+alias mmn="nvim -u ~/.config/nvim/minit.vim -c 'set syntax=off'"
+alias kurwa="killall -9 {node,watchman}"
 alias ag=rg
 alias ll="exa --icons -la"
 alias yarn=midgard-yarn
+alias y=midgard-yarn
 alias s="source ~/.zshrc"
-alias gis="git status"
-alias ys="yarn start"
-alias yb="yarn build"
+alias g="git"
+unalias git
 
 autoload -U promptinit && promptinit
 prompt redhat

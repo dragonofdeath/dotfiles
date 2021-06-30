@@ -1,6 +1,7 @@
 [user]
-  name = Vaidas Kublinskas
+  name = Vaidas Kublinskas (dragonofdeath)
   email = vaidask@wix.com
+  signingkey = 431072B8D3FE15C0
 [credential]
   helper = cache --timeout=3600
 [alias]
@@ -13,6 +14,11 @@
   prb = pull --rebase origin master
   rbi = rebase -i origin/master
   s = status
+  c = commit
+  ca = commit -a
+  cam = commit -am
+  r = reset
+  rh = reset --hard
 [core]
   editor = nvim
   excludesfile = /Users/vk/.gitignore_global
@@ -52,3 +58,7 @@
   rebase = true
 [branch "upstream"]
   rebase = true
+[commit]
+  gpgsign = true
+[gpg]
+  program = gpg

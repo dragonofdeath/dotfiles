@@ -410,7 +410,7 @@ nmap <leader>tc <Plug>(coc-fix-current)
 nmap <leader>te <Plug>(coc-diagnostic-info)
 nmap <leader>tg <Plug>(coc-declaration)
 map <leader>tj <Plug>(coc-refactor)
-nmap <silent> <leader>su <Plug>(coc-float-jump) :topleft sp<cr>:execute('resize ' . (line('$') + 2))<cr>
+nmap <leader>su <Plug>(coc-float-jump) :topleft sp<cr>:execute('resize ' . (line('$') + 2))<cr>
 nmap ]g <Plug>(coc-diagnostic-next-error)
 nmap [g <Plug>(coc-diagnostic-prev-error)
 
