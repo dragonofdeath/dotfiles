@@ -30,3 +30,28 @@ fbrr() {
            fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
+
+scr() {
+  manager=$1
+  if cat package.json > /dev/null 2>&1; then
+      scripts=$(cat package.json | jq .scripts | jq -r 'keys[]' | fzf --preview 'cat package.json | jq .scripts.\"{}\"' --height 40% --preview-window wrap)
+      echo $scripts
+
+       if [[ -n $scripts ]]; then
+          print -s $manager" run "$scripts;
+          $manager run $scripts
+      else
+          echo "Exit: You haven't selected any script"
+      fi
+  else
+      echo "Error: There's no package.json"
+  fi
+}
+
+ys() {
+  scr "yarn"
+}
+ns() {
+  scr "npm"
+}
+

@@ -248,7 +248,7 @@ nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>/ :BLines<cr>
 nnoremap <leader>h :History<cr>
 nnoremap <leader>H :Helptags<cr>
-nnoremap <leader>: :Commands<cr>
+" nnoremap <leader>: :Commands<cr>
 
 let g:fzf_preview_command = 'bat --color=always --plain {-1}'
 let g:fzf_preview_filelist_command = 'fd -H -E .git'

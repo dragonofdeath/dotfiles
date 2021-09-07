@@ -10,7 +10,7 @@ setopt auto_cd
 
 # use vim as the visual editor
 export TERM=alacritty
-export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin:$HOME/bin/"
+export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin:$HOME/bin/:/Applications/ARM/bin"
 export VISUAL='nvim -u ~/.config/nvim/minit.vim'
 export EDITOR='nvim -u ~/.config/nvim/minit.vim'
 export PAGER=less
@@ -25,6 +25,8 @@ setopt HIST_EXPIRE_DUPS_FIRST  # allow dups, but expire old ones when I hit HIST
 setopt EXTENDED_HISTORY        # save timestamp and runtime information
 
 alias vim=nvim
+alias vi=nvim
+alias v=nvim
 alias n=nvim
 alias mn="nvim -u ~/.config/nvim/minit.vim"
 alias mmn="nvim -u ~/.config/nvim/minit.vim -c 'set syntax=off'"
