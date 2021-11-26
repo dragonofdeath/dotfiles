@@ -17,7 +17,7 @@ FZF_CTRL_T_COMMAND='fd -H -E .git'
 # fbr - checkout git branch
 fbr() {
   local branches branch
-  branches=$(git branch -vv) &&
+  branches=$(git branch -vv --sort=-committerdate) &&
   branch=$(echo "$branches" | fzf +m) &&
   git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
 }
@@ -32,26 +32,17 @@ fbrr() {
 }
 
 scr() {
-  manager=$1
-  if cat package.json > /dev/null 2>&1; then
-      scripts=$(cat package.json | jq .scripts | jq -r 'keys[]' | fzf --preview 'cat package.json | jq .scripts.\"{}\"' --height 40% --preview-window wrap)
-      echo $scripts
+  manager=${1:-"npm"}
 
-       if [[ -n $scripts ]]; then
-          print -s $manager" run "$scripts;
-          $manager run $scripts
-      else
-          echo "Exit: You haven't selected any script"
-      fi
+  if [[ -f package.json ]]; then
+    jq '.scripts | keys[]' -r package.json \
+      | fzf --preview 'jq .scripts.\"{}\" package.json' --height 40% --preview-window wrap --bind "enter:accept-non-empty" \
+      | xargs $manager run
   else
-      echo "Error: There's no package.json"
+    echo "Error: There's no package.json"
   fi
 }
 
 ys() {
   scr "yarn"
 }
-ns() {
-  scr "npm"
-}
-

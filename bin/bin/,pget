@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+
+NAME=$1
+LINK=$(npm info $NAME dist.tarball)
+GZIP_FILE=${LINK##*/}
+
+wget -O /tmp/$GZIP_FILE $LINK
+rm -rf /tmp/package
+tar -xzvf "/tmp/$GZIP_FILE" -C /tmp
+nvim /tmp/package
+

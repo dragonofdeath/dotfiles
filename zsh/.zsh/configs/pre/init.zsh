@@ -37,6 +37,7 @@ alias yarn=midgard-yarn
 alias y=midgard-yarn
 alias s="source ~/.zshrc"
 alias g="git"
+alias p="pnpm"
 unalias git
 
 autoload -U promptinit && promptinit

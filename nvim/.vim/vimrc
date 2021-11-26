@@ -20,6 +20,7 @@ endif
 " Plugins ---------------------------------------{{{
 
 call plug#begin('~/.vim/plugged')
+Plug 'brooth/far.vim'
 
 "Plug 'liuchengxu/vim-which-key'
 Plug 'sindrets/diffview.nvim'
@@ -87,6 +88,7 @@ let g:coc_global_extensions = [
 \ 'coc-yank',
 \ 'coc-lists',
 \ 'coc-fzf-preview',
+\ 'coc-protobuf',
 \ ]
 
 Plug 'machakann/vim-highlightedyank'
@@ -241,6 +243,7 @@ nnoremap <leader>ve :vsp ~/.vim/vimrc<cr>
 nnoremap <leader>vn :CocCommand snippets.editSnippets<cr>
 nnoremap <leader>vd :vsp ~/dotfiles/<cr>
 
+
 let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
 nnoremap <leader>e :Files<cr>
 nnoremap <leader>a :Files<cr>
@@ -335,7 +338,7 @@ set gdefault                    " the /g flag on :s substitutions
 set tabstop=4
 
 " fugitive
-noremap <leader>gb :Gblame<CR>
+noremap <leader>gb :Git blame<CR>
 noremap <leader>gs :Git<CR>
 nnoremap <leader>gd :DiffviewOpen<CR>
 nnoremap <leader>gdh :diffget //2<CR>
@@ -382,7 +385,7 @@ augroup BgHighlight
 augroup END
 
 " refactor expression to var
-nnoremap <leader>r ".pIconst <esc>A = <esc>""p=`]`]A;<esc>
+" nnoremap <leader>r ".pIconst <esc>A = <esc>""p=`]`]A;<esc>
 
 " vim-test
 nmap <silent><leader>xt :TestNearest<cr>
@@ -421,6 +424,9 @@ nmap <leader>z <Plug>(coc-format)
 
 nmap <leader>tl :CocList<cr>
 
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+nmap <leader>tp :Prettier<cr>
+
 nmap <silent> <leader>td :CocDiagnostics<cr>
 " Introduce function text object
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -451,7 +457,7 @@ nnoremap <leader>tw :CocCommand tsserver.watchBuild<cr>
 
 augroup ctrl_m_definition
     autocmd!
-    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx,rust,stylable,vim,haskell nmap <buffer> <C-m> <Plug>(coc-definition)
+    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx,rust,stylable,vim,haskell,proto nmap <buffer> <C-m> <Plug>(coc-definition)
     autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
 augroup END
 
@@ -466,6 +472,8 @@ augroup END
 nnoremap  <leader>* :execute 'Rg' '--fixed-strings' shellescape(expand("<cword>"))<CR>
 vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'Rg' '--fixed-strings' shellescape(@/)<CR>
 
+" nnoremap  <leader>r :execute 'Grep' shellescape(expand("<cword>"))<CR>:execute 'cdo %s/' shellescape(expand("<cword>")) '/'
+nnoremap <leader>r :RenameAll<cr>
 " Type a replacement term and press . to repeat the replacement again. Useful
 " for replacing a few instances of the term (comparable to multiple cursors).
 nnoremap <silent> c* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
@@ -507,6 +515,8 @@ source ~/.vim/scripts/open_split.vim
 source ~/.vim/scripts/grep_operator.vim
 source ~/.vim/scripts/mark_margin.vim
 source ~/.vim/scripts/git.vim
+source ~/.vim/scripts/grep.vim
+source ~/.vim/scripts/replace.vim
 
 nnoremap  <leader>gv :call git#git_diffview_commit()<CR>
 
