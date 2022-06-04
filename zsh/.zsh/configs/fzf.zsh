@@ -46,3 +46,22 @@ scr() {
 ys() {
   scr "yarn"
 }
+
+_fzf-npm-script-widget() {
+  if [[ -f package.json ]]; then
+    jq '.scripts | keys[]' -r package.json \
+      | fzf --preview 'jq .scripts.\"{}\" package.json' --height 40% --preview-window wrap --bind "enter:accept-non-empty"
+  else
+    echo "Error: There's no package.json"
+  fi
+}
+
+fzf-npm-script-widget() {
+  LBUFFER="${LBUFFER}$(_fzf-npm-script-widget)"
+  local ret=$?
+  zle reset-prompt
+  return $ret
+}
+
+zle     -N    fzf-npm-script-widget
+bindkey '^B' fzf-npm-script-widget

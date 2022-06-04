@@ -33,11 +33,12 @@ alias mmn="nvim -u ~/.config/nvim/minit.vim -c 'set syntax=off'"
 alias kurwa="killall -9 {node,watchman}"
 alias ag=rg
 alias ll="exa --icons -la"
-alias yarn=midgard-yarn
-alias y=midgard-yarn
+# alias yarn=midgard-yarn
+alias y=yarn
 alias s="source ~/.zshrc"
 alias g="git"
 alias p="pnpm"
+alias pr="pnpm -r"
 unalias git
 
 autoload -U promptinit && promptinit

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# to remove the tanslations keys
+ls | rg messages | xargs -I{} sh -c "jq 'del(.\"shortDate\",.\"fullDate\")' {} > ../out/{}"

@@ -20,6 +20,16 @@ endif
 " Plugins ---------------------------------------{{{
 
 call plug#begin('~/.vim/plugged')
+
+Plug 'nvim-lua/plenary.nvim',
+Plug 'MunifTanjim/nui.nvim',
+Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v2.x' }
+
+Plug 'lewis6991/spellsitter.nvim'
+Plug 'github/copilot.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'ziontee113/syntax-tree-surfer'
 Plug 'brooth/far.vim'
 
 "Plug 'liuchengxu/vim-which-key'
@@ -62,9 +72,7 @@ Plug 'justinmk/vim-sneak'
 
 Plug 'https://github.com/christoomey/vim-tmux-navigator.git'
 
-" typescript
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
 Plug 'andys8/vim-elm-syntax'
 
@@ -177,10 +185,11 @@ hi WarningMsg guifg=#9b9257
 hi CocErrorSign guifg=#Ad7576
 hi CocWarningSign guifg=#9b9257
 hi CocInfoSign guifg=#9b9257
+hi CocHintSign guifg=#7997a6
 
 " cursor
-let &t_SI = "\e[6 q"
-let &t_EI = "\e[2 q"
+let &t_SI = "\e[9 q"
+let &t_EI = "\e[9 q"
 
 " Optionally reset the cursor on start:
 augroup myCmds
@@ -266,25 +275,22 @@ let g:fzf_preview_fzf_preview_window_option = 'up:60%'
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 let g:fzf_preview_window = ['up:70%', 'ctrl-/']
 
-nmap <Leader>f [fzf-p]
-xmap <Leader>f [fzf-p]
-
 " nnoremap <leader>e :<C-u>CocCommand fzf-preview.DirectoryFiles<CR>
-nnoremap <silent> [fzf-p]p     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
-nnoremap <silent> [fzf-p]gs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
-nnoremap <silent> [fzf-p]ga    :<C-u>CocCommand fzf-preview.GitActions<CR>
-nnoremap <silent> [fzf-p]b     :<C-u>CocCommand fzf-preview.Buffers<CR>
-nnoremap <silent> [fzf-p]B     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> [fzf-p]o     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
-nnoremap <silent> [fzf-p]<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
-nnoremap <silent> [fzf-p]g;    :<C-u>CocCommand fzf-preview.Changes<CR>
-nnoremap <silent> [fzf-p]/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
-nnoremap <silent> [fzf-p]*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-nnoremap          [fzf-p]gr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-xnoremap          [fzf-p]gr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
-nnoremap <silent> [fzf-p]t     :<C-u>CocCommand fzf-preview.BufferTags<CR>
-nnoremap <silent> [fzf-p]q     :<C-u>CocCommand fzf-preview.QuickFix<CR>
-nnoremap <silent> [fzf-p]l     :<C-u>CocCommand fzf-preview.LocationList<CR>
+nnoremap <silent> <Leader>fp     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
+nnoremap <silent> <Leader>fgs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
+nnoremap <silent> <Leader>fga    :<C-u>CocCommand fzf-preview.GitActions<CR>
+nnoremap <silent> <Leader>fb     :<C-u>CocCommand fzf-preview.Buffers<CR>
+nnoremap <silent> <Leader>fB     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
+nnoremap <silent> <Leader>fo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
+nnoremap <silent> <Leader>f<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
+nnoremap <silent> <Leader>fg;    :<C-u>CocCommand fzf-preview.Changes<CR>
+nnoremap <silent> <Leader>f/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
+nnoremap <silent> <Leader>f*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+nnoremap          <Leader>fgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
+xnoremap          <Leader>fgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+nnoremap <silent> <Leader>ft     :<C-u>CocCommand fzf-preview.BufferTags<CR>
+nnoremap <silent> <Leader>fq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
+nnoremap <silent> <Leader>fl     :<C-u>CocCommand fzf-preview.LocationList<CR>
 
 nnoremap <leader>gg :GFiles?<cr>
 
@@ -420,7 +426,9 @@ nmap [g <Plug>(coc-diagnostic-prev-error)
 nmap <leader>tr <Plug>(coc-rename)
 nmap <leader>ta <Plug>(coc-references)
 nmap <leader>tt :call CocAction('doHover')<cr>
-nmap <leader>z <Plug>(coc-format)
+
+nnoremap <silent> <leader>z :Prettier<cr>
+" nmap <leader>z <Plug>(coc-format)
 
 nmap <leader>tl :CocList<cr>
 
@@ -457,8 +465,9 @@ nnoremap <leader>tw :CocCommand tsserver.watchBuild<cr>
 
 augroup ctrl_m_definition
     autocmd!
-    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx,rust,stylable,vim,haskell,proto nmap <buffer> <C-m> <Plug>(coc-definition)
-    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <silent> <leader>z :CocCommand eslint.executeAutofix<cr>
+    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx,rust,stylable,vim,haskell,proto nnoremap <buffer> <cr> <Plug>(coc-definition)
+    " autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <leader>z :CocCommand eslint.executeAutofix<cr>
+    autocmd BufWrite * :echom "Writing buffer!"
 augroup END
 
 "replace the word under cursor
@@ -517,6 +526,9 @@ source ~/.vim/scripts/mark_margin.vim
 source ~/.vim/scripts/git.vim
 source ~/.vim/scripts/grep.vim
 source ~/.vim/scripts/replace.vim
+source ~/.vim/scripts/goyo.vim
+source ~/.vim/scripts/tree_surfer.vim
+" source ~/.vim/scripts/nvim-tree.vim
 
 nnoremap  <leader>gv :call git#git_diffview_commit()<CR>
 
@@ -573,3 +585,11 @@ set foldexpr=nvim_treesitter#foldexpr()
 
 hi clear SpellBad
 hi SpellBad cterm=underline
+
+augroup JsonToJsonc
+    autocmd! FileType json set filetype=jsonc
+augroup END
+
+nnoremap <silent> yog :Goyo<CR>
+nnoremap <silent> yol :Limelight!!<CR>
+

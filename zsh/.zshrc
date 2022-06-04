@@ -47,3 +47,6 @@ export PATH="$PATH:$HOME/.local/bin"
 
 source "$HOME/.bazelenv"
 [ -f "/Users/vaidask/.ghcup/env" ] && source "/Users/vaidask/.ghcup/env" # ghcup-env
+
+export PNPM_HOME="/Users/vaidask/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"

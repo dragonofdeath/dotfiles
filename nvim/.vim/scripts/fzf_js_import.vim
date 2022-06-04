@@ -28,4 +28,5 @@ function! JsFzfImport()
         \ )
 endfunction
 
-inoremap <expr> <c-x><c-f> JsFzfImport()
+" inoremap <expr> <c-x><c-f> JsFzfImport()
+inoremap <expr> <c-x><c-f> fzf#vim#complete("fd <Bar> xargs realpath --relative-to " . expand("%"))
