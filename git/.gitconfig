@@ -21,7 +21,7 @@
   rh = reset --hard
 [core]
   editor = nvim
-  excludesfile = /Users/vk/.gitignore_global
+	excludesfile = /Users/vaidask/.gitignore_global
   pager = delta
 
 [delta]
@@ -62,3 +62,9 @@
   gpgsign = true
 [gpg]
   program = gpg
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Users/vaidask/Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

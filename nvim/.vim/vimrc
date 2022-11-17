@@ -20,7 +20,8 @@ endif
 " Plugins ---------------------------------------{{{
 
 call plug#begin('~/.vim/plugged')
-
+Plug 'amadeus/vim-mjml'
+Plug 'smjonas/live-command.nvim',
 Plug 'nvim-lua/plenary.nvim',
 Plug 'MunifTanjim/nui.nvim',
 Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v2.x' }
@@ -89,7 +90,6 @@ let g:coc_global_extensions = [
 \ 'coc-yaml',
 \ 'coc-highlight',
 \ 'coc-rust-analyzer',
-\ 'coc-tabnine',
 \ 'coc-vimlsp',
 \ 'coc-snippets',
 \ 'coc-react-refactor',
@@ -97,7 +97,9 @@ let g:coc_global_extensions = [
 \ 'coc-lists',
 \ 'coc-fzf-preview',
 \ 'coc-protobuf',
+\ 'coc-spell-checker',
 \ ]
+" \ 'coc-tabnine',
 
 Plug 'machakann/vim-highlightedyank'
 Plug '/usr/local/opt/fzf'
@@ -116,7 +118,6 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'jxnblk/vim-mdx-js'
 
 Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-symbols.nvim'
 
@@ -427,8 +428,10 @@ nmap <leader>tr <Plug>(coc-rename)
 nmap <leader>ta <Plug>(coc-references)
 nmap <leader>tt :call CocAction('doHover')<cr>
 
-nnoremap <silent> <leader>z :Prettier<cr>
-" nmap <leader>z <Plug>(coc-format)
+" nnoremap <silent> <leader>z :Prettier<cr>
+nmap <leader>z <Plug>(coc-format)
+"nnoremap <leader>z :CocCommand eslint.executeAutofix<cr>
+
 
 nmap <leader>tl :CocList<cr>
 
@@ -465,11 +468,10 @@ nnoremap <leader>tw :CocCommand tsserver.watchBuild<cr>
 
 augroup ctrl_m_definition
     autocmd!
-    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx,rust,stylable,vim,haskell,proto nnoremap <buffer> <cr> <Plug>(coc-definition)
-    " autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <leader>z :CocCommand eslint.executeAutofix<cr>
+    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascriptreact,javascript.tsx,rust,stylable,vim,haskell,proto nnoremap <buffer> <cr> <Plug>(coc-definition)
+    autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <leader>z :CocCommand eslint.executeAutofix<cr>
     autocmd BufWrite * :echom "Writing buffer!"
 augroup END
-
 "replace the word under cursor
 " nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 " TODO work on visual mode: xnoremap <leader>* :<C-u>%s/\<<c-r><c-w>\>//g<left><left>
@@ -592,4 +594,16 @@ augroup END
 
 nnoremap <silent> yog :Goyo<CR>
 nnoremap <silent> yol :Limelight!!<CR>
+
+let g:test#javascript#runner = "jest"
+let g:test#javascript#jest#executable="yarn test:unit"
+" let g:test#javascript#jest#executable="yarn jest"
+
+lua <<EOF
+require("live-command").setup {
+  commands = {
+    Norm = { cmd = "norm" },
+  },
+}
+EOF
 

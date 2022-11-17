@@ -1,7 +1,5 @@
 function! s:isCommitHash(str) abort
-    echom "isCommitHash " . a:str
     let result = match(a:str, '^[a-f0-9]\+$') != -1 && len(a:str) >= 7
-    echom result
     return result
 endfunction
 
@@ -23,11 +21,10 @@ endfunction
 function! git#git_diffview_commit() abort
   " A line in Git log is of the form commit <SHA>
   let commit = s:extractCommit(expand("<cword>"), trim(getline('.')))
-  if (!commit)
+  if (len(commit) > 0)
+    let cmd = 'DiffviewOpen ' .  commit . '^!'
+    silent execute cmd
+  else 
     echoerr "No commit found in current line"
   endif
-
-  echom commit
-  let cmd = 'DiffviewOpen ' .  commit . '^!'
-  silent execute cmd
 endfunction
