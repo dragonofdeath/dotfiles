@@ -25,6 +25,7 @@ Plug 'smjonas/live-command.nvim',
 Plug 'nvim-lua/plenary.nvim',
 Plug 'MunifTanjim/nui.nvim',
 Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v2.x' }
+Plug 'nvim-treesitter/nvim-treesitter-context'
 
 Plug 'lewis6991/spellsitter.nvim'
 Plug 'github/copilot.vim'
