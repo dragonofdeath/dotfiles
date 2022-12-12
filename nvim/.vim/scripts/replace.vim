@@ -1,12 +1,15 @@
 function! RenameAll()
     let l:frompart = expand("<cword>")
-    let l:topart = input(l:frompart . ' -> ' , l:frompart)
+    let l:topart = input({
+                            \ 'prompt'      : l:frompart . ' -> ' ,
+                            \ 'default': l:frompart,
+                            \ 'cancelreturn': v:null,
+                            \ })
+    if l:topart is v:null
+      return
+    endif
     execute ':Grep ' . frompart . ' '
     execute ':cfdo %s/' . frompart . '/' . topart
-    execute ':wa'
-    " normal ':cfdo %s/\V' . frompart . '/'
-    " let l:replace = input("" , ':cfdo %s/\V' . l:frompart . '/')
-    " execute l:replace
 endfunction
 
 command RenameAll call RenameAll()

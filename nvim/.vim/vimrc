@@ -25,7 +25,10 @@ Plug 'smjonas/live-command.nvim',
 Plug 'nvim-lua/plenary.nvim',
 Plug 'MunifTanjim/nui.nvim',
 Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v2.x' }
+
 Plug 'nvim-treesitter/nvim-treesitter-context'
+Plug 'nvim-treesitter/playground'
+Plug 'stevearc/aerial.nvim'
 
 Plug 'lewis6991/spellsitter.nvim'
 Plug 'github/copilot.vim'
@@ -253,11 +256,10 @@ nnoremap <leader>vo :vsp $MYVIMRC<cr>
 nnoremap <leader>ve :vsp ~/.vim/vimrc<cr>
 nnoremap <leader>vn :CocCommand snippets.editSnippets<cr>
 nnoremap <leader>vd :vsp ~/dotfiles/<cr>
-
+nnoremap <leader>vi :PlugInstall<cr>
 
 let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
 nnoremap <leader>e :Files<cr>
-nnoremap <leader>a :Files<cr>
 nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>/ :BLines<cr>
 nnoremap <leader>h :History<cr>
@@ -606,5 +608,45 @@ require("live-command").setup {
     Norm = { cmd = "norm" },
   },
 }
+
+require('aerial').setup({
+  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+  on_attach = function(bufnr)
+    -- Jump forwards/backwards with '{' and '}'
+    vim.keymap.set('n', '<C-p>', '<cmd>AerialPrev<CR>', {buffer = bufnr})
+    vim.keymap.set('n', '<C-n>', '<cmd>AerialNext<CR>', {buffer = bufnr})
+  end,
+  filter_kind = false,
+})
+-- You probably also want to set a keymap to toggle aerial
+vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 EOF
 
+" Leader keys: 
+" q - quickfix list
+" w - vimwiki group
+" e - open fzf :Files
+" r - replcase is in project
+" y - FREE
+" u - FREE
+" i - insert group
+" o - open project files
+" p - paste yanked
+nnoremap <leader>p "0p
+nnoremap <leader>P "0P
+" a - FREE
+" s - splits
+" d - debuger
+" f - coc fzf - unused
+" g - Git
+" h - hunks
+" j - FREE
+" k - FREE
+" l - nohls
+" z - Format
+" x - execute (tests)
+" c - FREE
+" v - vim source/open etc
+" b - Fzf Buffers:
+" n - FREE
+" m - FREE
