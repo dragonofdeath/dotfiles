@@ -48,12 +48,9 @@ ys() {
 }
 
 _fzf-npm-script-widget() {
-  if [[ -f package.json ]]; then
-    jq '.scripts | keys[]' -r package.json \
-      | fzf --preview 'jq .scripts.\"{}\" package.json' --height 40% --preview-window wrap --bind "enter:accept-non-empty"
-  else
-    echo "Error: There's no package.json"
-  fi
+    PACKAGE_JSON_PATH="$(find-nearest-package-json)"
+    jq '.scripts | keys[]' -r $PACKAGE_JSON_PATH \
+      | fzf --preview 'jq .scripts.\"{}\" $(find-nearest-package-json)' --height 40% --preview-window wrap --bind "enter:accept-non-empty"
 }
 
 fzf-npm-script-widget() {

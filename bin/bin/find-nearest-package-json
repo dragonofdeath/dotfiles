@@ -1,0 +1,13 @@
+#!/bin/bash
+
+dir=$(pwd)
+
+while [[ "$dir" != '/' ]]; do
+  if [[ -f "$dir/package.json" ]]; then
+      echo "$dir/package.json"
+      exit 0
+  fi
+  dir="$(dirname "$dir")"
+done
+echo "package.json not found"
+exit 1
