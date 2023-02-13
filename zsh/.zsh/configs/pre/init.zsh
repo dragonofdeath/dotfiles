@@ -32,14 +32,13 @@ alias mn="nvim -u ~/.config/nvim/minit.vim"
 alias mmn="nvim -u ~/.config/nvim/minit.vim -c 'set syntax=off'"
 alias kurwa="killall -9 {node,nvim} && watchman watch-del-all"
 alias ag=rg
-alias ll="exa --icons -la"
+alias ll="exa --icons --group-directories-first -la"
 # alias yarn=midgard-yarn
 alias y=yarn
 alias s="source ~/.zshrc"
 alias g="git"
 alias p="pnpm"
 alias pr="pnpm -r"
-unalias git
 
 autoload -U promptinit && promptinit
 prompt redhat

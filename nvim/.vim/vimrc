@@ -20,6 +20,10 @@ endif
 " Plugins ---------------------------------------{{{
 
 call plug#begin('~/.vim/plugged')
+" Plug 'folke/noice.nvim'
+
+Plug 'christianchiarulli/nvcode-color-schemes.vim'
+
 Plug 'amadeus/vim-mjml'
 Plug 'smjonas/live-command.nvim',
 Plug 'nvim-lua/plenary.nvim',
@@ -70,8 +74,8 @@ Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-sleuth.git'
 Plug 'https://github.com/tpope/vim-unimpaired.git'
 " Plug 'tpope/vim-vinegar'
-Plug 'justinmk/vim-dirvish'
-Plug 'roginfarrer/vim-dirvish-dovish'
+" Plug 'justinmk/vim-dirvish'
+" Plug 'roginfarrer/vim-dirvish-dovish'
 
 Plug 'justinmk/vim-sneak'
 
@@ -210,8 +214,8 @@ set updatetime=400
 set hidden
 
 " Mappings ----------------------------------------{{{
-nnoremap <leader>l :<C-u>nohlsearch<CR>
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+nnoremap <silent> <leader>l :<C-u>nohlsearch<CR>
+cnoremap <silent> <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " airline
 let g:airline#extensions#tabline#enabled = 1
@@ -224,9 +228,9 @@ let g:airline_theme='elly'
 " let g:airline#extensions#coc#enabled = 1
 
 " Save with treesitter reset
-nnoremap <S-s> :write \| edit \| TSBufEnable highlight<CR>
+nnoremap <silent> <S-s> :write \| edit \| TSBufEnable highlight<CR>
 " <Command-S> is bound to <M--> in alacritty config
-nnoremap <M--> :write \| edit \| TSBufEnable highlight<CR>
+nnoremap <silent> <M--> :write \| edit \| TSBufEnable highlight<CR>
 
 " use system clipboard
 set clipboard+=unnamedplus
@@ -251,19 +255,19 @@ noremap <S-l> $
 noremap <C-6> :e#
 
 " system config editing
-nnoremap <leader>vs :so $MYVIMRC<cr>
-nnoremap <leader>vo :vsp $MYVIMRC<cr>
-nnoremap <leader>ve :vsp ~/.vim/vimrc<cr>
-nnoremap <leader>vn :CocCommand snippets.editSnippets<cr>
-nnoremap <leader>vd :vsp ~/dotfiles/<cr>
-nnoremap <leader>vi :PlugInstall<cr>
+nnoremap <silent> <leader>vs :so $MYVIMRC<cr>
+nnoremap <silent> <leader>vo :vsp $MYVIMRC<cr>
+nnoremap <silent> <leader>ve :vsp ~/.vim/vimrc<cr>
+nnoremap <silent> <leader>vn :CocCommand snippets.editSnippets<cr>
+nnoremap <silent> <leader>vd :vsp ~/dotfiles/<cr>
+nnoremap <silent> <leader>vi :PlugInstall<cr>
 
 let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
-nnoremap <leader>e :Files<cr>
-nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>/ :BLines<cr>
-nnoremap <leader>h :History<cr>
-nnoremap <leader>H :Helptags<cr>
+nnoremap <silent> <leader>e :Files<cr>
+nnoremap <silent> <leader>b :Buffers<cr>
+nnoremap <silent> <leader>/ :BLines<cr>
+nnoremap <silent> <leader>h :History<cr>
+nnoremap <silent> <leader>H :Helptags<cr>
 " nnoremap <leader>: :Commands<cr>
 
 let g:fzf_preview_command = 'bat --color=always --plain {-1}'
@@ -290,13 +294,13 @@ nnoremap <silent> <Leader>f<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
 nnoremap <silent> <Leader>fg;    :<C-u>CocCommand fzf-preview.Changes<CR>
 nnoremap <silent> <Leader>f/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
 nnoremap <silent> <Leader>f*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-nnoremap          <Leader>fgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-xnoremap          <Leader>fgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+nnoremap <silent> <Leader>fgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
+xnoremap <silent> <Leader>fgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> <Leader>ft     :<C-u>CocCommand fzf-preview.BufferTags<CR>
 nnoremap <silent> <Leader>fq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
 nnoremap <silent> <Leader>fl     :<C-u>CocCommand fzf-preview.LocationList<CR>
 
-nnoremap <leader>gg :GFiles?<cr>
+nnoremap <silent> <leader>gg :GFiles?<cr>
 
 nnoremap <silent> tc :tabc<cr>
 
@@ -307,31 +311,31 @@ iabbrev lenght length
 set splitright
 set splitbelow
 
-noremap Q :q<cr>
+noremap <silent> Q :q<cr>
 
 " splits
-noremap <leader>sh :call OpenSplit('h')<cr>
-noremap <leader>sl :call OpenSplit('l')<cr>
-noremap <leader>sk :call OpenSplit('k')<cr>
-noremap <leader>sj :call OpenSplit('j')<cr>
-noremap <leader>sfh :call OpenSplit('h')<cr>gf
-noremap <leader>sfl :call OpenSplit('l')<cr>gf
-noremap <leader>sfk :call OpenSplit('k')<cr>gf
-noremap <leader>sfj :call OpenSplit('j')<cr>gf
-noremap <leader>sth :call OpenSplit('h')<cr>:term<cr>i
-noremap <leader>stl :call OpenSplit('l')<cr>:term<cr>i
-noremap <leader>stk :call OpenSplit('k')<cr>:term<cr>i
-noremap <leader>stj :call OpenSplit('j')<cr>:term<cr>i
-noremap <leader>srh :call OpenSplit('h')<cr>:e.<cr>
-noremap <leader>srl :call OpenSplit('l')<cr>:e.<cr>
-noremap <leader>srk :call OpenSplit('k')<cr>:e.<cr>
-noremap <leader>srj :call OpenSplit('j')<cr>:e.<cr>
+noremap <silent> <leader>sh :call OpenSplit('h')<cr>
+noremap <silent> <leader>sl :call OpenSplit('l')<cr>
+noremap <silent> <leader>sk :call OpenSplit('k')<cr>
+noremap <silent> <leader>sj :call OpenSplit('j')<cr>
+noremap <silent> <leader>sfh :call OpenSplit('h')<cr>gf
+noremap <silent> <leader>sfl :call OpenSplit('l')<cr>gf
+noremap <silent> <leader>sfk :call OpenSplit('k')<cr>gf
+noremap <silent> <leader>sfj :call OpenSplit('j')<cr>gf
+noremap <silent> <leader>sth :call OpenSplit('h')<cr>:term<cr>i
+noremap <silent> <leader>stl :call OpenSplit('l')<cr>:term<cr>i
+noremap <silent> <leader>stk :call OpenSplit('k')<cr>:term<cr>i
+noremap <silent> <leader>stj :call OpenSplit('j')<cr>:term<cr>i
+noremap <silent> <leader>srh :call OpenSplit('h')<cr>:e.<cr>
+noremap <silent> <leader>srl :call OpenSplit('l')<cr>:e.<cr>
+noremap <silent> <leader>srk :call OpenSplit('k')<cr>:e.<cr>
+noremap <silent> <leader>srj :call OpenSplit('j')<cr>:e.<cr>
 
-nnoremap <leader>id :read !date -u +"\%Y-\%m-\%d \%A"<cr>
-nnoremap <leader>iw :read !date +"Week \%U"<cr>
+nnoremap <silent> <leader>id :read !date -u +"\%Y-\%m-\%d \%A"<cr>
+nnoremap <silent> <leader>iw :read !date +"Week \%U"<cr>
 
 " Make Y behave more like other operators.
-nnoremap Y y$
+nnoremap <silent> Y y$
 
 " Save cursor position for reopening.
 au BufReadPost *
@@ -348,17 +352,19 @@ set gdefault                    " the /g flag on :s substitutions
 set tabstop=4
 
 " fugitive
-noremap <leader>gb :Git blame<CR>
-noremap <leader>gs :Git<CR>
-nnoremap <leader>gd :DiffviewOpen<CR>
-nnoremap <leader>gdh :diffget //2<CR>
-nnoremap <leader>gdl :diffget //3<CR>
-noremap <leader>ge :Gedit<CR>
-noremap <leader>gl :0Gclog!<CR>
-noremap <leader>gc :Git commit<CR>
-noremap <leader>gw :Gwrite<CR>
-noremap <leader>gpf :Git push --forse<CR>
-noremap <leader>gpb :Git pub<CR>
+noremap <silent> <leader>gb :Git blame<CR>
+noremap <silent> <leader>gs :Git<CR>
+nnoremap <silent> <leader>gd :DiffviewOpen<CR>
+nnoremap <silent> <leader>gdh :diffget //2<CR>
+nnoremap <silent> <leader>gdl :diffget //3<CR>
+noremap <silent> <leader>ge :Gedit<CR>
+noremap <silent> <leader>gl :0Gclog!<CR>
+noremap <silent> <leader>gc :Git commit<CR>
+noremap <silent> <leader>gw :Gwrite<CR>
+noremap <silent> <leader>gpf :Git push --forse<CR>
+noremap <silent> <leader>gpb :Git pub<CR>
+
+nnoremap <expr> <Leader>gr ':!gh pr view -w '.expand('<cword>').'<cr>'
 
 augroup filetype_git
     autocmd!
@@ -381,7 +387,7 @@ tnoremap <Esc> <C-\><C-n>
 
 set inccommand=split
 " select just pasted text
-nnoremap gp `[v`]
+nnoremap <silent> gp `[v`]
 
 " hls colors
 " highlight Search ctermbg=black ctermfg=yellow cterm=underline
@@ -427,19 +433,19 @@ nmap <leader>su <Plug>(coc-float-jump) :topleft sp<cr>:execute('resize ' . (line
 nmap ]g <Plug>(coc-diagnostic-next-error)
 nmap [g <Plug>(coc-diagnostic-prev-error)
 
-nmap <leader>tr <Plug>(coc-rename)
-nmap <leader>ta <Plug>(coc-references)
-nmap <leader>tt :call CocAction('doHover')<cr>
+nmap <silent> <leader>tr <Plug>(coc-rename)
+nmap <silent> <leader>ta <Plug>(coc-references)
+nmap <silent> <leader>tt :call CocAction('doHover')<cr>
 
 " nnoremap <silent> <leader>z :Prettier<cr>
-nmap <leader>z <Plug>(coc-format)
+nmap <silent> <leader>z <Plug>(coc-format)
 "nnoremap <leader>z :CocCommand eslint.executeAutofix<cr>
 
 
-nmap <leader>tl :CocList<cr>
+nmap <silent> <leader>tl :CocList<cr>
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-nmap <leader>tp :Prettier<cr>
+nmap <silent> <leader>tp :Prettier<cr>
 
 nmap <silent> <leader>td :CocDiagnostics<cr>
 " Introduce function text object
@@ -449,7 +455,7 @@ xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
 
-nnoremap <leader>ts  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <leader>ts  :<C-u>CocList -I symbols<cr>
 
 " Use <TAB> for selections ranges.
 " NOTE: Requires 'textDocument/selectionRange' support from the language server.
@@ -466,8 +472,8 @@ xnoremap <silent> <leader>ty  :<C-u>CocList -A --normal yank<cr>
 
 imap <tab> <Plug>(coc-snippets-expand-jump)
 
-nnoremap <leader>to :CocCommand tsserver.organizeImports<cr>:CocCommand eslint.executeAutofix<cr>
-nnoremap <leader>tw :CocCommand tsserver.watchBuild<cr>
+nnoremap <silent> <leader>to :CocCommand tsserver.organizeImports<cr>:CocCommand eslint.executeAutofix<cr>
+nnoremap <silent> <leader>tw :CocCommand tsserver.watchBuild<cr>
 
 augroup ctrl_m_definition
     autocmd!
@@ -483,11 +489,11 @@ augroup END
 "nnoremap <leader>* :call ag#Ag('grep', '--literal ' . shellescape(expand("<cword>")))<CR>
 " vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:call ag#Ag('grep', '--literal ' . shellescape(@/))<CR>
 
-nnoremap  <leader>* :execute 'Rg' '--fixed-strings' shellescape(expand("<cword>"))<CR>
-vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'Rg' '--fixed-strings' shellescape(@/)<CR>
+nnoremap  <silent> <leader>* :execute 'Rg' '--fixed-strings' shellescape(expand("<cword>"))<CR>
+vnoremap <silent> <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'Rg' '--fixed-strings' "'" . @/ . "'"<CR>
 
 " nnoremap  <leader>r :execute 'Grep' shellescape(expand("<cword>"))<CR>:execute 'cdo %s/' shellescape(expand("<cword>")) '/'
-nnoremap <leader>r :RenameAll<cr>
+nnoremap <silent> <leader>r :RenameAll<cr>
 " Type a replacement term and press . to repeat the replacement again. Useful
 " for replacing a few instances of the term (comparable to multiple cursors).
 nnoremap <silent> c* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
@@ -517,9 +523,9 @@ augroup navigator_netrw_fix
   autocmd FileType netrw nmap <buffer> <silent> <c-l> :TmuxNavigateRight<cr>
 augroup END
 
-nnoremap <leader>oe :e .env<cr>
+nnoremap <silent> <leader>oe :e .env<cr>
 nmap <leader>op :e package.json<cr>
-nnoremap <leader>ot :e tsconfig.json<cr>
+nnoremap <silent> <leader>ot :e tsconfig.json<cr>
 
 packadd cfilter
 
@@ -533,18 +539,18 @@ source ~/.vim/scripts/grep.vim
 source ~/.vim/scripts/replace.vim
 source ~/.vim/scripts/goyo.vim
 source ~/.vim/scripts/tree_surfer.vim
-" source ~/.vim/scripts/nvim-tree.vim
+" source ~/.vim/scripts/theme.vim
 
-nnoremap  <leader>gv :call git#git_diffview_commit()<CR>
+nnoremap  <silent> <leader>gv :call git#git_diffview_commit()<CR>
 
 "camellcase
-nnoremap ,c viwgu:s/_\([a-z]\)/\u\1/g<CR>
+nnoremap <silent> ,c viwgu:s/_\([a-z]\)/\u\1/g<CR>
 
 nmap <Leader>- <Plug>VimwikiRemoveHeaderLevel
 
 set noswapfile
 
-let g:dirvish_mode = ':sort ,^.*[\/],'
+" let g:dirvish_mode = ':sort ,^.*[\/],'
 
 " mfussenegger/nvim-dap
 lua << EOF
@@ -557,22 +563,22 @@ dap.adapters.node2 = {
 vim.fn.sign_define('DapBreakpoint', {text='🟥', texthl='', linehl='', numhl=''})
 vim.fn.sign_define('DapStopped', {text='🟢', texthl='', linehl='', numhl=''})
 EOF
-nnoremap <leader>dh :lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <silent> <leader>dh :lua require'dap'.toggle_breakpoint()<CR>
 " nnoremap <S-k> :lua require'dap'.step_out()<CR>
 " nnoremap <S-l> :lua require'dap'.step_into()<CR>
 " nnoremap <S-j> :lua require'dap'.step_over()<CR>
-nnoremap <leader>dn :lua require'dap'.continue()<CR>
-nnoremap <leader>d_ :lua require'dap'.run_last()<CR>
-nnoremap <leader>dr :lua require'dap'.repl.open({}, 'vsplit')<CR><C-w>l
-nnoremap <leader>di :lua require'dap.ui.variables'.hover(function () return vim.fn.expand("<cexpr>") end)<CR>
-vnoremap <leader>di :lua require'dap.ui.variables'.visual_hover()<CR>
-nnoremap <leader>d? :lua require'dap.ui.variables'.scopes()<CR>
-nnoremap <leader>de :lua require'dap'.set_exception_breakpoints({"all"})<CR>
-nnoremap <leader>da :lua require'debugHelper'.attach()<CR>
+nnoremap <silent> <leader>dn :lua require'dap'.continue()<CR>
+nnoremap <silent> <leader>d_ :lua require'dap'.run_last()<CR>
+nnoremap <silent> <leader>dr :lua require'dap'.repl.open({}, 'vsplit')<CR><C-w>l
+nnoremap <silent> <leader>di :lua require'dap.ui.variables'.hover(function () return vim.fn.expand("<cexpr>") end)<CR>
+vnoremap <silent> <leader>di :lua require'dap.ui.variables'.visual_hover()<CR>
+nnoremap <silent> <leader>d? :lua require'dap.ui.variables'.scopes()<CR>
+nnoremap <silent> <leader>de :lua require'dap'.set_exception_breakpoints({"all"})<CR>
+nnoremap <silent> <leader>da :lua require'debugHelper'.attach()<CR>
 
 
 " jank/vim-test and mfussenegger/nvim-dap
-nnoremap <leader>dd :TestNearest -strategy=jest<CR>
+nnoremap <silent> <leader>dd :TestNearest -strategy=jest<CR>
 function! JestStrategy(cmd)
   let testName = matchlist(a:cmd, '\v -t ''(.*)''')[1]
   let fileName = matchlist(a:cmd, '\v'' -- (.*)$')[1]
@@ -581,9 +587,11 @@ endfunction
 let g:test#custom_strategies = {'jest': function('JestStrategy')}
 
 " Used for <Plug>(dovish_delete)
-function! g:DovishDelete(target) abort
-  return 'rm ' . a:target
-endfunction
+" function! g:DovishDelete(target) abort
+"   return 'rm ' . a:target
+" endfunction
+nnoremap <silent> - :Neotree filesystem reveal current<CR>
+
 
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
@@ -602,13 +610,28 @@ let g:test#javascript#runner = "jest"
 let g:test#javascript#jest#executable="yarn test:unit"
 " let g:test#javascript#jest#executable="yarn jest"
 
+nnoremap <silent> \ :Neotree reveal<cr>
+
+set title
+set titlestring=%{hostname()}\ \ %F\ \ %{strftime('%Y-%m-%d\ %H:%M',getftime(expand('%')))}
+
 lua <<EOF
 require("live-command").setup {
   commands = {
     Norm = { cmd = "norm" },
   },
 }
-
+require("neo-tree").setup({
+  filesystem = {
+    follow_current_file = true,
+    hijack_netrw_behavior = "open_current",
+    window = {
+      mappings = {
+        -- ["-"] = "navigate_up",
+      },
+    },
+  },
+})
 require('aerial').setup({
   -- optionally use on_attach to set keymaps when aerial has attached to a buffer
   on_attach = function(bufnr)
@@ -616,12 +639,39 @@ require('aerial').setup({
     vim.keymap.set('n', '<C-p>', '<cmd>AerialPrev<CR>', {buffer = bufnr})
     vim.keymap.set('n', '<C-n>', '<cmd>AerialNext<CR>', {buffer = bufnr})
   end,
-  filter_kind = false,
+  layout = {
+    -- These control the width of the aerial window.
+    -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
+    -- min_width and max_width can be a list of mixed types.
+    -- max_width = {40, 0.2} means "the lesser of 40 columns or 20% of total"
+    max_width = { 50, 0.3 },
+    width = nil,
+    min_width = 20,
+
+    -- key-value pairs of window-local options for aerial window (e.g. winhl)
+    win_opts = { wrap = true },
+
+    -- Determines the default direction to open the aerial window. The 'prefer'
+    -- options will open the window in the other direction *if* there is a
+    -- different buffer in the way of the preferred direction
+    -- Enum: prefer_right, prefer_left, right, left, float
+    default_direction = "prefer_left",
+
+    -- Determines where the aerial window will be opened
+    --   edge   - open aerial at the far right/left of the editor
+    --   window - open aerial to the right/left of the current window
+    placement = "window",
+
+    -- Preserve window size equality with (:help CTRL-W_=)
+    preserve_equality = false,
+    },
 })
+
+-- require("noice").setup()
+
 -- You probably also want to set a keymap to toggle aerial
 vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 EOF
-
 " Leader keys: 
 " q - quickfix list
 " w - vimwiki group
@@ -632,8 +682,8 @@ EOF
 " i - insert group
 " o - open project files
 " p - paste yanked
-nnoremap <leader>p "0p
-nnoremap <leader>P "0P
+nnoremap <silent> <leader>p "0p
+nnoremap <silent> <leader>P "0P
 " a - FREE
 " s - splits
 " d - debuger
@@ -645,6 +695,7 @@ nnoremap <leader>P "0P
 " l - nohls
 " z - Format
 " x - execute (tests)
+nnoremap <silent> <leader>xb :terminal cd $(dirname %); yarn build<CR>
 " c - FREE
 " v - vim source/open etc
 " b - Fzf Buffers:

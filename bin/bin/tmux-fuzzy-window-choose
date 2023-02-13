@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+tmux-lazy-session-rs listWindows | fzf --reverse --header jump-to-window | tmux-lazy-session-rs selectWindow

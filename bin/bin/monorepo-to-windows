@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+const fs = require("fs");
+
+async function convert() {
+  var stdinBuffer = fs.readFileSync(0);
+  const json = stdinBuffer.toString().trim();
+  const workspaces = JSON.parse(json);
+
+  console.log(
+    JSON.stringify(
+      Object.keys(workspaces).map((name) => {
+        return { name, path: workspaces[name].location };
+      })
+    )
+  );
+}
+
+convert();

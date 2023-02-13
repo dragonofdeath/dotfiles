@@ -1,0 +1,196 @@
+#!/usr/bin/env node
+
+// TODO: add window loader for different monorepos
+
+const { promisify } = require("util");
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
+const exec = promisify(require("child_process").exec);
+
+const CONFIG_PATH = ".config/txs/sessions.json";
+
+async function getSessions() {
+  const config = require(path.join(os.homedir(), CONFIG_PATH));
+  const configuredSessions = Object.keys(config).reduce((acc, key) => {
+    const path = deHome(config[key].path);
+    acc[key] = {
+      name: key,
+      path,
+      windows: (config[key].windows ?? []).map((w) => ({
+        ...w,
+        path: absolutePath(w.path, path),
+      })),
+      status: "configured",
+    };
+    return acc;
+  }, {});
+
+  const { stdout: sessionList, stderr } = await exec("tmux list-sessions");
+  if (stderr) {
+    throw new Error(stderr);
+  }
+  const allSessions = sessionList
+    .split("\n")
+    .filter(Boolean)
+    .map((line) => {
+      return line.split(":")[0];
+    })
+    .reduce(
+      (acc, key) => {
+        acc[key] = {
+          name: key,
+          path: configuredSessions[key]?.path,
+          status: "loaded",
+          windows: configuredSessions[key]?.windows ?? [],
+        };
+        return acc;
+      },
+      { ...configuredSessions }
+    );
+
+  const currentSessionName = await getCurrentSessionName();
+
+  allSessions[currentSessionName] = {
+    ...allSessions[currentSessionName],
+    name: currentSessionName,
+    status: "active",
+  };
+
+  return allSessions;
+}
+
+async function getCurrentSessionName() {
+  const { stdout: currentSessionNameUntrimmed, stderr: e2 } = await exec(
+    "tmux display-message -p '#S'"
+  );
+  if (e2) {
+    throw new Error(e2);
+  }
+  const currentSessionName = currentSessionNameUntrimmed.trim();
+  return currentSessionName;
+}
+
+async function listSessions() {
+  const sessions = await getSessions();
+  const list = Object.values(sessions)
+    .filter((s) => s.status !== "active")
+    .map((s) => s.name);
+  process.stdout.write(list.reverse().join("\n"));
+}
+
+async function selectSession() {
+  var stdinBuffer = fs.readFileSync(0); // STDIN_FILENO = 0
+  const chosenSession = stdinBuffer.toString().trim();
+  const sessions = await getSessions();
+  const chosenConfig = sessions[chosenSession];
+  if (!chosenConfig) {
+    throw new Error("No session config found");
+  }
+  if (chosenConfig.status === "loaded") {
+    await exec("tmux switch-client -t " + chosenConfig.name);
+  }
+  if (chosenConfig.status === "configured") {
+    await exec(
+      "tmux new-session -s " +
+        chosenConfig.name +
+        " -c " +
+        chosenConfig.path +
+        " -d "
+    );
+    await exec("tmux switch-client -t " + chosenConfig.name);
+  } else {
+    console.error(sessions);
+    throw new Error("Unknown session status");
+  }
+}
+
+async function listWindows() {
+  const { stdout, stderr } = await exec(
+    "tmux list-windows -F '#{window_index}:#{window_name}:#{pane_current_path}'"
+  );
+  if (stderr) {
+    throw new Error(stderr);
+  }
+  const existingWindows = stdout
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [index, name, path] = line.split(":");
+      return {
+        index,
+        name,
+        path,
+      };
+    })
+    .reduce((acc, w) => {
+      acc[w.name + w.path] = w;
+      return acc;
+    }, {});
+
+  const currentSessionName = await getCurrentSessionName();
+  const sessions = await getSessions();
+  const currentSession = sessions[currentSessionName];
+  const configuredWindows = (currentSession.windows ?? []).reduce(
+    (acc, w) => {
+      acc[w.name + w.path] = w;
+      return acc;
+    },
+    {}
+  );
+  const allWindows = { ...configuredWindows, ...existingWindows };
+  const list = Object.values(allWindows).map((w) =>
+    [(w.index ?? "X").padEnd(5, ' '), w.name.padEnd(30, ' '), ' ', relativeToSession(currentSession.path, w.path)].join("")
+  );
+  list.sort();
+  process.stdout.write(list.join("\n"));
+}
+
+async function selectWindow() {
+  var stdinBuffer = fs.readFileSync(0); // STDIN_FILENO = 0
+  const chosenWindow = stdinBuffer.toString().trim();
+  const [index, name, path] = chosenWindow.trim().split(/\s+/);
+  if (index !== "X") {
+    await exec("tmux select-window -t " + index);
+  } else if (index === "X") {
+    const sessions = await getSessions();
+    const currentSession = Object.values(sessions).find((s) => s.status === "active");
+    const windowConfig = currentSession.windows.find(w => w.name === name);
+    if (!windowConfig) {
+      console.error(currentSession);
+      throw new Error("No window config found");
+    }
+    await exec("tmux new-window -c " + windowConfig.path + " -n " + windowConfig.name);
+    await exec("tmux split-window -v -c " + windowConfig.path);
+    await exec("tmux split-window -h -c " + windowConfig.path);
+  } else {
+    throw new Error("Coudn't parse fzf outpu");
+  }
+}
+
+function absolutePath(filepath, sessionRoot = "") {
+  return path.resolve(deHome(sessionRoot), deHome(filepath));
+}
+
+function deHome(filepath) {
+  return filepath.startsWith('~')
+    ? filepath.replace("~", process.env.HOME)
+    : filepath;
+}
+
+function relativeToSession(sessionRoot, filepath) {
+  return path.relative(sessionRoot, filepath);
+}
+
+if (process.argv[2] === "listSessions") {
+  listSessions();
+} else if (process.argv[2] === "selectSession") {
+  selectSession();
+} else if (process.argv[2] === "listWindows") {
+  listWindows();
+} else if (process.argv[2] === "selectWindow") {
+  selectWindow();
+} else {
+  throw new Error("unknown command");
+}

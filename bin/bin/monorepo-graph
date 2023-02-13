@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+const fs = require("fs");
+
+async function toMarmaid() {
+  var stdinBuffer = fs.readFileSync(0);
+  const json = stdinBuffer.toString().trim();
+  const workspaces = JSON.parse(json);
+  const dependencies = Object.keys(workspaces).flatMap((name) => {
+    const deps = workspaces[name].workspaceDependencies;
+    return deps.map((dep) => `${name} --> ${dep}`);
+  }).join('\n');
+
+  console.log(`graph LR\n`, dependencies);
+}
+
+toMarmaid();
