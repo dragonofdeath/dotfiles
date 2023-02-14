@@ -55,7 +55,7 @@ font:
   #
   # This is a global setting and will require a log out or restart to take
   # effect.
-  use_thin_strokes: true
+  # AppleFontSmoothing: true
 
 # When true, bold text is drawn using the bright variant of colors.
 draw_bold_text_with_bright_colors: false
@@ -64,44 +64,73 @@ draw_bold_text_with_bright_colors: false
 # and cursor.background colors, otherwise invert the colors of the cursor.
 # custom_cursor_colors: false
 
-# Colors (Elly)
+# Colors (Solarized Dark)
 colors:
   # Default colors
   primary:
-    background: '#111A1F'
-    foreground: '#c0c7ca'
-
-  # Cursor colors
-  cursor:
-    text: '#ffffff'
-    cursor: '#997432'
+    background: '0x22272e'
+    foreground: '0xadbac7'
 
   # Normal colors
   normal:
-    black:   '#111A1F'
-    red:     '#8d7856'
-    green:   '#798362'
-    yellow:  '#9b9257'
-    blue:    '#63768a'
-    magenta: '#738c9c'
-    cyan:    '#6998b3'
-    white:   '#c0c7ca'
+    black:   '0x545d68'
+    red:     '0xf47067'
+    blue:    '0x539bf5'
+    green:   '0x57ab5a'
+    white:   '0xadbac7'
+    yellow:  '0xc69026'
+    magenta: '0xb083f0'
+    cyan:    '0x39c5cf'
 
   # Bright colors
   bright:
-    black:   '#868b8d'
-    red:     '#8d7856'
-    green:   '#798362'
-    yellow:  '#9b9257'
-    blue:    '#63768a'
-    magenta: '#738c9c'
-    cyan:    '#6998b3'
-    white:   '#c0c7ca'
+    black:   '0x636e7b'
+    red:     '0xff938a'
+    green:   '0x6bc46d'
+    yellow:  '0xdaaa3f'
+    blue:    '0x6cb6ff'
+    magenta: '0xdcbdfb'
+    cyan:    '0x39c5cf'
+    white:   '0xcdd9e5'
 
-  # Selection colors
-  selection:
-    text: '#111A1F'
-    background: '#c0c7ca'
+# Colors (Elly)
+# colors:
+#   # Default colors
+#   primary:
+#     background: '#111A1F'
+#     foreground: '#c0c7ca'
+
+#   # Cursor colors
+#   cursor:
+#     text: '#ffffff'
+#     cursor: '#997432'
+
+#   # Normal colors
+#   normal:
+#     black:   '#111A1F'
+#     red:     '#8d7856'
+#     green:   '#798362'
+#     yellow:  '#9b9257'
+#     blue:    '#63768a'
+#     magenta: '#738c9c'
+#     cyan:    '#6998b3'
+#     white:   '#c0c7ca'
+
+#   # Bright colors
+#   bright:
+#     black:   '#868b8d'
+#     red:     '#8d7856'
+#     green:   '#798362'
+#     yellow:  '#9b9257'
+#     blue:    '#63768a'
+#     magenta: '#738c9c'
+#     cyan:    '#6998b3'
+#     white:   '#c0c7ca'
+
+#   # Selection colors
+#   selection:
+#     text: '#111A1F'
+#     background: '#c0c7ca'
 
 #  New line
 #https://github.com/alacritty/alacritty/issues/2017#issuecomment-581707489
@@ -234,7 +263,7 @@ key_bindings:
   - { key: Minus,    mods: Control, action: DecreaseFontSize             }
 alt_send_esc: false
 
-mouse:
-  url:
-    launcher:
-      program: open
+# mouse:
+#   url:
+#     launcher:
+#       program: open

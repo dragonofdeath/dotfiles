@@ -20,6 +20,8 @@ endif
 " Plugins ---------------------------------------{{{
 
 call plug#begin('~/.vim/plugged')
+
+Plug 'projekt0n/github-nvim-theme', { 'tag': 'v0.0.7' }
 " Plug 'folke/noice.nvim'
 
 Plug 'christianchiarulli/nvcode-color-schemes.vim'
@@ -176,29 +178,30 @@ set foldmethod=syntax
 set foldlevel=20
 
 "" ========== Theme ==========
+" colorscheme github_dimmed
 set termguicolors
-colorscheme elly
-set background=dark
-hi User1 guifg=#3D424D
-hi ModeMsg guifg=#3D424D
-hi DiffAdd gui=NONE guifg=NONE guibg=#012800
-hi DiffText gui=NONE guifg=NONE guibg=#012800
-hi DiffChange gui=NONE guifg=NONE guibg=#5D4826
-hi DiffDelete gui=bold guifg=#340001 guibg=#340001
+" colorscheme elly
+" set background=dark
+" hi User1 guifg=#3D424D
+" hi ModeMsg guifg=#3D424D
+" hi DiffAdd gui=NONE guifg=NONE guibg=#012800
+" hi DiffText gui=NONE guifg=NONE guibg=#012800
+" hi DiffChange gui=NONE guifg=NONE guibg=#5D4826
+" hi DiffDelete gui=bold guifg=#340001 guibg=#340001
 
-" hi Error guifg=#Ad7576
+" " hi Error guifg=#Ad7576
 
-hi ErrorMsg guifg=#Ad7576
-hi WarningMsg guifg=#9b9257
+" hi ErrorMsg guifg=#Ad7576
+" hi WarningMsg guifg=#9b9257
 
-hi CocErrorSign guifg=#Ad7576
-hi CocWarningSign guifg=#9b9257
-hi CocInfoSign guifg=#9b9257
-hi CocHintSign guifg=#7997a6
+" hi CocErrorSign guifg=#Ad7576
+" hi CocWarningSign guifg=#9b9257
+" hi CocInfoSign guifg=#9b9257
+" hi CocHintSign guifg=#7997a6
 
 " cursor
-let &t_SI = "\e[9 q"
-let &t_EI = "\e[9 q"
+" let &t_SI = "\e[9 q"
+" let &t_EI = "\e[9 q"
 
 " Optionally reset the cursor on start:
 augroup myCmds
@@ -392,13 +395,13 @@ nnoremap <silent> gp `[v`]
 " hls colors
 " highlight Search ctermbg=black ctermfg=yellow cterm=underline
 
-augroup BgHighlight
-    autocmd!
-    autocmd WinEnter * set cursorline
-    autocmd WinEnter * set cursorcolumn
-    autocmd WinLeave * set nocursorline
-    autocmd WinLeave * set nocursorcolumn
-augroup END
+" augroup BgHighlight
+"     autocmd!
+"     autocmd WinEnter * set cursorline
+"     autocmd WinEnter * set cursorcolumn
+"     autocmd WinLeave * set nocursorline
+"     autocmd WinLeave * set nocursorcolumn
+" augroup END
 
 " refactor expression to var
 " nnoremap <leader>r ".pIconst <esc>A = <esc>""p=`]`]A;<esc>
@@ -533,7 +536,6 @@ source ~/.vim/scripts/fzf_js_import.vim
 source ~/.vim/scripts/toggle_list.vim
 source ~/.vim/scripts/open_split.vim
 source ~/.vim/scripts/grep_operator.vim
-source ~/.vim/scripts/mark_margin.vim
 source ~/.vim/scripts/git.vim
 source ~/.vim/scripts/grep.vim
 source ~/.vim/scripts/replace.vim
@@ -667,6 +669,19 @@ require('aerial').setup({
     },
 })
 
+require("github-theme").setup({
+  theme_style = "dimmed",
+  variable_style = "NONE",
+  colors = {
+    syntax = {
+      -- variable = '#00FF00',
+      func = '#adbac7',
+      constant = '#96d0ff',
+      string = '#8ddb8c',
+      variable = '#96d0ff',
+    },
+  }
+})
 -- require("noice").setup()
 
 -- You probably also want to set a keymap to toggle aerial
@@ -701,3 +716,5 @@ nnoremap <silent> <leader>xb :terminal cd $(dirname %); yarn build<CR>
 " b - Fzf Buffers:
 " n - FREE
 " m - FREE
+
+hi CocInfoHighlight gui=undercurl guisp=red
