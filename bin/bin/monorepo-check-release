@@ -1,0 +1,3 @@
+#!/bin/bash
+
+yarn constraints query "workspace(Cwd), \+ workspace_field(Cwd, 'private', true), workspace_ident(Cwd, Ident)" --json | jq -n '[inputs]' | jq '.[].Ident' | xargs -I{} sh -c "echo {} && npm info {}@next version"

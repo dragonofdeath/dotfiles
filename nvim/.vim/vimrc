@@ -266,6 +266,7 @@ nnoremap <silent> <leader>vd :vsp ~/dotfiles/<cr>
 nnoremap <silent> <leader>vi :PlugInstall<cr>
 
 let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
+" let $FZF_DEFAULT_COMMAND = 'fd -H -E .git --type file'
 nnoremap <silent> <leader>e :Files<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>/ :BLines<cr>
@@ -624,13 +625,25 @@ require("live-command").setup {
   },
 }
 require("neo-tree").setup({
+  window = {
+    mappings = {
+      -- ["-"] = "navigate_up",
+      ["[c"] = "prev_git_modified",
+      ["]c"] = "next_git_modified",
+    },
+  },
   filesystem = {
     follow_current_file = true,
+    group_empty_dirs = false,
     hijack_netrw_behavior = "open_current",
     window = {
       mappings = {
-        -- ["-"] = "navigate_up",
-      },
+        -- disable fuzzy finder
+        ["/"] = "noop"
+      }
+    },
+    filtered_items = {
+      visible = true, -- when true, they will just be displayed differently than normal items
     },
   },
 })
@@ -672,6 +685,7 @@ require('aerial').setup({
 require("github-theme").setup({
   theme_style = "dimmed",
   variable_style = "NONE",
+  dark_float = true,
   colors = {
     syntax = {
       -- variable = '#00FF00',

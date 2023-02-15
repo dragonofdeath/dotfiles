@@ -10,6 +10,10 @@ source ~/.vim/vimrc
 set runtimepath^=/Users/vaidask/b/stylable-intelligence
 
 lua <<EOF
+
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",     -- one of "all", "language", or a list of languages
   highlight = {
