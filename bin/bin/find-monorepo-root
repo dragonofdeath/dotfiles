@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e # exit immediately if any command fails
+
+# Get the path of the file to find the monorepo root for
+file_path=$1
+
+if [[ $file_path == "" ]]; then
+  echo 'Usage: find-monorepo-root filepath' 1>&2
+  exit 1
+fi
+
+# Find the closest ancestor directory containing a package.json file with a "workspaces" field
+monorepo_dir=$(
+  cd $(dirname $file_path);
+  while [[ $(pwd) != '/' ]]; do
+    if [[ -f package.json ]] &&  [[ "$( cat package.json | jq 'has("workspaces")' )" == "true" ]]; then
+      pwd
+      break
+    fi
+    cd ..
+  done
+)
+
+if [[ $monorepo_dir == '' ]]; then
+  echo 'Monorepo root not found' 1>&2
+  exit 1
+fi
+
+echo -n $monorepo_dir

@@ -23,6 +23,10 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'projekt0n/github-nvim-theme', { 'tag': 'v0.0.7' }
 " Plug 'folke/noice.nvim'
+Plug 'ray-x/sad.nvim'
+Plug 'ray-x/guihua.lua'
+
+Plug 'dyng/ctrlsf.vim'
 
 Plug 'christianchiarulli/nvcode-color-schemes.vim'
 
@@ -108,6 +112,7 @@ let g:coc_global_extensions = [
 \ 'coc-fzf-preview',
 \ 'coc-protobuf',
 \ 'coc-spell-checker',
+\ 'coc-sh',
 \ ]
 " \ 'coc-tabnine',
 
@@ -527,10 +532,6 @@ augroup navigator_netrw_fix
   autocmd FileType netrw nmap <buffer> <silent> <c-l> :TmuxNavigateRight<cr>
 augroup END
 
-nnoremap <silent> <leader>oe :e .env<cr>
-nmap <leader>op :e package.json<cr>
-nnoremap <silent> <leader>ot :e tsconfig.json<cr>
-
 packadd cfilter
 
 source ~/.vim/scripts/fzf_js_import.vim
@@ -542,6 +543,7 @@ source ~/.vim/scripts/grep.vim
 source ~/.vim/scripts/replace.vim
 source ~/.vim/scripts/goyo.vim
 source ~/.vim/scripts/tree_surfer.vim
+source ~/.vim/scripts/execute-package-script.vim
 " source ~/.vim/scripts/theme.vim
 
 nnoremap  <silent> <leader>gv :call git#git_diffview_commit()<CR>
@@ -697,7 +699,16 @@ require("github-theme").setup({
   }
 })
 -- require("noice").setup()
-
+require("sad").setup({
+  debug = false, -- print debug info
+  diff = 'delta', -- you can use `less`, `diff-so-fancy`
+  ls_file = 'fd', -- also git ls_file
+  exact = false, -- exact match
+  vsplit = false, -- split sad window the screen vertically, when set to number
+  -- it is a threadhold when window is larger than the threshold sad will split vertically,
+  height_ratio = 0.6, -- height ratio of sad window when split horizontally
+  width_ratio = 0.6, -- height ratio of sad window when split vertically
+})
 -- You probably also want to set a keymap to toggle aerial
 vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 EOF
@@ -709,11 +720,25 @@ EOF
 " y - FREE
 " u - FREE
 " i - insert group
-" o - open project files
+" o - open package/monorepo level files
+nnoremap <silent> <leader>oe :execute "edit " . system('find-package-root ' . expand('%:p')) . '/.env' <CR>
+nnoremap <silent> <leader>op :execute "edit " . system('find-package-root ' . expand('%:p')) . '/package.json' <CR>
+nnoremap <silent> <leader>ot :execute "edit " . system('find-package-root ' . expand('%:p')) . '/tsconfig.json' <CR>
+nnoremap <silent> <leader>on :execute "edit " . system('find-package-root ' . expand('%:p')) . '/node_modules' <CR>
+nnoremap <leader>os :execute "cd " . system('find-package-root ' . expand('%:p'))<CR>:pwd<CR>
+nnoremap <leader>ox :call ExecutePackageScript(system('find-package-root ' . expand('%:p')))<CR>
+
+nnoremap <silent> <leader>ooe :execute "edit " . system('find-monorepo-root ' . expand('%:p')) . '/.env' <CR>
+nnoremap <silent> <leader>oop :execute "edit " . system('find-monorepo-root ' . expand('%:p')) . '/package.json' <CR>
+nnoremap <silent> <leader>oot :execute "edit " . system('find-monorepo-root ' . expand('%:p')) . '/tsconfig.json' <CR>
+nnoremap <silent> <leader>oon :execute "edit " . system('find-monorepo-root ' . expand('%:p')) . '/node_modules' <CR>
+nnoremap <leader>oos :execute "cd " . system('find-monorepo-root ' . expand('%:p'))<CR>:pwd<CR>
+nnoremap <leader>oox :call ExecutePackageScript(system('find-monorepo-root ' . expand('%:p')))<CR>
+
 " p - paste yanked
 nnoremap <silent> <leader>p "0p
 nnoremap <silent> <leader>P "0P
-" a - FREE
+" a - aerial
 " s - splits
 " d - debuger
 " f - coc fzf - unused
