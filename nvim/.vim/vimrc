@@ -36,6 +36,10 @@ Plug 'nvim-lua/plenary.nvim',
 Plug 'MunifTanjim/nui.nvim',
 Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'v2.x' }
 
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'nvim-neotest/neotest'
+Plug 'haydenmeade/neotest-jest'
+
 Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'nvim-treesitter/playground'
 Plug 'stevearc/aerial.nvim'
@@ -223,7 +227,7 @@ set hidden
 
 " Mappings ----------------------------------------{{{
 nnoremap <silent> <leader>l :<C-u>nohlsearch<CR>
-cnoremap <silent> <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " airline
 let g:airline#extensions#tabline#enabled = 1
@@ -423,7 +427,8 @@ set nowritebackup
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Highlight symbol under cursor on CursorHold
 " autocmd CursorHold * :echo("abc")
@@ -620,6 +625,9 @@ nnoremap <silent> \ :Neotree reveal<cr>
 set title
 set titlestring=%{hostname()}\ \ %F\ \ %{strftime('%Y-%m-%d\ %H:%M',getftime(expand('%')))}
 
+" fix gbrowse when because netrw is disabled: https://vi.stackexchange.com/questions/38447/vim-fugitive-netrw-not-found-define-your-own-browse-to-use-gbrowse
+:command! -nargs=1 Browse silent execute '!open' shellescape(<q-args>,1)
+
 lua <<EOF
 require("live-command").setup {
   commands = {
@@ -711,6 +719,20 @@ require("sad").setup({
 })
 -- You probably also want to set a keymap to toggle aerial
 vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
+
+require('neotest').setup({
+  adapters = {
+    require('neotest-jest')({
+      jestCommand = "echo hello;",
+      -- jestConfigFile = "custom.jest.config.ts",
+      env = { CI = true },
+      cwd = function(path)
+        return vim.fn.system('find-package-root ' .. path)
+      end,
+    }),
+  }
+})
+
 EOF
 " Leader keys: 
 " q - quickfix list
