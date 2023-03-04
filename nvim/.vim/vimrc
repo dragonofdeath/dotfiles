@@ -57,7 +57,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 
 Plug 'https://github.com/morhetz/gruvbox.git'
 Plug 'ericbn/vim-solarized'
-Plug 'ulwlu/elly.vim'
+" Plug 'ulwlu/elly.vim'
 Plug 'cormacrelf/vim-colors-github'
 Plug 'ayu-theme/ayu-vim'
 
@@ -97,6 +97,13 @@ Plug 'andys8/vim-elm-syntax'
 
 Plug 'mfussenegger/nvim-dap'
 
+Plug 'cbochs/portal.nvim'
+
+Plug 'kevinhwang91/nvim-bqf'
+
+Plug 'inkarkat/vim-EnhancedJumps'
+Plug 'inkarkat/vim-ingo-library'
+
 Plug 'andymass/vim-visput'
 set signcolumn=number
 let g:coc_global_extensions = [
@@ -121,7 +128,7 @@ let g:coc_global_extensions = [
 " \ 'coc-tabnine',
 
 Plug 'machakann/vim-highlightedyank'
-Plug '/usr/local/opt/fzf'
+Plug '/opt/homebrew/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
 Plug 'wellle/targets.vim'
@@ -185,6 +192,8 @@ set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars map
 
 set foldmethod=syntax
 set foldlevel=20
+" set foldmethod=expr
+" set foldexpr=nvim_treesitter#foldexpr()
 
 "" ========== Theme ==========
 " colorscheme github_dimmed
@@ -236,7 +245,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_extensions = ['tmuxline', 'netrw', 'quickfix', 'coc']
-let g:airline_theme='elly'
+" let g:airline_theme='elly'
 " let g:airline#extensions#coc#enabled = 1
 
 " Save with treesitter reset
@@ -733,7 +742,16 @@ require('neotest').setup({
   }
 })
 
+vim.keymap.set("n", "<leader>j", "<cmd>Portal jumplist backward<cr>")
+-- vim.keymap.set("n", "<leader>i", "<cmd>Portal jumplist forward<cr>")
+
 EOF
+
+" Alt-o
+nmap <A-o> <Plug>EnhancedJumpsRemoteOlder
+" Alt-i
+nmap <A-i> <Plug>EnhancedJumpsRemoteNewer
+
 " Leader keys: 
 " q - quickfix list
 " w - vimwiki group

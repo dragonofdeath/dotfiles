@@ -1,7 +1,7 @@
 [user]
   name = Vaidas Kublinskas (dragonofdeath)
   email = vaidask@wix.com
-  signingkey = 431072B8D3FE15C0
+  signingkey = EC1909DD917D4F25
 [credential]
   helper = cache --timeout=3600
 [alias]

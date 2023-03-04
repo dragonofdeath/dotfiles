@@ -1,6 +1,6 @@
 " https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
 
-set grepprg=ag\ --vimgrep
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 
 function! Grep(...)
 	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))

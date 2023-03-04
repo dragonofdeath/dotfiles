@@ -1,7 +1,8 @@
 # load our own completion functions
 fpath=(~/.zsh/completion $fpath)
-
 zmodload zsh/zprof
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 for function in ~/.zsh/functions/*; do
   source $function
@@ -45,8 +46,13 @@ _load_settings "$HOME/.zsh/configs"
 [[ -f ~/.aliases ]] && source ~/.aliases
 export PATH="$PATH:$HOME/.local/bin"
 
-source "$HOME/.bazelenv"
-[ -f "/Users/vaidask/.ghcup/env" ] && source "/Users/vaidask/.ghcup/env" # ghcup-env
-
 export PNPM_HOME="/Users/vaidask/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+# pnpm
+export PNPM_HOME="/Users/vaidask/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end

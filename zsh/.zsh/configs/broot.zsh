@@ -1,7 +1,7 @@
 
 
-source "${HOME}/.config/broot/launcher/bash/br"
+# source "${HOME}/.config/broot/launcher/bash/br"
 
-alias brs='br -s'
-alias brh='br -h'
-alias bri='br -i'
+# alias brs='br -s'
+# alias brh='br -h'
+# alias bri='br -i'
