@@ -56,3 +56,13 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export PNPM_HOME="/Users/vaidask/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
+
+export JAVA_HOME=`/usr/libexec/java_home -v 11`
+export ANDROID_HOME=/Users/vaidask/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+export PUPPETEER_EXECUTABLE_PATH=`which chromium`

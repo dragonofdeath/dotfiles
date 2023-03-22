@@ -147,6 +147,10 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-symbols.nvim'
 
+Plug 'kevinhwang91/promise-async'
+Plug 'kevinhwang91/nvim-ufo'
+Plug 'luukvbaal/statuscol.nvim'
+
 call plug#end()
 
 nnoremap <silent> <leader> :WhichKey ' '<CR>
@@ -190,8 +194,8 @@ set shiftwidth=2
 set list          " Display unprintable characters f12 - switches
 set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars mapping
 
-set foldmethod=syntax
-set foldlevel=20
+" set foldmethod=syntax
+" set foldlevel=20
 " set foldmethod=expr
 " set foldexpr=nvim_treesitter#foldexpr()
 
@@ -282,6 +286,7 @@ nnoremap <silent> <leader>ve :vsp ~/.vim/vimrc<cr>
 nnoremap <silent> <leader>vn :CocCommand snippets.editSnippets<cr>
 nnoremap <silent> <leader>vd :vsp ~/dotfiles/<cr>
 nnoremap <silent> <leader>vi :PlugInstall<cr>
+nnoremap <silent> <leader>vj :e ~/.config/txs/sessions.json<cr>
 
 let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
 " let $FZF_DEFAULT_COMMAND = 'fd -H -E .git --type file'
@@ -411,9 +416,6 @@ set inccommand=split
 " select just pasted text
 nnoremap <silent> gp `[v`]
 
-" hls colors
-" highlight Search ctermbg=black ctermfg=yellow cterm=underline
-
 " augroup BgHighlight
 "     autocmd!
 "     autocmd WinEnter * set cursorline
@@ -426,9 +428,9 @@ nnoremap <silent> gp `[v`]
 " nnoremap <leader>r ".pIconst <esc>A = <esc>""p=`]`]A;<esc>
 
 " vim-test
-nmap <silent><leader>xt :TestNearest<cr>
-nmap <silent><leader>xf :TestFile<cr>
-nmap <silent><leader>xl :TestLast<cr>
+nmap <silent><leader>xt <leader>os:TestNearest<cr>
+nmap <silent><leader>xf <leader>os:TestFile<cr>
+nmap <silent><leader>xl <leader>os:TestLast<cr>
 " Coc
 " Some servers have issues with backup files
 set nobackup
@@ -612,8 +614,8 @@ let g:test#custom_strategies = {'jest': function('JestStrategy')}
 nnoremap <silent> - :Neotree filesystem reveal current<CR>
 
 
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+" set foldmethod=expr
+" set foldexpr=nvim_treesitter#foldexpr()
 
 hi clear SpellBad
 hi SpellBad cterm=underline
@@ -626,7 +628,7 @@ nnoremap <silent> yog :Goyo<CR>
 nnoremap <silent> yol :Limelight!!<CR>
 
 let g:test#javascript#runner = "jest"
-let g:test#javascript#jest#executable="yarn test:unit"
+let g:test#javascript#jest#executable="yarn test"
 " let g:test#javascript#jest#executable="yarn jest"
 
 nnoremap <silent> \ :Neotree reveal<cr>
@@ -745,7 +747,78 @@ require('neotest').setup({
 vim.keymap.set("n", "<leader>j", "<cmd>Portal jumplist backward<cr>")
 -- vim.keymap.set("n", "<leader>i", "<cmd>Portal jumplist forward<cr>")
 
+-- require("statuscol").setup(
+--   {
+--     foldfunc = "builtin",
+--     setopt = true
+--   }
+-- )
+
+
+vim.o.foldcolumn = "1" -- '0' is not bad
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+vim.o.foldcolumn = '1'
+vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+
+-- these are "extra", change them as you like
+vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+vim.keymap.set("n", "zM", function() 
+  vim.o.foldlevel = 0 
+end)
+vim.keymap.set('n', 'K', function()
+    local winid = require('ufo').peekFoldedLinesUnderCursor()
+    if not winid then
+        -- choose one of coc.nvim and nvim lsp
+        vim.fn.CocActionAsync('definitionHover') -- coc.nvim
+        vim.lsp.buf.hover()
+    end
+end)
+
+local lineCountHandler = function(virtText, lnum, endLnum, width, truncate)
+    local newVirtText = {}
+    local suffix = ('  %d '):format(endLnum - lnum)
+    local sufWidth = vim.fn.strdisplaywidth(suffix)
+    local targetWidth = width - sufWidth
+    local curWidth = 0
+    for _, chunk in ipairs(virtText) do
+        local chunkText = chunk[1]
+        local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+        if targetWidth > curWidth + chunkWidth then
+            table.insert(newVirtText, chunk)
+        else
+            chunkText = truncate(chunkText, targetWidth - curWidth)
+            local hlGroup = chunk[2]
+            table.insert(newVirtText, {chunkText, hlGroup})
+            chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            -- str width returned from truncate() may less than 2nd argument, need padding
+            if curWidth + chunkWidth < targetWidth then
+                suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+            end
+            break
+        end
+        curWidth = curWidth + chunkWidth
+    end
+    table.insert(newVirtText, {suffix, 'MoreMsg'})
+    return newVirtText
+end
+-- Option 3: treesitter as a main provider instead
+-- Only depend on `nvim-treesitter/queries/filetype/folds.scm`,
+-- performance and stability are better than `foldmethod=nvim_treesitter#foldexpr()`
+require("ufo").setup(
+  {
+    fold_virt_text_handler = lineCountHandler,
+    provider_selector = function(bufnr, filetype, buftype)
+      return {"treesitter", "indent"}
+    end
+  }
+)
+
 EOF
+
+" hls colors
+highlight Search ctermbg=black ctermfg=yellow cterm=underline guibg=yellow
 
 " Alt-o
 nmap <A-o> <Plug>EnhancedJumpsRemoteOlder
@@ -789,7 +862,7 @@ nnoremap <silent> <leader>P "0P
 " l - nohls
 " z - Format
 " x - execute (tests)
-nnoremap <silent> <leader>xb :terminal cd $(dirname %); yarn build<CR>
+nmap <silent><leader>xb <leader>os:terminal cd $(dirname %); yarn build<CR>
 " c - FREE
 " v - vim source/open etc
 " b - Fzf Buffers:
