@@ -20,7 +20,7 @@ endif
 " Plugins ---------------------------------------{{{
 
 call plug#begin('~/.vim/plugged')
-
+" Plug 'akinsho/bufferline.nvim', { 'tag': 'v3.*' }
 Plug 'projekt0n/github-nvim-theme', { 'tag': 'v0.0.7' }
 " Plug 'folke/noice.nvim'
 Plug 'ray-x/sad.nvim'
@@ -151,6 +151,8 @@ Plug 'kevinhwang91/promise-async'
 Plug 'kevinhwang91/nvim-ufo'
 Plug 'luukvbaal/statuscol.nvim'
 
+Plug 'chentoast/marks.nvim'
+
 call plug#end()
 
 nnoremap <silent> <leader> :WhichKey ' '<CR>
@@ -248,9 +250,15 @@ let g:airline_powerline_fonts = 1
 " let g:airline_inactive_collapse=1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline_extensions = ['tmuxline', 'netrw', 'quickfix', 'coc']
-" let g:airline_theme='elly'
+let g:airline_extensions = ['tmuxline', 'quickfix', 'coc']
+" let g:airline_section_c = ''
+" let g:airline_theme='github'
 " let g:airline#extensions#coc#enabled = 1
+let g:airline_section_c='%<%#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#%#__accent_bold#%{airline#util#wrap(airline#extensions#coc#get_status(),0)}%#__restore__#%#__accent_bold#%#__restore__#'
+" show me the git branch
+" let g:airline#extensions#hunks#enabled=0
+let g:airline#extensions#branch#enabled=1
+" let g:airline_section_b = '%{b:branch}'
 
 " Save with treesitter reset
 nnoremap <silent> <S-s> :write \| edit \| TSBufEnable highlight<CR>
@@ -628,7 +636,7 @@ nnoremap <silent> yog :Goyo<CR>
 nnoremap <silent> yol :Limelight!!<CR>
 
 let g:test#javascript#runner = "jest"
-let g:test#javascript#jest#executable="yarn test"
+let g:test#javascript#jest#executable="yarn test-jest"
 " let g:test#javascript#jest#executable="yarn jest"
 
 nnoremap <silent> \ :Neotree reveal<cr>
@@ -640,6 +648,60 @@ set titlestring=%{hostname()}\ \ %F\ \ %{strftime('%Y-%m-%d\ %H:%M',getftime(exp
 :command! -nargs=1 Browse silent execute '!open' shellescape(<q-args>,1)
 
 lua <<EOF
+
+-- require("bufferline").setup {
+--   options = {
+--     name_formatter = function(buf) 
+--       local MAX_LEN = 100
+--       local ellipsis = string.char(0xE2, 0x80, 0xA6)
+--       local str = buf.path:gsub("/Users/vaidask", "~") 
+--       if string.len(str) > MAX_LEN then
+--         str = ellipsis .. string.sub(str, -MAX_LEN + string.len(ellipsis))
+--       end
+--       return str
+-- 
+--     end,
+--     max_name_length = 100
+--   }
+-- }
+
+require("marks").setup {
+  -- whether to map keybinds or not. default true
+  default_mappings = true,
+  -- which builtin marks to show. default {}
+  builtin_marks = { ".", "<", ">", "^" },
+  -- whether movements cycle back to the beginning/end of buffer. default true
+  cyclic = true,
+  -- whether the shada file is updated after modifying uppercase marks. default false
+  force_write_shada = false,
+  -- how often (in ms) to redraw signs/recompute mark positions. 
+  -- higher values will have better performance but may cause visual lag, 
+  -- while lower values may cause performance penalties. default 150.
+  refresh_interval = 250,
+  -- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
+  -- marks, and bookmarks.
+  -- can be either a table with all/none of the keys, or a single number, in which case
+  -- the priority applies to all marks.
+  -- default 10.
+  sign_priority = { lower=10, upper=15, builtin=8, bookmark=20 },
+  -- disables mark tracking for specific filetypes. default {}
+  excluded_filetypes = {},
+  -- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
+  -- sign/virttext. Bookmarks can be used to group together positions and quickly move
+  -- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
+  -- default virt_text is "".
+  bookmark_0 = {
+    sign = "⚑",
+    virt_text = "hello world",
+    -- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
+    -- defaults to false.
+    annotate = false,
+  },
+   mappings = {
+     annotate="M"
+  }
+}
+
 require("live-command").setup {
   commands = {
     Norm = { cmd = "norm" },
@@ -831,6 +893,8 @@ nmap <A-i> <Plug>EnhancedJumpsRemoteNewer
 " e - open fzf :Files
 " r - replcase is in project
 " y - FREE
+:command! CopyBuffer let @+ = join([expand('%:p'),  line(".")], ':')
+nnoremap <silent> <leader>y :CopyBuffer<CR>
 " u - FREE
 " i - insert group
 " o - open package/monorepo level files
@@ -869,4 +933,32 @@ nmap <silent><leader>xb <leader>os:terminal cd $(dirname %); yarn build<CR>
 " n - FREE
 " m - FREE
 
-hi CocInfoHighlight gui=undercurl guisp=red
+hi CocInfoHighlight gui=undercurl guisp=#6bc46d
+
+" set winbar=g:airline_section_c
+autocmd FileType neo-tree,fugitive,help,startify,dashboard,packer,neogitstatus,NvimTree,Trouble,alpha,lir,Outline,spectre_panel,toggleterm,qf let b:nowinbar=1
+fun! AddWinBar()
+    " Don't strip on these filetypes
+    if exists('b:nowinbar')
+        return
+    endif
+
+    " setlocal winbar=%<%f
+    setlocal winbar=
+    setlocal winbar+=%#PathGroup#
+    setlocal winbar+=%{expand('%:~:h')}/
+    setlocal winbar+=%#FileNameGroup#
+    setlocal winbar+=%t
+    setlocal winbar+=%m
+
+    highlight PathGroup guifg=gray guibg=black
+    highlight FileNameGroup guifg=#f47067 guibg=black
+    " highlight WinBar cterm=underline ctermfg=gray ctermbg=darkblue
+
+    " highlight WinBarNC cterm=NONE
+endfun
+
+
+autocmd BufEnter * call AddWinBar()
+
+hi CocSpellBad cterm=underline gui=underline ctermfg=Green guifg=Green
