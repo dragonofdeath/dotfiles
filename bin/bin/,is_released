@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Usage: is_released <directory> <tag-name>
+
+directory="$1"
+tag="$2"
+
+if [[ -z "$directory" || -z "$tag" ]]; then
+  echo "Usage: is_released <directory> <tag-name>"
+  exit 1
+fi
+
+# Navigate to git repository root
+root_dir=$(git rev-parse --show-toplevel)
+cd "$root_dir" || exit 1
+
+# Validate if tag exists
+if ! git rev-parse "$tag" >/dev/null 2>&1; then
+  echo "Tag $tag does not exist."
+  exit 1
+fi
+
+# Check each file in the directory
+released=true
+
+for file in $(find "$directory" -type f); do
+  # Get the latest commit hash where the file was changed
+  last_commit=$(git log -n 1 --pretty=format:%H -- "$file")
+  
+  # Check if this commit is contained in the tag
+  if ! git merge-base --is-ancestor "$last_commit" "$tag"; then
+    echo "$file is not contained in the tag $tag."
+    released=false
+  fi
+done
+
+if $released; then
+  echo "All changes in $directory are contained in the tag $tag."
+else
+  echo "Some changes in $directory are not contained in the tag $tag."
+fi
