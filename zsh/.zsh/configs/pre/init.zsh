@@ -10,7 +10,7 @@ setopt auto_cd
 
 # use vim as the visual editor
 export TERM=alacritty
-export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin:$HOME/bin/:/Applications/ARM/bin"
+export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/bin:/bin:$HOME/bin/:/Applications/ARM/bin:~/.bun/bin:/usr/local/go/bin"
 export VISUAL='nvim -u ~/.config/nvim/minit.vim'
 export EDITOR='nvim -u ~/.config/nvim/minit.vim'
 export PAGER=less
@@ -39,6 +39,7 @@ alias s="source ~/.zshrc"
 alias g="git"
 alias p="pnpm"
 alias pr="pnpm -r"
+alias hi="notify 0 done && say 'done'"
 
 autoload -U promptinit && promptinit
 prompt redhat

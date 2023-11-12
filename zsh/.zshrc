@@ -66,3 +66,12 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+
+# bun completions
+[ -s "/Users/vaidask/.bun/_bun" ] && source "/Users/vaidask/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+source /Users/vaidask/.config/broot/launcher/bash/br
