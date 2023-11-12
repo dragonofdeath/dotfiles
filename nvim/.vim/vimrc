@@ -22,7 +22,13 @@ endif
 call plug#begin('~/.vim/plugged')
 " Plug 'akinsho/bufferline.nvim', { 'tag': 'v3.*' }
 Plug 'projekt0n/github-nvim-theme', { 'tag': 'v0.0.7' }
-" Plug 'folke/noice.nvim'
+
+Plug 'epwalsh/obsidian.nvim'
+
+Plug 'folke/which-key.nvim'
+Plug 'mrjones2014/legendary.nvim'
+Plug 'stevearc/dressing.nvim'
+
 Plug 'ray-x/sad.nvim'
 Plug 'ray-x/guihua.lua'
 
@@ -136,7 +142,7 @@ Plug 'wellle/targets.vim'
 " Scratch buffer
 Plug 'mtth/scratch.vim'
 
-Plug 'vimwiki/vimwiki'
+" Plug 'vimwiki/vimwiki'
 
 Plug 'janko/vim-test'
 
@@ -152,6 +158,10 @@ Plug 'kevinhwang91/nvim-ufo'
 Plug 'luukvbaal/statuscol.nvim'
 
 Plug 'chentoast/marks.nvim'
+
+Plug 'jackMort/ChatGPT.nvim'
+
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 call plug#end()
 
@@ -196,36 +206,9 @@ set shiftwidth=2
 set list          " Display unprintable characters f12 - switches
 set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars mapping
 
-" set foldmethod=syntax
-" set foldlevel=20
-" set foldmethod=expr
-" set foldexpr=nvim_treesitter#foldexpr()
-
 "" ========== Theme ==========
 " colorscheme github_dimmed
 set termguicolors
-" colorscheme elly
-" set background=dark
-" hi User1 guifg=#3D424D
-" hi ModeMsg guifg=#3D424D
-" hi DiffAdd gui=NONE guifg=NONE guibg=#012800
-" hi DiffText gui=NONE guifg=NONE guibg=#012800
-" hi DiffChange gui=NONE guifg=NONE guibg=#5D4826
-" hi DiffDelete gui=bold guifg=#340001 guibg=#340001
-
-" " hi Error guifg=#Ad7576
-
-" hi ErrorMsg guifg=#Ad7576
-" hi WarningMsg guifg=#9b9257
-
-" hi CocErrorSign guifg=#Ad7576
-" hi CocWarningSign guifg=#9b9257
-" hi CocInfoSign guifg=#9b9257
-" hi CocHintSign guifg=#7997a6
-
-" cursor
-" let &t_SI = "\e[9 q"
-" let &t_EI = "\e[9 q"
 
 " Optionally reset the cursor on start:
 augroup myCmds
@@ -241,7 +224,6 @@ set updatetime=400
 set hidden
 
 " Mappings ----------------------------------------{{{
-nnoremap <silent> <leader>l :<C-u>nohlsearch<CR>
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " airline
@@ -251,14 +233,9 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_extensions = ['tmuxline', 'quickfix', 'coc']
-" let g:airline_section_c = ''
-" let g:airline_theme='github'
-" let g:airline#extensions#coc#enabled = 1
 let g:airline_section_c='%<%#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#%#__accent_bold#%{airline#util#wrap(airline#extensions#coc#get_status(),0)}%#__restore__#%#__accent_bold#%#__restore__#'
 " show me the git branch
-" let g:airline#extensions#hunks#enabled=0
 let g:airline#extensions#branch#enabled=1
-" let g:airline_section_b = '%{b:branch}'
 
 " Save with treesitter reset
 nnoremap <silent> <S-s> :write \| edit \| TSBufEnable highlight<CR>
@@ -287,18 +264,8 @@ noremap <S-h> ^
 noremap <S-l> $
 noremap <C-6> :e#
 
-" system config editing
-nnoremap <silent> <leader>vs :so $MYVIMRC<cr>
-nnoremap <silent> <leader>vo :vsp $MYVIMRC<cr>
-nnoremap <silent> <leader>ve :vsp ~/.vim/vimrc<cr>
-nnoremap <silent> <leader>vn :CocCommand snippets.editSnippets<cr>
-nnoremap <silent> <leader>vd :vsp ~/dotfiles/<cr>
-nnoremap <silent> <leader>vi :PlugInstall<cr>
-nnoremap <silent> <leader>vj :e ~/.config/txs/sessions.json<cr>
-
 let $FZF_DEFAULT_COMMAND = 'fd -H -E .git'
 " let $FZF_DEFAULT_COMMAND = 'fd -H -E .git --type file'
-nnoremap <silent> <leader>e :Files<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>/ :BLines<cr>
 nnoremap <silent> <leader>h :History<cr>
@@ -386,28 +353,13 @@ set scrolloff=3                 " minimum lines to keep above and below cursor
 set gdefault                    " the /g flag on :s substitutions
 set tabstop=4
 
-" fugitive
-noremap <silent> <leader>gb :Git blame<CR>
-noremap <silent> <leader>gs :Git<CR>
-nnoremap <silent> <leader>gd :DiffviewOpen<CR>
-nnoremap <silent> <leader>gdh :diffget //2<CR>
-nnoremap <silent> <leader>gdl :diffget //3<CR>
-noremap <silent> <leader>ge :Gedit<CR>
-noremap <silent> <leader>gl :0Gclog!<CR>
-noremap <silent> <leader>gc :Git commit<CR>
-noremap <silent> <leader>gw :Gwrite<CR>
-noremap <silent> <leader>gpf :Git push --forse<CR>
-noremap <silent> <leader>gpb :Git pub<CR>
-
-nnoremap <expr> <Leader>gr ':!gh pr view -w '.expand('<cword>').'<cr>'
-
 augroup filetype_git
     autocmd!
     autocmd FileType git :norm zM<CR>
 augroup END
 
 " shotcuts for location and quickfix windows
-nmap <silent> <leader>w :call ToggleList("Location List", 'l')<CR>
+" nmap <silent> <leader>w :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " clean white space
@@ -469,6 +421,7 @@ nmap [g <Plug>(coc-diagnostic-prev-error)
 nmap <silent> <leader>tr <Plug>(coc-rename)
 nmap <silent> <leader>ta <Plug>(coc-references)
 nmap <silent> <leader>tt :call CocAction('doHover')<cr>
+nmap <silent> <leader>cc :CocCommand<cr>
 
 " nnoremap <silent> <leader>z :Prettier<cr>
 nmap <silent> <leader>z <Plug>(coc-format)
@@ -512,7 +465,6 @@ augroup ctrl_m_definition
     autocmd!
     autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascriptreact,javascript.tsx,rust,stylable,vim,haskell,proto nnoremap <buffer> <cr> <Plug>(coc-definition)
     autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <leader>z :CocCommand eslint.executeAutofix<cr>
-    autocmd BufWrite * :echom "Writing buffer!"
 augroup END
 "replace the word under cursor
 " nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
@@ -569,8 +521,6 @@ source ~/.vim/scripts/goyo.vim
 source ~/.vim/scripts/tree_surfer.vim
 source ~/.vim/scripts/execute-package-script.vim
 " source ~/.vim/scripts/theme.vim
-
-nnoremap  <silent> <leader>gv :call git#git_diffview_commit()<CR>
 
 "camellcase
 nnoremap <silent> ,c viwgu:s/_\([a-z]\)/\u\1/g<CR>
@@ -636,7 +586,7 @@ nnoremap <silent> yog :Goyo<CR>
 nnoremap <silent> yol :Limelight!!<CR>
 
 let g:test#javascript#runner = "jest"
-let g:test#javascript#jest#executable="yarn test-jest"
+let g:test#javascript#jest#executable="yarn test"
 " let g:test#javascript#jest#executable="yarn jest"
 
 nnoremap <silent> \ :Neotree reveal<cr>
@@ -877,6 +827,135 @@ require("ufo").setup(
   }
 )
 
+
+require("chatgpt").setup({
+  openai_params = {
+    model = "gpt-4",
+    max_tokens = 2000,
+  },
+  keymaps = {
+      close = { "<C-c>" },
+      submit = "<S-CR>",
+      yank_last = "<C-y>",
+      yank_last_code = "<C-k>",
+      scroll_up = "<C-u>",
+      scroll_down = "<C-d>",
+      toggle_settings = "<C-o>",
+      new_session = "<C-n>",
+      cycle_windows = "<Tab>",
+      -- in the Sessions pane
+      select_session = "<Space>",
+      rename_session = "r",
+      delete_session = "d",
+    },
+})
+
+require('dressing').setup({
+ select = {
+   get_config = function(opts)
+     if opts.kind == 'legendary.nvim' then
+       return {
+         telescope = {
+           sorter = require('telescope.sorters').fuzzy_with_index_bias({})
+         }
+       }
+     else
+       return {}
+     end
+   end
+ }
+})
+
+local wk = require("which-key");
+wk.setup({})
+
+wk.register({
+e = { "<cmd>execute 'silent! cd ' . system('find-monorepo-root ' . expand('%:p'))<CR>:Files<CR>", "find file in monorepo" },
+g = {
+  name = "Git",
+  b = { "<cmd>Git blame<CR>", "Blame" },
+  s = { "<cmd>Git<CR>", "Status" },
+  h = { "<cmd>DiffviewFileHistory<CR>", "History" },
+  f = { "<cmd>DiffviewFileHistory %<CR>", "History of current file" },
+  d = { "<cmd>DiffviewOpen<CR>", "Diff" },
+  v = { "<cmd>call git#git_diffview_commit()<CR>", "Diff of commit" },
+  dh = { "<cmd>diffget //2<CR>", "Diff get left" },
+  dl = { "<cmd>diffget //3<CR>", "Diff get right" },
+  e = { "<cmd>Gedit<CR>", "Edit" },
+  l = { "<cmd>0Gclog!<CR>", "Log" },
+  c = { "<cmd>Git commit<CR>", "Commit" },
+  w = { "<cmd>Git write<CR>", "Write" },
+  p = {
+    name = 'Publish',
+    f = { "<cmd>Git push --force-with-lease<CR>", "Push force" },
+    b = { "<cmd>Git pub <CR>", "Publish branch" },
+  },
+  -- gr = { function() vim.cmd("!gh pr view -w<CR>") end ,  "View PR on this branch" },
+  r = { "<cmd>!gh pr view -w<CR>",  "View PR on this branch" },
+},
+o = {
+  name = "Package",
+  u = {function() 
+        if vim.bo.filetype == 'neo-tree' then
+          local state = require("neo-tree.sources.manager").get_state("filesystem")
+          local node = state.tree:get_node()
+          vim.pretty_print(node)
+          if node.type == 'file' then
+          else 
+            vim.cmd(":Files " .. node.path)
+          end
+        end
+      end, "find files in current directory"},
+  p = { "<cmd>execute 'edit ' . system('find-package-root ' . expand('%:p')) . '/package.json' <CR>", "Edit package.json" },
+  t = { "<cmd>execute 'edit ' . system('find-package-root ' . expand('%:p')) . '/tsconfig.json' <CR>", "Edit tsconfig.json" },
+  n = { "<cmd>system('find-package-root ' . expand('%:p')) . '/node_modules' <CR>", "Edit node_modules" },
+  s = { "<cmd>execute 'cd ' . system('find-package-root ' . expand('%:p'))<CR>:pwd<CR>", "Set cwd to package root" },
+  x = { "<cmd>call ExecutePackageScript(system('find-package-root ' . expand('%:p')))<CR>", "Execute package script" },
+  e = { "<cmd>execute 'cd ' . system('find-package-root ' . expand('%:p'))<CR>:Files<CR>", "find file in package" },
+  o = {
+    name = "Monorepo",
+    p = { "<cmd>execute 'edit ' . system('find-monorepo-root ' . expand('%:p')) . '/package.json' <CR>", "Edit package.json" },
+    t = { "<cmd>execute 'edit ' . system('find-monorepo-root ' . expand('%:p')) . '/tsconfig.json' <CR>", "Edit tsconfig.json" },
+    n = { "<cmd>system('find-monorepo-root ' . expand('%:p')) . '/node_modules' <CR>", "Edit node_modules" },
+    s = { "<cmd>execute 'cd ' . system('find-monorepo-root ' . expand('%:p'))<CR>:pwd<CR>", "Set cwd to monorepo root" },
+    x = { "<cmd>call ExecutePackageScript(system('find-monorepo-root ' . expand('%:p')))<CR>", "Execute package script" },
+    e = { "<cmd>execute 'cd ' . system('find-monorepo-root ' . expand('%:p'))<CR>:Files<CR>", "find file in monorepo" },
+  }
+  },
+v = {
+  name = "System config editing",
+  s = {":so $MYVIMRC<cr>", "Source vimrc"},
+  o = {":vsp $MYVIMRC<cr>", "Open vimrc in vertical split"},
+  e = {":vsp ~/.vim/vimrc<cr>", "Edit ~/.vim/vimrc in vertical split"},
+  n = {":CocCommand snippets.editSnippets<cr>", "Edit snippets"},
+  d = {":vsp ~/dotfiles/<cr>", "Open ~/dotfiles/ in vertical split"},
+  i = {":PlugInstall<cr>", "Run PlugInstall"},
+  j = {":e ~/.config/txs/sessions.json<cr>", "Edit sessions.json"},
+},
+n = {
+  name = "Obsidian",
+  n = { "<cmd>ObsidianNew<CR>", "New note" },
+  s = { "<cmd>ObsidianSearch<CR>", "Search" },
+  t = { "<cmd>ObsidianToday<CR>", "Today" },
+}
+
+}, { prefix="<leader>" })
+
+require("legendary").setup({
+  which_key = {
+    auto_register = true,
+    do_bindings = false,
+  }
+})
+
+require("obsidian").setup({
+  dir = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/notesv1",
+  notes_subdir = "daily-notes",
+  completion = {
+    nvim_cmp = false, -- if using nvim-cmp, otherwise set to false
+  }
+})
+
 EOF
 
 " hls colors
@@ -895,22 +974,10 @@ nmap <A-i> <Plug>EnhancedJumpsRemoteNewer
 " y - FREE
 :command! CopyBuffer let @+ = join([expand('%:p'),  line(".")], ':')
 nnoremap <silent> <leader>y :CopyBuffer<CR>
-" u - FREE
+" u - AI
+nnoremap <leader>uu :ChatGPT<CR>
+xnoremap <leader>uv :lua require'chatgpt'.edit_with_instructions()<CR>
 " i - insert group
-" o - open package/monorepo level files
-nnoremap <silent> <leader>oe :execute "edit " . system('find-package-root ' . expand('%:p')) . '/.env' <CR>
-nnoremap <silent> <leader>op :execute "edit " . system('find-package-root ' . expand('%:p')) . '/package.json' <CR>
-nnoremap <silent> <leader>ot :execute "edit " . system('find-package-root ' . expand('%:p')) . '/tsconfig.json' <CR>
-nnoremap <silent> <leader>on :execute "edit " . system('find-package-root ' . expand('%:p')) . '/node_modules' <CR>
-nnoremap <leader>os :execute "cd " . system('find-package-root ' . expand('%:p'))<CR>:pwd<CR>
-nnoremap <leader>ox :call ExecutePackageScript(system('find-package-root ' . expand('%:p')))<CR>
-
-nnoremap <silent> <leader>ooe :execute "edit " . system('find-monorepo-root ' . expand('%:p')) . '/.env' <CR>
-nnoremap <silent> <leader>oop :execute "edit " . system('find-monorepo-root ' . expand('%:p')) . '/package.json' <CR>
-nnoremap <silent> <leader>oot :execute "edit " . system('find-monorepo-root ' . expand('%:p')) . '/tsconfig.json' <CR>
-nnoremap <silent> <leader>oon :execute "edit " . system('find-monorepo-root ' . expand('%:p')) . '/node_modules' <CR>
-nnoremap <leader>oos :execute "cd " . system('find-monorepo-root ' . expand('%:p'))<CR>:pwd<CR>
-nnoremap <leader>oox :call ExecutePackageScript(system('find-monorepo-root ' . expand('%:p')))<CR>
 
 " p - paste yanked
 nnoremap <silent> <leader>p "0p
@@ -935,30 +1002,34 @@ nmap <silent><leader>xb <leader>os:terminal cd $(dirname %); yarn build<CR>
 
 hi CocInfoHighlight gui=undercurl guisp=#6bc46d
 
-" set winbar=g:airline_section_c
-autocmd FileType neo-tree,fugitive,help,startify,dashboard,packer,neogitstatus,NvimTree,Trouble,alpha,lir,Outline,spectre_panel,toggleterm,qf let b:nowinbar=1
-fun! AddWinBar()
+autocmd FileType chatgpt,neo-tree,fugitive,help,startify,dashboard,packer,neogitstatus,NvimTree,Trouble,alpha,lir,Outline,spectre_panel,toggleterm,qf, let b:nowinbar=1
+
+function! AddWinBar()
+    " Disable for all non-standard windows
+    if win_gettype(bufwinnr('%')) != ''
+        return
+    endif
     " Don't strip on these filetypes
     if exists('b:nowinbar')
         return
     endif
-
-    " setlocal winbar=%<%f
-    setlocal winbar=
-    setlocal winbar+=%#PathGroup#
-    setlocal winbar+=%{expand('%:~:h')}/
-    setlocal winbar+=%#FileNameGroup#
-    setlocal winbar+=%t
-    setlocal winbar+=%m
-
+    setlocal winbar=%#PathGroup#%{expand('%:~:h')}/%#FileNameGroup#%t%m
     highlight PathGroup guifg=gray guibg=black
     highlight FileNameGroup guifg=#f47067 guibg=black
-    " highlight WinBar cterm=underline ctermfg=gray ctermbg=darkblue
-
-    " highlight WinBarNC cterm=NONE
-endfun
-
+endfunction
 
 autocmd BufEnter * call AddWinBar()
 
 hi CocSpellBad cterm=underline gui=underline ctermfg=Green guifg=Green
+
+inoremap <C-,> <BS>
+inoremap <C-b> <BS>
+
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit',
+  \ 'ctrl-q': 'fill_quickfix'}
+
+" for some broken monorepos
+let g:editorconfig = v:false
