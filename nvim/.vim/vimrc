@@ -147,6 +147,7 @@ Plug 'mtth/scratch.vim'
 Plug 'janko/vim-test'
 
 Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'stevearc/oil.nvim'
 Plug 'jxnblk/vim-mdx-js'
 
 Plug 'nvim-lua/popup.nvim'
@@ -657,6 +658,37 @@ require("live-command").setup {
     Norm = { cmd = "norm" },
   },
 }
+
+require("oil").setup {
+  keymaps = {
+    ["g?"] = "actions.show_help",
+    ["<CR>"] = "actions.select",
+    ["<C-s>"] = "actions.select_vsplit",
+    -- ["<C-h>"] = "actions.select_split",
+    ["<C-t>"] = "actions.select_tab",
+    ["<C-p>"] = "actions.preview",
+    ["<C-c>"] = "actions.close",
+  -- ["<C-l>"] = "actions.refresh",
+    ["-"] = "actions.parent",
+    ["_"] = "actions.open_cwd",
+    ["§"] = "actions.open_cmdline",
+    ["~"] = "actions.open_cmdline_dir",
+    ["gs"] = "actions.change_sort",
+    ["gr"] = "actions.refresh",
+    ["gx"] = "actions.open_external",
+    ["g."] = "actions.toggle_hidden",
+    ["g\\"] = "actions.toggle_trash",
+  },
+  -- Set to false to disable all of the above keymaps
+  use_default_keymaps = false,
+  view_options = {
+    -- Show files and directories that start with "."
+    show_hidden = true,
+  },
+}
+
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+
 require("neo-tree").setup({
   window = {
     mappings = {
@@ -668,7 +700,7 @@ require("neo-tree").setup({
   filesystem = {
     follow_current_file = true,
     group_empty_dirs = false,
-    hijack_netrw_behavior = "open_current",
+    -- hijack_netrw_behavior = "open_current",
     window = {
       mappings = {
         -- disable fuzzy finder
@@ -680,6 +712,7 @@ require("neo-tree").setup({
     },
   },
 })
+
 require('aerial').setup({
   -- optionally use on_attach to set keymaps when aerial has attached to a buffer
   on_attach = function(bufnr)
@@ -869,8 +902,9 @@ require('dressing').setup({
 local wk = require("which-key");
 wk.setup({})
 
+local execWithRoot = require("findRoot").execWithRoot
 wk.register({
-e = { "<cmd>execute 'silent! cd ' . system('find-monorepo-root ' . expand('%:p'))<CR>:Files<CR>", "find file in monorepo" },
+e = { execWithRoot('cd ${MONOREPO_ROOT} | Files'), "find file in monorepo" },
 g = {
   name = "Git",
   b = { "<cmd>Git blame<CR>", "Blame" },
@@ -906,20 +940,20 @@ o = {
           end
         end
       end, "find files in current directory"},
-  p = { "<cmd>execute 'edit ' . system('find-package-root ' . expand('%:p')) . '/package.json' <CR>", "Edit package.json" },
-  t = { "<cmd>execute 'edit ' . system('find-package-root ' . expand('%:p')) . '/tsconfig.json' <CR>", "Edit tsconfig.json" },
-  n = { "<cmd>system('find-package-root ' . expand('%:p')) . '/node_modules' <CR>", "Edit node_modules" },
-  s = { "<cmd>execute 'cd ' . system('find-package-root ' . expand('%:p'))<CR>:pwd<CR>", "Set cwd to package root" },
-  x = { "<cmd>call ExecutePackageScript(system('find-package-root ' . expand('%:p')))<CR>", "Execute package script" },
-  e = { "<cmd>execute 'cd ' . system('find-package-root ' . expand('%:p'))<CR>:Files<CR>", "find file in package" },
+  p = { execWithRoot('edit ${PACKAGE_ROOT}/package.json'), "Edit package.json" },
+  t = { execWithRoot('edit ${PACKAGE_ROOT}/tsconfig.json'), "Edit tsconfig.json" },
+  n = { execWithRoot('edit ${PACKAGE_ROOT}/node_modules'), "Edit node_modules" },
+  s = { execWithRoot('cd ${PACKAGE_ROOT} | pwd'), "Set cwd to package root" },
+  x = { execWithRoot('call ExecutePackageScript("${PACKAGE_ROOT}")'), "Execute package script" },
+  e = { execWithRoot('cd ${PACKAGE_ROOT} | Files'), "find file in package" },
   o = {
     name = "Monorepo",
-    p = { "<cmd>execute 'edit ' . system('find-monorepo-root ' . expand('%:p')) . '/package.json' <CR>", "Edit package.json" },
-    t = { "<cmd>execute 'edit ' . system('find-monorepo-root ' . expand('%:p')) . '/tsconfig.json' <CR>", "Edit tsconfig.json" },
-    n = { "<cmd>system('find-monorepo-root ' . expand('%:p')) . '/node_modules' <CR>", "Edit node_modules" },
-    s = { "<cmd>execute 'cd ' . system('find-monorepo-root ' . expand('%:p'))<CR>:pwd<CR>", "Set cwd to monorepo root" },
-    x = { "<cmd>call ExecutePackageScript(system('find-monorepo-root ' . expand('%:p')))<CR>", "Execute package script" },
-    e = { "<cmd>execute 'cd ' . system('find-monorepo-root ' . expand('%:p'))<CR>:Files<CR>", "find file in monorepo" },
+    p = { execWithRoot('edit ${MONOREPO_ROOT}/package.json'), "Edit package.json" },
+    t = { execWithRoot('edit ${MONOREPO_ROOT}/tsconfig.json'), "Edit tsconfig.json" },
+    n = { execWithRoot('edit ${MONOREPO_ROOT}/node_modules'), "Edit node_modules" },
+    s = { execWithRoot('cd ${MONOREPO_ROOT} | pwd'), "Set cwd to monorepo root" },
+    x = { execWithRoot('call ExecutePackageScript("${MONOREPO_ROOT}")'), "Execute package script" },
+    e = { execWithRoot('cd ${MONOREPO_ROOT} | Files'), "find file in monorepo" },
   }
   },
 v = {
@@ -942,9 +976,11 @@ n = {
 }, { prefix="<leader>" })
 
 require("legendary").setup({
-  which_key = {
-    auto_register = true,
-    do_bindings = false,
+  extentions = {
+    which_key = {
+      auto_register = true,
+      do_bindings = false,
+    }
   }
 })
 

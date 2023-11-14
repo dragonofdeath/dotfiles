@@ -12,7 +12,13 @@ fi
 
 # Find the closest ancestor directory containing a package.json file with a "workspaces" field
 package_root=$(
-  cd $(dirname $file_path);
+  cd $(if [ -f "$file_path" ]; then
+            dirname "$file_path"
+         elif [ -d "$file_path" ]; then
+            echo "$file_path"
+         else
+            echo "Invalid path"
+         fi)
   while [[ $(pwd) != '/' ]]; do
     if [[ -f package.json ]] &&  [[ "$( cat package.json | jq 'has("name")' )" == "true" ]]; then
       pwd
