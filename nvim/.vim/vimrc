@@ -89,9 +89,6 @@ Plug 'https://github.com/tpope/vim-repeat.git'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/tpope/vim-sleuth.git'
 Plug 'https://github.com/tpope/vim-unimpaired.git'
-" Plug 'tpope/vim-vinegar'
-" Plug 'justinmk/vim-dirvish'
-" Plug 'roginfarrer/vim-dirvish-dovish'
 
 Plug 'justinmk/vim-sneak'
 
@@ -131,7 +128,6 @@ let g:coc_global_extensions = [
 \ 'coc-spell-checker',
 \ 'coc-sh',
 \ ]
-" \ 'coc-tabnine',
 
 Plug 'machakann/vim-highlightedyank'
 Plug '/opt/homebrew/opt/fzf'
@@ -360,7 +356,6 @@ augroup filetype_git
 augroup END
 
 " shotcuts for location and quickfix windows
-" nmap <silent> <leader>w :call ToggleList("Location List", 'l')<CR>
 nmap <silent> <leader>q :call ToggleList("Quickfix List", 'c')<CR>
 
 " clean white space
@@ -376,17 +371,6 @@ tnoremap <Esc> <C-\><C-n>
 set inccommand=split
 " select just pasted text
 nnoremap <silent> gp `[v`]
-
-" augroup BgHighlight
-"     autocmd!
-"     autocmd WinEnter * set cursorline
-"     autocmd WinEnter * set cursorcolumn
-"     autocmd WinLeave * set nocursorline
-"     autocmd WinLeave * set nocursorcolumn
-" augroup END
-
-" refactor expression to var
-" nnoremap <leader>r ".pIconst <esc>A = <esc>""p=`]`]A;<esc>
 
 " vim-test
 nmap <silent><leader>xt <leader>os:TestNearest<cr>
@@ -467,13 +451,6 @@ augroup ctrl_m_definition
     autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascriptreact,javascript.tsx,rust,stylable,vim,haskell,proto nnoremap <buffer> <cr> <Plug>(coc-definition)
     autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <leader>z :CocCommand eslint.executeAutofix<cr>
 augroup END
-"replace the word under cursor
-" nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
-" TODO work on visual mode: xnoremap <leader>* :<C-u>%s/\<<c-r><c-w>\>//g<left><left>
-
-" use ag for recursive searching so we don't find 10,000 useless hits inside node_modules
-"nnoremap <leader>* :call ag#Ag('grep', '--literal ' . shellescape(expand("<cword>")))<CR>
-" vnoremap <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:call ag#Ag('grep', '--literal ' . shellescape(@/))<CR>
 
 nnoremap  <silent> <leader>* :execute 'Rg' '--fixed-strings' shellescape(expand("<cword>"))<CR>
 vnoremap <silent> <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'Rg' '--fixed-strings' "'" . @/ . "'"<CR>
@@ -502,12 +479,6 @@ command! -bang -nargs=* Rg
 
 " tmux
 let g:tmux_navigator_disable_when_zoomed = 1
-" Solves netrw using <C-L><C-H> which is used for jumping windows
-" https://github.com/christoomey/vim-tmux-navigator/issues/53
-augroup navigator_netrw_fix
-  autocmd!
-  autocmd FileType netrw nmap <buffer> <silent> <c-l> :TmuxNavigateRight<cr>
-augroup END
 
 packadd cfilter
 
@@ -521,43 +492,9 @@ source ~/.vim/scripts/replace.vim
 source ~/.vim/scripts/goyo.vim
 source ~/.vim/scripts/tree_surfer.vim
 source ~/.vim/scripts/execute-package-script.vim
-" source ~/.vim/scripts/theme.vim
-
-"camellcase
-nnoremap <silent> ,c viwgu:s/_\([a-z]\)/\u\1/g<CR>
-
-nmap <Leader>- <Plug>VimwikiRemoveHeaderLevel
 
 set noswapfile
 
-" let g:dirvish_mode = ':sort ,^.*[\/],'
-
-" mfussenegger/nvim-dap
-lua << EOF
-local dap = require('dap')
-dap.adapters.node2 = {
-  type = 'executable',
-  command = 'node',
-  args = {os.getenv('HOME') .. '/b/vscode-node-debug2/out/src/nodeDebug.js'},
-}
-vim.fn.sign_define('DapBreakpoint', {text='🟥', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapStopped', {text='🟢', texthl='', linehl='', numhl=''})
-EOF
-nnoremap <silent> <leader>dh :lua require'dap'.toggle_breakpoint()<CR>
-" nnoremap <S-k> :lua require'dap'.step_out()<CR>
-" nnoremap <S-l> :lua require'dap'.step_into()<CR>
-" nnoremap <S-j> :lua require'dap'.step_over()<CR>
-nnoremap <silent> <leader>dn :lua require'dap'.continue()<CR>
-nnoremap <silent> <leader>d_ :lua require'dap'.run_last()<CR>
-nnoremap <silent> <leader>dr :lua require'dap'.repl.open({}, 'vsplit')<CR><C-w>l
-nnoremap <silent> <leader>di :lua require'dap.ui.variables'.hover(function () return vim.fn.expand("<cexpr>") end)<CR>
-vnoremap <silent> <leader>di :lua require'dap.ui.variables'.visual_hover()<CR>
-nnoremap <silent> <leader>d? :lua require'dap.ui.variables'.scopes()<CR>
-nnoremap <silent> <leader>de :lua require'dap'.set_exception_breakpoints({"all"})<CR>
-nnoremap <silent> <leader>da :lua require'debugHelper'.attach()<CR>
-
-
-" jank/vim-test and mfussenegger/nvim-dap
 nnoremap <silent> <leader>dd :TestNearest -strategy=jest<CR>
 function! JestStrategy(cmd)
   let testName = matchlist(a:cmd, '\v -t ''(.*)''')[1]
@@ -565,16 +502,6 @@ function! JestStrategy(cmd)
   call luaeval("require'debugHelper'.debugJest([[" . testName . "]], [[" . fileName . "]])")
 endfunction
 let g:test#custom_strategies = {'jest': function('JestStrategy')}
-
-" Used for <Plug>(dovish_delete)
-" function! g:DovishDelete(target) abort
-"   return 'rm ' . a:target
-" endfunction
-nnoremap <silent> - :Neotree filesystem reveal current<CR>
-
-
-" set foldmethod=expr
-" set foldexpr=nvim_treesitter#foldexpr()
 
 hi clear SpellBad
 hi SpellBad cterm=underline
@@ -600,403 +527,32 @@ set titlestring=%{hostname()}\ \ %F\ \ %{strftime('%Y-%m-%d\ %H:%M',getftime(exp
 
 lua <<EOF
 
--- require("bufferline").setup {
---   options = {
---     name_formatter = function(buf) 
---       local MAX_LEN = 100
---       local ellipsis = string.char(0xE2, 0x80, 0xA6)
---       local str = buf.path:gsub("/Users/vaidask", "~") 
---       if string.len(str) > MAX_LEN then
---         str = ellipsis .. string.sub(str, -MAX_LEN + string.len(ellipsis))
---       end
---       return str
--- 
---     end,
---     max_name_length = 100
---   }
--- }
+require('whichKey')
+require("winbar")
 
-require("marks").setup {
-  -- whether to map keybinds or not. default true
-  default_mappings = true,
-  -- which builtin marks to show. default {}
-  builtin_marks = { ".", "<", ">", "^" },
-  -- whether movements cycle back to the beginning/end of buffer. default true
-  cyclic = true,
-  -- whether the shada file is updated after modifying uppercase marks. default false
-  force_write_shada = false,
-  -- how often (in ms) to redraw signs/recompute mark positions. 
-  -- higher values will have better performance but may cause visual lag, 
-  -- while lower values may cause performance penalties. default 150.
-  refresh_interval = 250,
-  -- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
-  -- marks, and bookmarks.
-  -- can be either a table with all/none of the keys, or a single number, in which case
-  -- the priority applies to all marks.
-  -- default 10.
-  sign_priority = { lower=10, upper=15, builtin=8, bookmark=20 },
-  -- disables mark tracking for specific filetypes. default {}
-  excluded_filetypes = {},
-  -- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
-  -- sign/virttext. Bookmarks can be used to group together positions and quickly move
-  -- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
-  -- default virt_text is "".
-  bookmark_0 = {
-    sign = "⚑",
-    virt_text = "hello world",
-    -- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
-    -- defaults to false.
-    annotate = false,
-  },
-   mappings = {
-     annotate="M"
-  }
-}
+-- PLUGIN CONFIGURATION
 
-require("live-command").setup {
-  commands = {
-    Norm = { cmd = "norm" },
-  },
-}
+-- require('plugins/marks');
+require('plugins/oil');
+require('plugins/live-command');
 
-require("oil").setup {
-  keymaps = {
-    ["g?"] = "actions.show_help",
-    ["<CR>"] = "actions.select",
-    ["<C-s>"] = "actions.select_vsplit",
-    -- ["<C-h>"] = "actions.select_split",
-    ["<C-t>"] = "actions.select_tab",
-    ["<C-p>"] = "actions.preview",
-    ["<C-c>"] = "actions.close",
-  -- ["<C-l>"] = "actions.refresh",
-    ["-"] = "actions.parent",
-    ["_"] = "actions.open_cwd",
-    ["§"] = "actions.open_cmdline",
-    ["~"] = "actions.open_cmdline_dir",
-    ["gs"] = "actions.change_sort",
-    ["gr"] = "actions.refresh",
-    ["gx"] = "actions.open_external",
-    ["g."] = "actions.toggle_hidden",
-    ["g\\"] = "actions.toggle_trash",
-  },
-  -- Set to false to disable all of the above keymaps
-  use_default_keymaps = false,
-  view_options = {
-    -- Show files and directories that start with "."
-    show_hidden = true,
-  },
-}
+require('plugins/neo-tree')
+-- require('plugins/aerial')
+require('plugins/github-theme')
+-- require('plugins/sad')
+-- require('plugins/neotest');
 
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-
-require("neo-tree").setup({
-  window = {
-    mappings = {
-      -- ["-"] = "navigate_up",
-      ["[c"] = "prev_git_modified",
-      ["]c"] = "next_git_modified",
-    },
-  },
-  filesystem = {
-    follow_current_file = true,
-    group_empty_dirs = false,
-    -- hijack_netrw_behavior = "open_current",
-    window = {
-      mappings = {
-        -- disable fuzzy finder
-        ["/"] = "noop"
-      }
-    },
-    filtered_items = {
-      visible = true, -- when true, they will just be displayed differently than normal items
-    },
-  },
-})
-
-require('aerial').setup({
-  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
-  on_attach = function(bufnr)
-    -- Jump forwards/backwards with '{' and '}'
-    vim.keymap.set('n', '<C-p>', '<cmd>AerialPrev<CR>', {buffer = bufnr})
-    vim.keymap.set('n', '<C-n>', '<cmd>AerialNext<CR>', {buffer = bufnr})
-  end,
-  layout = {
-    -- These control the width of the aerial window.
-    -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
-    -- min_width and max_width can be a list of mixed types.
-    -- max_width = {40, 0.2} means "the lesser of 40 columns or 20% of total"
-    max_width = { 50, 0.3 },
-    width = nil,
-    min_width = 20,
-
-    -- key-value pairs of window-local options for aerial window (e.g. winhl)
-    win_opts = { wrap = true },
-
-    -- Determines the default direction to open the aerial window. The 'prefer'
-    -- options will open the window in the other direction *if* there is a
-    -- different buffer in the way of the preferred direction
-    -- Enum: prefer_right, prefer_left, right, left, float
-    default_direction = "prefer_left",
-
-    -- Determines where the aerial window will be opened
-    --   edge   - open aerial at the far right/left of the editor
-    --   window - open aerial to the right/left of the current window
-    placement = "window",
-
-    -- Preserve window size equality with (:help CTRL-W_=)
-    preserve_equality = false,
-    },
-})
-
-require("github-theme").setup({
-  theme_style = "dimmed",
-  variable_style = "NONE",
-  dark_float = true,
-  colors = {
-    syntax = {
-      -- variable = '#00FF00',
-      func = '#adbac7',
-      constant = '#96d0ff',
-      string = '#8ddb8c',
-      variable = '#96d0ff',
-    },
-  }
-})
--- require("noice").setup()
-require("sad").setup({
-  debug = false, -- print debug info
-  diff = 'delta', -- you can use `less`, `diff-so-fancy`
-  ls_file = 'fd', -- also git ls_file
-  exact = false, -- exact match
-  vsplit = false, -- split sad window the screen vertically, when set to number
-  -- it is a threadhold when window is larger than the threshold sad will split vertically,
-  height_ratio = 0.6, -- height ratio of sad window when split horizontally
-  width_ratio = 0.6, -- height ratio of sad window when split vertically
-})
--- You probably also want to set a keymap to toggle aerial
-vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
-
-require('neotest').setup({
-  adapters = {
-    require('neotest-jest')({
-      jestCommand = "echo hello;",
-      -- jestConfigFile = "custom.jest.config.ts",
-      env = { CI = true },
-      cwd = function(path)
-        return vim.fn.system('find-package-root ' .. path)
-      end,
-    }),
-  }
-})
-
-vim.keymap.set("n", "<leader>j", "<cmd>Portal jumplist backward<cr>")
--- vim.keymap.set("n", "<leader>i", "<cmd>Portal jumplist forward<cr>")
-
--- require("statuscol").setup(
---   {
---     foldfunc = "builtin",
---     setopt = true
---   }
--- )
-
-
-vim.o.foldcolumn = "1" -- '0' is not bad
-vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
-vim.o.foldcolumn = '1'
-vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
-
--- these are "extra", change them as you like
-vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-vim.keymap.set("n", "zM", function() 
-  vim.o.foldlevel = 0 
-end)
-vim.keymap.set('n', 'K', function()
-    local winid = require('ufo').peekFoldedLinesUnderCursor()
-    if not winid then
-        -- choose one of coc.nvim and nvim lsp
-        vim.fn.CocActionAsync('definitionHover') -- coc.nvim
-        vim.lsp.buf.hover()
-    end
-end)
-
-local lineCountHandler = function(virtText, lnum, endLnum, width, truncate)
-    local newVirtText = {}
-    local suffix = ('  %d '):format(endLnum - lnum)
-    local sufWidth = vim.fn.strdisplaywidth(suffix)
-    local targetWidth = width - sufWidth
-    local curWidth = 0
-    for _, chunk in ipairs(virtText) do
-        local chunkText = chunk[1]
-        local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-        if targetWidth > curWidth + chunkWidth then
-            table.insert(newVirtText, chunk)
-        else
-            chunkText = truncate(chunkText, targetWidth - curWidth)
-            local hlGroup = chunk[2]
-            table.insert(newVirtText, {chunkText, hlGroup})
-            chunkWidth = vim.fn.strdisplaywidth(chunkText)
-            -- str width returned from truncate() may less than 2nd argument, need padding
-            if curWidth + chunkWidth < targetWidth then
-                suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
-            end
-            break
-        end
-        curWidth = curWidth + chunkWidth
-    end
-    table.insert(newVirtText, {suffix, 'MoreMsg'})
-    return newVirtText
-end
--- Option 3: treesitter as a main provider instead
--- Only depend on `nvim-treesitter/queries/filetype/folds.scm`,
--- performance and stability are better than `foldmethod=nvim_treesitter#foldexpr()`
-require("ufo").setup(
-  {
-    fold_virt_text_handler = lineCountHandler,
-    provider_selector = function(bufnr, filetype, buftype)
-      return {"treesitter", "indent"}
-    end
-  }
-)
-
-
-require("chatgpt").setup({
-  openai_params = {
-    model = "gpt-4",
-    max_tokens = 2000,
-  },
-  keymaps = {
-      close = { "<C-c>" },
-      submit = "<S-CR>",
-      yank_last = "<C-y>",
-      yank_last_code = "<C-k>",
-      scroll_up = "<C-u>",
-      scroll_down = "<C-d>",
-      toggle_settings = "<C-o>",
-      new_session = "<C-n>",
-      cycle_windows = "<Tab>",
-      -- in the Sessions pane
-      select_session = "<Space>",
-      rename_session = "r",
-      delete_session = "d",
-    },
-})
-
-require('dressing').setup({
- select = {
-   get_config = function(opts)
-     if opts.kind == 'legendary.nvim' then
-       return {
-         telescope = {
-           sorter = require('telescope.sorters').fuzzy_with_index_bias({})
-         }
-       }
-     else
-       return {}
-     end
-   end
- }
-})
-
-local wk = require("which-key");
-wk.setup({})
-
-local execWithRoot = require("findRoot").execWithRoot
-wk.register({
-e = { execWithRoot('cd ${MONOREPO_ROOT} | Files'), "find file in monorepo" },
-g = {
-  name = "Git",
-  b = { "<cmd>Git blame<CR>", "Blame" },
-  s = { "<cmd>Git<CR>", "Status" },
-  h = { "<cmd>DiffviewFileHistory<CR>", "History" },
-  f = { "<cmd>DiffviewFileHistory %<CR>", "History of current file" },
-  d = { "<cmd>DiffviewOpen<CR>", "Diff" },
-  v = { "<cmd>call git#git_diffview_commit()<CR>", "Diff of commit" },
-  dh = { "<cmd>diffget //2<CR>", "Diff get left" },
-  dl = { "<cmd>diffget //3<CR>", "Diff get right" },
-  e = { "<cmd>Gedit<CR>", "Edit" },
-  l = { "<cmd>0Gclog!<CR>", "Log" },
-  c = { "<cmd>Git commit<CR>", "Commit" },
-  w = { "<cmd>Git write<CR>", "Write" },
-  p = {
-    name = 'Publish',
-    f = { "<cmd>Git push --force-with-lease<CR>", "Push force" },
-    b = { "<cmd>Git pub <CR>", "Publish branch" },
-  },
-  -- gr = { function() vim.cmd("!gh pr view -w<CR>") end ,  "View PR on this branch" },
-  r = { "<cmd>!gh pr view -w<CR>",  "View PR on this branch" },
-},
-o = {
-  name = "Package",
-  u = {function() 
-        if vim.bo.filetype == 'neo-tree' then
-          local state = require("neo-tree.sources.manager").get_state("filesystem")
-          local node = state.tree:get_node()
-          vim.pretty_print(node)
-          if node.type == 'file' then
-          else 
-            vim.cmd(":Files " .. node.path)
-          end
-        end
-      end, "find files in current directory"},
-  p = { execWithRoot('edit ${PACKAGE_ROOT}/package.json'), "Edit package.json" },
-  t = { execWithRoot('edit ${PACKAGE_ROOT}/tsconfig.json'), "Edit tsconfig.json" },
-  n = { execWithRoot('edit ${PACKAGE_ROOT}/node_modules'), "Edit node_modules" },
-  s = { execWithRoot('cd ${PACKAGE_ROOT} | pwd'), "Set cwd to package root" },
-  x = { execWithRoot('call ExecutePackageScript("${PACKAGE_ROOT}")'), "Execute package script" },
-  e = { execWithRoot('cd ${PACKAGE_ROOT} | Files'), "find file in package" },
-  o = {
-    name = "Monorepo",
-    p = { execWithRoot('edit ${MONOREPO_ROOT}/package.json'), "Edit package.json" },
-    t = { execWithRoot('edit ${MONOREPO_ROOT}/tsconfig.json'), "Edit tsconfig.json" },
-    n = { execWithRoot('edit ${MONOREPO_ROOT}/node_modules'), "Edit node_modules" },
-    s = { execWithRoot('cd ${MONOREPO_ROOT} | pwd'), "Set cwd to monorepo root" },
-    x = { execWithRoot('call ExecutePackageScript("${MONOREPO_ROOT}")'), "Execute package script" },
-    e = { execWithRoot('cd ${MONOREPO_ROOT} | Files'), "find file in monorepo" },
-  }
-  },
-v = {
-  name = "System config editing",
-  s = {":so $MYVIMRC<cr>", "Source vimrc"},
-  o = {":vsp $MYVIMRC<cr>", "Open vimrc in vertical split"},
-  e = {":vsp ~/.vim/vimrc<cr>", "Edit ~/.vim/vimrc in vertical split"},
-  n = {":CocCommand snippets.editSnippets<cr>", "Edit snippets"},
-  d = {":vsp ~/dotfiles/<cr>", "Open ~/dotfiles/ in vertical split"},
-  i = {":PlugInstall<cr>", "Run PlugInstall"},
-  j = {":e ~/.config/txs/sessions.json<cr>", "Edit sessions.json"},
-},
-n = {
-  name = "Obsidian",
-  n = { "<cmd>ObsidianNew<CR>", "New note" },
-  s = { "<cmd>ObsidianSearch<CR>", "Search" },
-  t = { "<cmd>ObsidianToday<CR>", "Today" },
-}
-
-}, { prefix="<leader>" })
-
-require("legendary").setup({
-  extentions = {
-    which_key = {
-      auto_register = true,
-      do_bindings = false,
-    }
-  }
-})
-
-require("obsidian").setup({
-  dir = "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/notesv1",
-  notes_subdir = "daily-notes",
-  completion = {
-    nvim_cmp = false, -- if using nvim-cmp, otherwise set to false
-  }
-})
+require('plugins/ufo')
+require('plugins/dressing')
+require("plugins/chatgpt")
+require('plugins/obsidian')
 
 EOF
 
 " hls colors
 highlight Search ctermbg=black ctermfg=yellow cterm=underline guibg=yellow
 
+let g:EnhancedJumps_no_mappings = 1
 " Alt-o
 nmap <A-o> <Plug>EnhancedJumpsRemoteOlder
 " Alt-i
@@ -1037,24 +593,6 @@ nmap <silent><leader>xb <leader>os:terminal cd $(dirname %); yarn build<CR>
 " m - FREE
 
 hi CocInfoHighlight gui=undercurl guisp=#6bc46d
-
-autocmd FileType chatgpt,neo-tree,fugitive,help,startify,dashboard,packer,neogitstatus,NvimTree,Trouble,alpha,lir,Outline,spectre_panel,toggleterm,qf, let b:nowinbar=1
-
-function! AddWinBar()
-    " Disable for all non-standard windows
-    if win_gettype(bufwinnr('%')) != ''
-        return
-    endif
-    " Don't strip on these filetypes
-    if exists('b:nowinbar')
-        return
-    endif
-    setlocal winbar=%#PathGroup#%{expand('%:~:h')}/%#FileNameGroup#%t%m
-    highlight PathGroup guifg=gray guibg=black
-    highlight FileNameGroup guifg=#f47067 guibg=black
-endfunction
-
-autocmd BufEnter * call AddWinBar()
 
 hi CocSpellBad cterm=underline gui=underline ctermfg=Green guifg=Green
 

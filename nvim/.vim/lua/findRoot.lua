@@ -14,12 +14,22 @@ end
 
 function forPackage()
     local path = getCurrentPath()
-    return vim.fn.system("find-package-root " .. path)
+    local result =  vim.fn.system("find-package-root " .. path)
+    if (vim.v.shell_error ~= 0) then
+        return vim.fn.getcwd()
+    else
+        return result
+    end
 end
 
 function forMonorepo()
     local path = getCurrentPath()
-    return vim.fn.system("find-monorepo-root " .. path)
+    local result =  vim.fn.system("find-monorepo-root " .. path)
+    if (vim.v.shell_error ~= 0) then
+        return vim.fn.getcwd()
+    else
+        return result
+    end
 end
 
 -- takes a command with placeholders like 'edit ${PACKAGE_ROOT}/package.json'
@@ -42,4 +52,7 @@ end
 
 return {
     execWithRoot = execWithRoot,
+    forPackage = forPackage,
+    forMonorepo = forMonorepo,
+    getCurrentPath = getCurrentPath
 }
