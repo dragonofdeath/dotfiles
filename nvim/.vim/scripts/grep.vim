@@ -17,3 +17,11 @@ augroup quickfix
 	autocmd QuickFixCmdPost cgetexpr cwindow
 	autocmd QuickFixCmdPost lgetexpr lwindow
 augroup END
+
+command! -nargs=+ Search cgetexpr Grep(<f-args>)
+" command! -nargs=+ SearchF cgetexpr Grep('-F', <f-args>)
+" command! -nargs=+ SearchG call setqflist([]) | execute 'grep! --no-ignore' shellescape(<q-args>)
+" command! -nargs=+ SearchI call setqflist([]) | execute 'grep! -i' shellescape(<q-args>)
+" command! -nargs=+ SearchE call setqflist([]) | execute 'grep! -e' shellescape(<q-args>)
+" command! -nargs=+ SearchD call setqflist([]) | execute 'lcd %:p:h' | execute 'grep!' shellescape(<q-args>) | lcd -
+

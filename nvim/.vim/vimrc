@@ -160,6 +160,8 @@ Plug 'jackMort/ChatGPT.nvim'
 
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
+Plug 'nvim-pack/nvim-spectre'
+
 call plug#end()
 
 nnoremap <silent> <leader> :WhichKey ' '<CR>
@@ -243,8 +245,16 @@ nnoremap <silent> <M--> :write \| edit \| TSBufEnable highlight<CR>
 set clipboard+=unnamedplus
 
 " the rg search on grep
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden\ --glob\ \"!**/.git/**\"
-set grepformat=%f:%l:%c:%m,%f:%l:%m
+" set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden\ --glob\ \"!**/.git/**\"
+" set grepformat=%f:%l:%c:%m,%f:%l:%m
+
+"search = default search
+"searchf = search for fixed string
+"searchg = search including gitignored
+"searchi = search ignoring case
+"searchu = search not ignoring case
+"searche = searchregex
+"searchd = search in current buffers directory
 
 " command! -bang -nargs=* Rg
 "   \ call fzf#vim#grep(
@@ -407,6 +417,7 @@ nmap <silent> <leader>tr <Plug>(coc-rename)
 nmap <silent> <leader>ta <Plug>(coc-references)
 nmap <silent> <leader>tt :call CocAction('doHover')<cr>
 nmap <silent> <leader>cc :CocCommand<cr>
+nmap <silent> <leader>cq :CocCommand tsserver.restart<cr>
 
 " nnoremap <silent> <leader>z :Prettier<cr>
 nmap <silent> <leader>z <Plug>(coc-format)
@@ -517,7 +528,7 @@ let g:test#javascript#runner = "jest"
 let g:test#javascript#jest#executable="yarn test"
 " let g:test#javascript#jest#executable="yarn jest"
 
-nnoremap <silent> \ :Neotree reveal<cr>
+nnoremap <silent><leader>n :Neotree reveal<cr>
 
 set title
 set titlestring=%{hostname()}\ \ %F\ \ %{strftime('%Y-%m-%d\ %H:%M',getftime(expand('%')))}
@@ -537,7 +548,7 @@ require('plugins/oil');
 require('plugins/live-command');
 
 require('plugins/neo-tree')
--- require('plugins/aerial')
+require('plugins/aerial')
 require('plugins/github-theme')
 -- require('plugins/sad')
 -- require('plugins/neotest');
@@ -560,7 +571,7 @@ nmap <A-i> <Plug>EnhancedJumpsRemoteNewer
 
 " Leader keys: 
 " q - quickfix list
-" w - vimwiki group
+" w - free
 " e - open fzf :Files
 " r - replcase is in project
 " y - FREE
@@ -589,7 +600,7 @@ nmap <silent><leader>xb <leader>os:terminal cd $(dirname %); yarn build<CR>
 " c - FREE
 " v - vim source/open etc
 " b - Fzf Buffers:
-" n - FREE
+" n - obsidian
 " m - FREE
 
 hi CocInfoHighlight gui=undercurl guisp=#6bc46d
@@ -607,3 +618,7 @@ let g:fzf_action = {
 
 " for some broken monorepos
 let g:editorconfig = v:false
+
+
+" vim-multi
+let g:VM_leader = '\'
