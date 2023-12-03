@@ -9,6 +9,7 @@ function! s:goyo_enter()
   set signcolumn=yes
   set linebreak
   set wrap
+  set winbar=
 
   hi ErrorMsg guifg=#Ad7576
   hi WarningMsg guifg=#9b9257
