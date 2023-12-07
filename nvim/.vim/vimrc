@@ -412,6 +412,8 @@ map <leader>tj <Plug>(coc-refactor)
 nmap <leader>su <Plug>(coc-float-jump) :topleft sp<cr>:execute('resize ' . (line('$') + 2))<cr>
 nmap ]g <Plug>(coc-diagnostic-next-error)
 nmap [g <Plug>(coc-diagnostic-prev-error)
+nmap ]w <Plug>(coc-diagnostic-next)
+nmap [w <Plug>(coc-diagnostic-prev)
 
 nmap <silent> <leader>tr <Plug>(coc-rename)
 nmap <silent> <leader>ta <Plug>(coc-references)
@@ -548,10 +550,11 @@ require('plugins/oil');
 require('plugins/live-command');
 
 require('plugins/neo-tree')
-require('plugins/aerial')
+-- require('plugins/aerial')
 require('plugins/github-theme')
 -- require('plugins/sad')
 -- require('plugins/neotest');
+require('plugins/diffview');
 
 require('plugins/ufo')
 require('plugins/dressing')
