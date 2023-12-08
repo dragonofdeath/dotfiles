@@ -108,26 +108,6 @@ Plug 'inkarkat/vim-EnhancedJumps'
 Plug 'inkarkat/vim-ingo-library'
 
 Plug 'andymass/vim-visput'
-set signcolumn=number
-let g:coc_global_extensions = [
-\ 'coc-json',
-\ 'coc-tsserver',
-\ 'coc-eslint',
-\ 'coc-html',
-\ 'coc-css',
-\ 'coc-yaml',
-\ 'coc-highlight',
-\ 'coc-rust-analyzer',
-\ 'coc-vimlsp',
-\ 'coc-snippets',
-\ 'coc-react-refactor',
-\ 'coc-yank',
-\ 'coc-lists',
-\ 'coc-fzf-preview',
-\ 'coc-protobuf',
-\ 'coc-spell-checker',
-\ 'coc-sh',
-\ ]
 
 Plug 'machakann/vim-highlightedyank'
 Plug '/opt/homebrew/opt/fzf'
@@ -137,8 +117,6 @@ Plug 'wellle/targets.vim'
 
 " Scratch buffer
 Plug 'mtth/scratch.vim'
-
-" Plug 'vimwiki/vimwiki'
 
 Plug 'janko/vim-test'
 
@@ -164,6 +142,27 @@ Plug 'nvim-pack/nvim-spectre'
 
 call plug#end()
 
+set signcolumn=number
+let g:coc_global_extensions = [
+\ 'coc-json',
+\ 'coc-tsserver',
+\ 'coc-eslint',
+\ 'coc-html',
+\ 'coc-css',
+\ 'coc-yaml',
+\ 'coc-highlight',
+\ 'coc-rust-analyzer',
+\ 'coc-vimlsp',
+\ 'coc-snippets',
+\ 'coc-react-refactor',
+\ 'coc-yank',
+\ 'coc-lists',
+\ 'coc-fzf-preview',
+\ 'coc-protobuf',
+\ 'coc-spell-checker',
+\ 'coc-sh',
+\ ]
+
 nnoremap <silent> <leader> :WhichKey ' '<CR>
 " ============================================================================
 " Install plugins the first time vim runs
@@ -174,53 +173,10 @@ if vim_plug_just_installed
 endif
 
 " ============================================================================
-autocmd FileType gitcommit setlocal spell
 
-" Basic options ----------------------------------------{{{
-set nocompatible
-
-syntax on
-filetype plugin indent on
-
-" leader mapping
-let mapleader = ' '
-
-" make backspace work like most other programs
-set backspace=2
-set history=200
-
-"set keyword for temporatry higlite switch off
-set hls
-set incsearch
-
-set number
-" set relativenumber
-set mouse=a
-set autoindent
-set nowrap
-
-set expandtab
-set shiftwidth=2
-
-set list          " Display unprintable characters f12 - switches
-set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars mapping
-
-"" ========== Theme ==========
-" colorscheme github_dimmed
-set termguicolors
-
-" Optionally reset the cursor on start:
-augroup myCmds
-au!
-autocmd VimEnter * silent !echo -ne "\e[2 q"
-augroup END
-
-" For VimGutter
-set updatetime=400
-" }}}
-
-" allow close unsaved buffer
-set hidden
+lua <<EOF
+require('basic-options');
+EOF
 
 " Mappings ----------------------------------------{{{
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
