@@ -54,3 +54,14 @@ vim.opt.updatetime = 400
 
 -- Allow closing unsaved buffer
 vim.opt.hidden = true
+
+-- rewrite %% to current file folder path
+-- vim.api.nvim_set_keymap('c', '%%', [[getcmdtype() == ':' and vim.fn.expand('%:h')..'/' or '%%']], { expr = true, noremap = true })
+vim.keymap.set('c', '%%', function()
+    if vim.fn.getcmdtype() == ':' then
+        local path = vim.fn.expand('%:h')
+        local filtered_path = path:sub(1, 6) == 'oil://' and path:sub(7) or path
+        return filtered_path .. '/'
+    end
+   return '%%'
+end, { expr = true, noremap = true })

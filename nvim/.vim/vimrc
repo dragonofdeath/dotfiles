@@ -151,7 +151,6 @@ let g:coc_global_extensions = [
 \ 'coc-css',
 \ 'coc-yaml',
 \ 'coc-highlight',
-\ 'coc-rust-analyzer',
 \ 'coc-vimlsp',
 \ 'coc-snippets',
 \ 'coc-react-refactor',
@@ -179,7 +178,7 @@ require('basic-options');
 EOF
 
 " Mappings ----------------------------------------{{{
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+" cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " airline
 let g:airline#extensions#tabline#enabled = 1
@@ -200,29 +199,6 @@ nnoremap <silent> <M--> :write \| edit \| TSBufEnable highlight<CR>
 " use system clipboard
 set clipboard+=unnamedplus
 
-" the rg search on grep
-" set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden\ --glob\ \"!**/.git/**\"
-" set grepformat=%f:%l:%c:%m,%f:%l:%m
-
-"search = default search
-"searchf = search for fixed string
-"searchg = search including gitignored
-"searchi = search ignoring case
-"searchu = search not ignoring case
-"searche = searchregex
-"searchd = search in current buffers directory
-
-" command! -bang -nargs=* Rg
-"   \ call fzf#vim#grep(
-"   \   'rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1,
-"   \   fzf#vim#with_preview(), <bang>0)
-
-" command! -bang -nargs=* Rg
-"       call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --hidden --glob !**/.git/**" . <q-args>, 1, fzf#vim#with_preview(), <bang>0)
-"   \ call fzf#vim#grep(
-"   \   'rg --column --line-number --no-heading --color=always --smart-case --hidden\ --glob\ \"!**/.git/**\ -- '.shellescape(<q-args>), 1,
-"   \   fzf#vim#with_preview(), <bang>0)
-
 noremap <S-h> ^
 noremap <S-l> $
 noremap <C-6> :e#
@@ -239,10 +215,6 @@ let g:fzf_preview_command = 'bat --color=always --plain {-1}'
 let g:fzf_preview_filelist_command = 'fd -H -E .git'
 " https://www.reddit.com/r/vim/comments/kaedj9/implemented_fzfpreviewvim_with_gitdelta_in_vim/
 let g:fzf_preview_git_status_preview_command = "git diff --color=always -- {-1}"
-    "\ "[[ $(git diff --cached -- {-1}) != \"\" ]] && git diff --cached --color=always -- {-1} | delta || " .
-    "\ "[[ $(git diff -- {-1}) != \"\" ]] && git diff --color=always -- {-1} "
-    "\ g:fzf_preview_command
-
 let g:fzf_preview_fzf_preview_window_option = 'up:60%'
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
@@ -264,7 +236,6 @@ xnoremap <silent> <Leader>fgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>
 nnoremap <silent> <Leader>ft     :<C-u>CocCommand fzf-preview.BufferTags<CR>
 nnoremap <silent> <Leader>fq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
 nnoremap <silent> <Leader>fl     :<C-u>CocCommand fzf-preview.LocationList<CR>
-
 nnoremap <silent> <leader>gg :GFiles?<cr>
 
 nnoremap <silent> tc :tabc<cr>
@@ -283,21 +254,6 @@ noremap <silent> <leader>sh :call OpenSplit('h')<cr>
 noremap <silent> <leader>sl :call OpenSplit('l')<cr>
 noremap <silent> <leader>sk :call OpenSplit('k')<cr>
 noremap <silent> <leader>sj :call OpenSplit('j')<cr>
-noremap <silent> <leader>sfh :call OpenSplit('h')<cr>gf
-noremap <silent> <leader>sfl :call OpenSplit('l')<cr>gf
-noremap <silent> <leader>sfk :call OpenSplit('k')<cr>gf
-noremap <silent> <leader>sfj :call OpenSplit('j')<cr>gf
-noremap <silent> <leader>sth :call OpenSplit('h')<cr>:term<cr>i
-noremap <silent> <leader>stl :call OpenSplit('l')<cr>:term<cr>i
-noremap <silent> <leader>stk :call OpenSplit('k')<cr>:term<cr>i
-noremap <silent> <leader>stj :call OpenSplit('j')<cr>:term<cr>i
-noremap <silent> <leader>srh :call OpenSplit('h')<cr>:e.<cr>
-noremap <silent> <leader>srl :call OpenSplit('l')<cr>:e.<cr>
-noremap <silent> <leader>srk :call OpenSplit('k')<cr>:e.<cr>
-noremap <silent> <leader>srj :call OpenSplit('j')<cr>:e.<cr>
-
-nnoremap <silent> <leader>id :read !date -u +"\%Y-\%m-\%d \%A"<cr>
-nnoremap <silent> <leader>iw :read !date +"Week \%U"<cr>
 
 " Make Y behave more like other operators.
 nnoremap <silent> Y y$
@@ -516,6 +472,7 @@ require('plugins/ufo')
 require('plugins/dressing')
 require("plugins/chatgpt")
 require('plugins/obsidian')
+require("fugitive")
 
 EOF
 

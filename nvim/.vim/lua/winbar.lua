@@ -3,7 +3,7 @@ local group = vim.api.nvim_create_augroup("WinBarGroup", { clear = true })
 
 -- Autocmd for setting `b:nowinbar`
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "chatgpt", "neo-tree", "fugitive", "help", "startify", "dashboard", "packer", "neogitstatus", "NvimTree", "Trouble", "alpha", "lir", "Outline", "spectre_panel", "toggleterm", "qf", "DiffviewFiles" },
+    pattern = { "chatgpt", "neo-tree", "fugitive", "help", "startify", "dashboard", "packer", "neogitstatus", "NvimTree", "Trouble", "alpha", "lir", "Outline", "spectre_panel", "toggleterm", "qf", "DiffviewFiles", "fugitive" },
     command = "let b:nowinbar=1",
     group = group
 })
@@ -20,7 +20,10 @@ local function AddWinBar()
     end
     -- if current buffer is diffviews, don't show winbar (starts with diffview://)
     if vim.fn.expand('%'):sub(1, 11) == 'diffview://' then
-
+        vim.wo.winbar = vim.fn.expand('%');
+        return
+    end
+    if vim.fn.expand('%'):sub(1, 11) == 'fugitive://' then
         vim.wo.winbar = vim.fn.expand('%');
         return
     end
