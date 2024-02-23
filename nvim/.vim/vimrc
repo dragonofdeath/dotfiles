@@ -308,6 +308,13 @@ set nowritebackup
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+" let g:copilot_no_tab_map = v:true
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ exists('b:_copilot.suggestions') ? copilot#Accept("\<CR>") :
+      \ CheckBackSpace() ? "\<Tab>" :
+      \ coc#refresh()
+
 " Highlight symbol under cursor on CursorHold
 " autocmd CursorHold * :echo("abc")
 autocmd CursorHold * call CocActionAsync('highlight')
@@ -329,7 +336,7 @@ nmap [w <Plug>(coc-diagnostic-prev)
 
 nmap <silent> <leader>tr <Plug>(coc-rename)
 nmap <silent> <leader>ta <Plug>(coc-references)
-nmap <silent> <leader>tt :call CocAction('doHover')<cr>
+nmap <silent> <leader>tt :call CocActionAsync('doHover')<cr>
 nmap <silent> <leader>cc :CocCommand<cr>
 nmap <silent> <leader>cq :CocCommand tsserver.restart<cr>
 
