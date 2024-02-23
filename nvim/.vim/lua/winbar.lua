@@ -33,16 +33,16 @@ local function AddWinBar()
     local package_parts = splitPath(findRoot.forPackage())
     local current_parts = splitPath(findRoot.getCurrentPath())
 
-    local monorepoUnique = tableDifference(monorepo_parts, home_parts);
+    local monorepoUnique = tableSlice(#home_parts + 1, monorepo_parts);
     local monorepoPrepath = #monorepoUnique > 1 and "%#PathGroup#" .. table.concat(subarrayWithoutLast(monorepoUnique), '/') .. '/' or ""
 
     local monorepo = "%#MonorepoGroup#" .. monorepo_parts[#monorepo_parts] .. '/';
 
-    local packageUnique = tableDifference(package_parts, monorepo_parts);
+    local packageUnique = tableSlice(#monorepo_parts + 1, package_parts);
     local packagePrepath = #packageUnique > 1 and "%#PathGroup#" .. table.concat(subarrayWithoutLast(packageUnique), '/') .. '/' or ""
     local package =  #packageUnique > 0 and "%#PackageGroup#" .. packageUnique[#packageUnique] .. '/' or ''
 
-    local currentUnique = tableDifference(current_parts, package_parts);
+    local currentUnique = tableSlice(#package_parts + 1, current_parts);
     local currentPrepath = #currentUnique > 1 and "%#PathGroup#" .. table.concat(subarrayWithoutLast(currentUnique), '/') .. '/' or ""
     local current =  #currentUnique > 0 and "%#FileNameGroup#" .. currentUnique[#currentUnique] .. '' or ''
 
@@ -63,23 +63,12 @@ vim.api.nvim_create_autocmd("BufEnter", {
     group = group
 })
 
-function tableDifference(t1, t2)
-    local hashT2 = {}
-    local diff = {}
-
-    -- Create a hash table of t2's elements for quicker lookup
-    for _, value in ipairs(t2) do
-        hashT2[value] = true
+function tableSlice(from, array)
+    local sliced = {}
+    for i = from, #array do
+        sliced[i - from + 1] = array[i]
     end
-
-    -- Check each element in t1, if not in hashT2, add to diff
-    for _, value in ipairs(t1) do
-        if not hashT2[value] then
-            table.insert(diff, value)
-        end
-    end
-
-    return diff
+    return sliced
 end
 
 function subarrayWithoutLast(array)
