@@ -1,13 +1,36 @@
 local wk = require("which-key");
-wk.setup({})
+wk.setup({
+  notify = false
+})
 
 local execWithRoot = require("findRoot").execWithRoot
 
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set("n", "<leader>j", "<cmd>Portal jumplist backward<cr>")
 
+vim.keymap.set("n", "s", require('substitute').operator, { noremap = true })
+vim.keymap.set("n", "ss", require('substitute').line, { noremap = true })
+vim.keymap.set("x", "s", require('substitute').visual, { noremap = true })
+
+vim.cmd([[
+  cnoreabbrev <expr> gr  (getcmdtype() ==# ':' && getcmdline() ==# 'gr')  ? 'Gr' : 'gr'
+]])
+vim.api.nvim_create_user_command(
+  'Gr',
+  function(opts)
+    require('grug-far').grug_far({
+      prefills = {
+        search = opts.fargs[1],
+        filesFilter = opts.fargs[2]
+      }
+    })
+  end,
+  { nargs = '*' }
+)
 -- leader
 wk.register({
+-- ["*"] = { 'viw<cmd>lua require("grug-far").grug_far({ prefills = { search = vim.fn.expand("<cword>") } })<CR>', "Search with grug-far" },
+["*"] = { 'viw<cmd>execute "Grep" shellescape(expand("<cword>"))<CR>', "Search with grug-far" },
 a = { '<cmd>AerialToggle!<CR>', "Toggle Aerial" },
 e = { execWithRoot('cd ${MONOREPO_ROOT} | Files'), "find file in monorepo" },
 g = {

@@ -3,7 +3,7 @@ local group = vim.api.nvim_create_augroup("WinBarGroup", { clear = true })
 
 -- Autocmd for setting `b:nowinbar`
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "chatgpt", "neo-tree", "fugitive", "help", "startify", "dashboard", "packer", "neogitstatus", "NvimTree", "Trouble", "alpha", "lir", "Outline", "spectre_panel", "toggleterm", "qf", "DiffviewFiles", "fugitive" },
+    pattern = { "chatgpt", "neo-tree", "fugitive", "help", "startify", "dashboard", "packer", "neogitstatus", "NvimTree", "Trouble", "alpha", "lir", "Outline", "spectre_panel", "toggleterm", "qf", "DiffviewFiles", "fugitive", "grug-far" },
     command = "let b:nowinbar=1",
     group = group
 })

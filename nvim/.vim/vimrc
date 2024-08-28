@@ -51,7 +51,7 @@ Plug 'nvim-treesitter/playground'
 Plug 'stevearc/aerial.nvim'
 
 Plug 'lewis6991/spellsitter.nvim'
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'ziontee113/syntax-tree-surfer'
@@ -139,6 +139,12 @@ Plug 'jackMort/ChatGPT.nvim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 Plug 'nvim-pack/nvim-spectre'
+Plug 'MagicDuck/grug-far.nvim'
+
+Plug 'gbprod/substitute.nvim'
+
+Plug 'zbirenbaum/copilot.lua'
+Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
 
 call plug#end()
 
@@ -305,8 +311,9 @@ set nowritebackup
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " let g:copilot_no_tab_map = v:true
 inoremap <silent><expr> <TAB>
@@ -384,8 +391,8 @@ augroup ctrl_m_definition
     autocmd FileType typescript.tsx,typescriptreact,typescript,javascript,javascript.tsx nnoremap <leader>z :CocCommand eslint.executeAutofix<cr>
 augroup END
 
-nnoremap  <silent> <leader>* :execute 'Rg' '--fixed-strings' shellescape(expand("<cword>"))<CR>
-vnoremap <silent> <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'Rg' '--fixed-strings' "'" . @/ . "'"<CR>
+" nnoremap  <silent> <leader>* :execute 'Rg' '--fixed-strings' shellescape(expand("<cword>"))<CR>
+" vnoremap <silent> <leader>* :<C-u>call VisualStarSearchSet('/', 'raw')<CR>:execute 'Rg' '--fixed-strings' "'" . @/ . "'"<CR>
 
 " nnoremap  <leader>r :execute 'Grep' shellescape(expand("<cword>"))<CR>:execute 'cdo %s/' shellescape(expand("<cword>")) '/'
 nnoremap <silent> <leader>r :RenameAll<cr>
@@ -479,7 +486,31 @@ require('plugins/ufo')
 require('plugins/dressing')
 require("plugins/chatgpt")
 require('plugins/obsidian')
+require("plugins/grub-far")
 require("fugitive")
+require("substitute").setup()
+
+require("typerelax")
+require("copilot").setup({
+  suggestion = {
+    enabled = true,
+    auto_trigger = true,
+    keymap = {
+      accept = "<TAB>",
+      accept_word = false,
+      accept_line = false,
+      next = "<C-]>",
+      -- prev = "<C-[>",
+      -- dismiss = "<C-]>",
+    },
+  }
+})
+
+require("CopilotChat").setup {
+  debug = true, -- Enable debugging
+  -- See Configuration section for rest
+}
+require('bunTest')
 
 EOF
 
@@ -520,6 +551,9 @@ nnoremap <silent> <leader>P "0P
 " z - Format
 " x - execute (tests)
 nmap <silent><leader>xb <leader>os:terminal cd $(dirname %); yarn build<CR>
+
+nmap <silent><leader>xp :BunTest<CR>
+nmap <silent><leader>xo :BunTestOnly<CR>
 " c - FREE
 " v - vim source/open etc
 " b - Fzf Buffers:
@@ -542,6 +576,8 @@ let g:fzf_action = {
 " for some broken monorepos
 let g:editorconfig = v:false
 
-
 " vim-multi
 let g:VM_leader = '\'
+let maplocalleader = ","
+
+autocmd FileType proto setlocal commentstring=//\ %s

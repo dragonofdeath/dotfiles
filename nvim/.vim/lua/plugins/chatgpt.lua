@@ -3,6 +3,18 @@ require("chatgpt").setup({
     model = "gpt-4",
     max_tokens = 2000,
   },
+  edit_with_instructions = { 
+     diff = true, 
+     keymaps = { 
+       close = "<C-c>", 
+       accept = "<C-y>", 
+       toggle_diff = "<C-d>", 
+       toggle_settings = "<C-o>", 
+       toggle_help = "<C-h>", 
+       cycle_windows = "<Tab>", 
+       use_output_as_input = "<C-i>", 
+     }, 
+   }, 
   keymaps = {
       close = { "<C-c>" },
       submit = "<S-CR>",

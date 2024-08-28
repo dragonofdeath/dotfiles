@@ -32,7 +32,7 @@ alias mn="nvim -u ~/.config/nvim/minit.vim"
 alias mmn="nvim -u ~/.config/nvim/minit.vim -c 'set syntax=off'"
 alias kurwa="killall -9 {node,nvim} && watchman watch-del-all"
 alias ag=rg
-alias ll="exa --icons --group-directories-first -la"
+alias ll="eza --icons --group-directories-first -la"
 # alias yarn=midgard-yarn
 alias y=yarn
 alias s="source ~/.zshrc"
@@ -40,6 +40,7 @@ alias g="git"
 alias p="pnpm"
 alias pr="pnpm -r"
 alias hi="notify 0 done && say 'done'"
+alias plz="gh copilot suggest -t shell"
 
 autoload -U promptinit && promptinit
 prompt redhat
@@ -100,3 +101,5 @@ md ()
 }
 
 zmodload zsh/mapfile
+
+export GPG_TTY=$(tty)
