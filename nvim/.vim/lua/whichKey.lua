@@ -31,7 +31,7 @@ vim.api.nvim_create_user_command(
 wk.register({
 -- ["*"] = { 'viw<cmd>lua require("grug-far").grug_far({ prefills = { search = vim.fn.expand("<cword>") } })<CR>', "Search with grug-far" },
 ["*"] = { 'viw<cmd>execute "Grep" shellescape(expand("<cword>"))<CR>', "Search with grug-far" },
-a = { '<cmd>AerialToggle!<CR>', "Toggle Aerial" },
+-- a = { '<cmd>AerialToggle!<CR>', "Toggle Aerial" },
 e = { execWithRoot('cd ${MONOREPO_ROOT} | Files'), "find file in monorepo" },
 g = {
   name = "Git",

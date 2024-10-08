@@ -146,6 +146,13 @@ Plug 'gbprod/substitute.nvim'
 Plug 'zbirenbaum/copilot.lua'
 Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
 
+Plug 'MeanderingProgrammer/render-markdown.nvim'
+Plug 'yetone/avante.nvim'
+
+Plug 'luckasRanarison/tailwind-tools.nvim'
+
+Plug 'ziontee113/icon-picker.nvim'
+
 call plug#end()
 
 set signcolumn=number
@@ -166,6 +173,7 @@ let g:coc_global_extensions = [
 \ 'coc-protobuf',
 \ 'coc-spell-checker',
 \ 'coc-sh',
+\ '@yaegassy/coc-tailwindcss3',
 \ ]
 
 nnoremap <silent> <leader> :WhichKey ' '<CR>
@@ -511,6 +519,11 @@ require("CopilotChat").setup {
   -- See Configuration section for rest
 }
 require('bunTest')
+
+require('plugins/avante')
+require('plugins/render-markdown')
+
+require("icon-picker").setup({ disable_legacy_commands = true })
 
 EOF
 
