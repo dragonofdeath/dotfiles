@@ -49,7 +49,7 @@ ys() {
 
 _fzf-npm-script-widget() {
     PACKAGE_JSON_PATH="$(find-nearest-package-json)"
-    jq '.scripts | keys[]' -r $PACKAGE_JSON_PATH \
+    jq '.scripts | keys[]' -r $PACKAGE_JSON_PATH | rg -v -- '----' \
       | fzf --preview 'jq .scripts.\"{}\" $(find-nearest-package-json)' --height 40% --preview-window wrap --bind "enter:accept-non-empty"
 }
 

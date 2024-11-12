@@ -146,12 +146,14 @@ Plug 'gbprod/substitute.nvim'
 Plug 'zbirenbaum/copilot.lua'
 Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
 
-Plug 'MeanderingProgrammer/render-markdown.nvim'
+" Plug 'MeanderingProgrammer/render-markdown.nvim'
 Plug 'yetone/avante.nvim'
 
 Plug 'luckasRanarison/tailwind-tools.nvim'
 
 Plug 'ziontee113/icon-picker.nvim'
+
+Plug 'daliusd/ghlite.nvim'
 
 call plug#end()
 
@@ -354,6 +356,7 @@ nmap <silent> <leader>ta <Plug>(coc-references)
 nmap <silent> <leader>tt :call CocActionAsync('doHover')<cr>
 nmap <silent> <leader>cc :CocCommand<cr>
 nmap <silent> <leader>cq :CocCommand tsserver.restart<cr>
+nmap <silent> <leader>ct :CocCommand tsserver.chooseVersion<cr>
 
 " nnoremap <silent> <leader>z :Prettier<cr>
 nmap <silent> <leader>z <Plug>(coc-format)
@@ -443,12 +446,13 @@ source ~/.vim/scripts/execute-package-script.vim
 set noswapfile
 
 nnoremap <silent> <leader>dd :TestNearest -strategy=jest<CR>
-function! JestStrategy(cmd)
-  let testName = matchlist(a:cmd, '\v -t ''(.*)''')[1]
-  let fileName = matchlist(a:cmd, '\v'' -- (.*)$')[1]
-  call luaeval("require'debugHelper'.debugJest([[" . testName . "]], [[" . fileName . "]])")
-endfunction
-let g:test#custom_strategies = {'jest': function('JestStrategy')}
+
+" function! JestStrategy(cmd)
+"   let testName = matchlist(a:cmd, '\v -t ''(.*)''')[1]
+"   let fileName = matchlist(a:cmd, '\v'' -- (.*)$')[1]
+"   call luaeval("require'debugHelper'.debugJest([[" . testName . "]], [[" . fileName . "]])")
+" endfunction
+" let g:test#custom_strategies = {'jest': function('JestStrategy')}
 
 hi clear SpellBad
 hi SpellBad cterm=underline
@@ -460,7 +464,7 @@ augroup END
 nnoremap <silent> yog :Goyo<CR>
 nnoremap <silent> yol :Limelight!!<CR>
 
-let g:test#javascript#runner = "jest"
+let g:test#javascript#runner = "vitest"
 let g:test#javascript#jest#executable="yarn test"
 " let g:test#javascript#jest#executable="yarn jest"
 
@@ -473,6 +477,14 @@ set titlestring=%{hostname()}\ \ %F\ \ %{strftime('%Y-%m-%d\ %H:%M',getftime(exp
 :command! -nargs=1 Browse silent execute '!open' shellescape(<q-args>,1)
 
 lua <<EOF
+
+require('ghlite').setup({
+        debug = false, -- if set to true debugging information is written to ~/.ghlite.log file
+        view_split = 'vsplit', -- set to empty string '' to open in active buffer
+        diff_split = 'vsplit', -- set to empty string '' to open in active buffer
+        comment_split = 'split', -- set to empty string '' to open in active buffer
+        open_command = 'open', -- open command to use, e.g. on Linux you might want to use xdg-open
+      })
 
 require('whichKey')
 require("winbar")
@@ -521,7 +533,7 @@ require("CopilotChat").setup {
 require('bunTest')
 
 require('plugins/avante')
-require('plugins/render-markdown')
+-- require('plugins/render-markdown')
 
 require("icon-picker").setup({ disable_legacy_commands = true })
 
