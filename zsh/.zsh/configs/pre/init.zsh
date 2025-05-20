@@ -30,7 +30,7 @@ alias v=nvim
 alias n=nvim
 alias mn="nvim -u ~/.config/nvim/minit.vim"
 alias mmn="nvim -u ~/.config/nvim/minit.vim -c 'set syntax=off'"
-alias kurwa="killall -9 {node,nvim} && watchman watch-del-all"
+alias kurwa="killall -9 {node,nvim,esbuild} && watchman watch-del-all"
 alias ag=rg
 alias ll="eza --icons --group-directories-first -la"
 # alias yarn=midgard-yarn

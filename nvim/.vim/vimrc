@@ -55,6 +55,7 @@ Plug 'lewis6991/spellsitter.nvim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'ziontee113/syntax-tree-surfer'
+Plug 'aaronik/treewalker.nvim'
 Plug 'brooth/far.vim'
 
 "Plug 'liuchengxu/vim-which-key'
@@ -136,24 +137,34 @@ Plug 'chentoast/marks.nvim'
 
 Plug 'jackMort/ChatGPT.nvim'
 
-Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+" Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'jake-stewart/multicursor.nvim'
 
 Plug 'nvim-pack/nvim-spectre'
 Plug 'MagicDuck/grug-far.nvim'
 
-Plug 'gbprod/substitute.nvim'
+" Plug 'gbprod/substitute.nvim'
 
 Plug 'zbirenbaum/copilot.lua'
-Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
+" Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
 
 " Plug 'MeanderingProgrammer/render-markdown.nvim'
-Plug 'yetone/avante.nvim'
+Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
 
 Plug 'luckasRanarison/tailwind-tools.nvim'
 
 Plug 'ziontee113/icon-picker.nvim'
 
 Plug 'daliusd/ghlite.nvim'
+
+Plug 'Wansmer/treesj'
+
+" Plug 'rest-nvim/rest.nvim'
+" Plug 'j-hui/fidget.nvim'
+" Plug 'oysandvik94/curl.nvim'
+Plug 'nvim-neotest/nvim-nio'
+
+Plug 'bassamsdata/namu.nvim'
 
 call plug#end()
 
@@ -165,6 +176,7 @@ let g:coc_global_extensions = [
 \ 'coc-html',
 \ 'coc-css',
 \ 'coc-yaml',
+\ 'coc-prettier',
 \ 'coc-highlight',
 \ 'coc-vimlsp',
 \ 'coc-snippets',
@@ -248,7 +260,7 @@ nnoremap <silent> <Leader>fg;    :<C-u>CocCommand fzf-preview.Changes<CR>
 nnoremap <silent> <Leader>f/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
 nnoremap <silent> <Leader>f*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
 nnoremap <silent> <Leader>fgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-xnoremap <silent> <Leader>fgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+" xnoremap <silent> <Leader>fgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> <Leader>ft     :<C-u>CocCommand fzf-preview.BufferTags<CR>
 nnoremap <silent> <Leader>fq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
 nnoremap <silent> <Leader>fl     :<C-u>CocCommand fzf-preview.LocationList<CR>
@@ -355,7 +367,7 @@ nmap <silent> <leader>tr <Plug>(coc-rename)
 nmap <silent> <leader>ta <Plug>(coc-references)
 nmap <silent> <leader>tt :call CocActionAsync('doHover')<cr>
 nmap <silent> <leader>cc :CocCommand<cr>
-nmap <silent> <leader>cq :CocCommand tsserver.restart<cr>
+nmap <silent> <leader>cq :CocCommand tsserver.restart<cr> :CocCommand eslint.restart<cr>
 nmap <silent> <leader>ct :CocCommand tsserver.chooseVersion<cr>
 
 " nnoremap <silent> <leader>z :Prettier<cr>
@@ -508,28 +520,34 @@ require("plugins/chatgpt")
 require('plugins/obsidian')
 require("plugins/grub-far")
 require("fugitive")
-require("substitute").setup()
+-- require("substitute").setup()
 
-require("typerelax")
+require("plugins/tree-sitter-context")
+require("plugins/multicursor")
+require("plugins/namu")
+
+require("treewalker").setup({
+  highlight = false
+})
+
+-- require("CopilotChat").setup {
+--     debug = true, -- Enable debugging
+-- }
 require("copilot").setup({
   suggestion = {
     enabled = true,
     auto_trigger = true,
+    hide_during_completion = false,
+    debounce = 75,
+    trigger_on_accept = true,
     keymap = {
-      accept = "<TAB>",
-      accept_word = false,
-      accept_line = false,
-      next = "<C-]>",
-      -- prev = "<C-[>",
-      -- dismiss = "<C-]>",
+      accept = "<Tab>"
     },
-  }
+  },
+  filetypes = {
+    markdown = true,
+  },
 })
-
-require("CopilotChat").setup {
-  debug = true, -- Enable debugging
-  -- See Configuration section for rest
-}
 require('bunTest')
 
 require('plugins/avante')
@@ -587,7 +605,8 @@ nmap <silent><leader>xo :BunTestOnly<CR>
 
 hi CocInfoHighlight gui=undercurl guisp=#6bc46d
 
-hi CocSpellBad cterm=underline gui=underline ctermfg=Green guifg=Green
+hi CocSpellBad cterm=underline gui=underline ctermfg=Green guifg=Orange
+" nmap ]s <Plug>(coc-diagnostic-next-error)
 
 inoremap <C-,> <BS>
 inoremap <C-b> <BS>
@@ -604,5 +623,7 @@ let g:editorconfig = v:false
 " vim-multi
 let g:VM_leader = '\'
 let maplocalleader = ","
+
+nnoremap <silent> yot :TSContextToggle<CR>
 
 autocmd FileType proto setlocal commentstring=//\ %s

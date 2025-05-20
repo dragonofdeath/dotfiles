@@ -11,6 +11,7 @@
   // "tsserver.log": "verbose",
   // "tsserver.tsdk": "${workspaceFolder}/.yarn/sdks/typescript/lib",
   // "tsserver.tsdk": "${workspaceFolder}/node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifierEnding": "js",
   "tsserver.useLocalTsdk": true,
   "typescript.showUnused": false,
   "typescript.suggestionActions.enabled": false,
@@ -52,6 +53,7 @@
       "filetypes": ["haskell", "lhaskell"]
     }
   },
+  "cSpell.showStatus": true,
   "cSpell.userWords": [
     "ADSENSE",
     "Barchart",

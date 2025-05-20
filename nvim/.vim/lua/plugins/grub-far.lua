@@ -1,6 +1,7 @@
 
 require('grug-far').setup({
   startInInsertMode = false,
+  normalModeSearch = true,
 });
 
 -- require('grug-far').with_visual_selection(opts)
