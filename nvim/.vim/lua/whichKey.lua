@@ -6,7 +6,10 @@ wk.setup({
 local execWithRoot = require("findRoot").execWithRoot
 
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-vim.keymap.set("n", "<leader>j", "<cmd>Portal jumplist backward<cr>")
+
+require('treesj').setup({})
+vim.keymap.set("n", "<leader>j", "<cmd>TSJToggle<cr>")
+vim.keymap.set("n", "<leader>J", "<cmd>TSJToggle<cr>")
 
 vim.keymap.set("n", "s", require('substitute').operator, { noremap = true })
 vim.keymap.set("n", "ss", require('substitute').line, { noremap = true })
