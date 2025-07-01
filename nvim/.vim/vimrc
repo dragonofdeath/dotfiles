@@ -143,7 +143,7 @@ Plug 'jake-stewart/multicursor.nvim'
 Plug 'nvim-pack/nvim-spectre'
 Plug 'MagicDuck/grug-far.nvim'
 
-Plug 'gbprod/substitute.nvim'
+" Plug 'gbprod/substitute.nvim'
 
 Plug 'zbirenbaum/copilot.lua'
 " Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
@@ -260,7 +260,7 @@ nnoremap <silent> <Leader>fg;    :<C-u>CocCommand fzf-preview.Changes<CR>
 nnoremap <silent> <Leader>f/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
 nnoremap <silent> <Leader>f*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
 nnoremap <silent> <Leader>fgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-xnoremap <silent> <Leader>fgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+" xnoremap <silent> <Leader>fgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> <Leader>ft     :<C-u>CocCommand fzf-preview.BufferTags<CR>
 nnoremap <silent> <Leader>fq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
 nnoremap <silent> <Leader>fl     :<C-u>CocCommand fzf-preview.LocationList<CR>
@@ -520,7 +520,7 @@ require("plugins/chatgpt")
 require('plugins/obsidian')
 require("plugins/grub-far")
 require("fugitive")
-require("substitute").setup()
+-- require("substitute").setup()
 
 require("plugins/tree-sitter-context")
 require("plugins/multicursor")
@@ -530,10 +530,24 @@ require("treewalker").setup({
   highlight = false
 })
 
-require("CopilotChat").setup {
-  debug = true, -- Enable debugging
-  -- See Configuration section for rest
-}
+-- require("CopilotChat").setup {
+--     debug = true, -- Enable debugging
+-- }
+require("copilot").setup({
+  suggestion = {
+    enabled = true,
+    auto_trigger = true,
+    hide_during_completion = false,
+    debounce = 75,
+    trigger_on_accept = true,
+    keymap = {
+      accept = "<Tab>"
+    },
+  },
+  filetypes = {
+    markdown = true,
+  },
+})
 require('bunTest')
 
 require('plugins/avante')
