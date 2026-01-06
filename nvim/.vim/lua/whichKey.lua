@@ -11,9 +11,9 @@ require('treesj').setup({})
 vim.keymap.set("n", "<leader>j", "<cmd>TSJToggle<cr>")
 vim.keymap.set("n", "<leader>J", "<cmd>TSJToggle<cr>")
 
-vim.keymap.set("n", "s", require('substitute').operator, { noremap = true })
-vim.keymap.set("n", "ss", require('substitute').line, { noremap = true })
-vim.keymap.set("x", "s", require('substitute').visual, { noremap = true })
+-- vim.keymap.set("n", "s", require('substitute').operator, { noremap = true })
+-- vim.keymap.set("n", "ss", require('substitute').line, { noremap = true })
+-- vim.keymap.set("x", "s", require('substitute').visual, { noremap = true })
 
 vim.cmd([[
   cnoreabbrev <expr> gr  (getcmdtype() ==# ':' && getcmdline() ==# 'gr')  ? 'Gr' : 'gr'
@@ -21,7 +21,7 @@ vim.cmd([[
 vim.api.nvim_create_user_command(
   'Gr',
   function(opts)
-    require('grug-far').grug_far({
+    require('grug-far').open({
       prefills = {
         search = opts.fargs[1],
         filesFilter = opts.fargs[2]

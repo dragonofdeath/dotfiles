@@ -93,3 +93,6 @@ export ELASTIC_HOST=http://127.0.0.1:9200
 alias npmpublic="npm config --global set registry https://registry.npmjs.org/ && npm config --global get registry && yarn config set registry https://registry.npmjs.org/ || yarn config set npmRegistryServer https://registry.npmjs.org/"
 alias npmprivate="npm config --global set registry https://npm.dev.wixpress.com && npm config --global get registry && yarn config set registry https://npm.dev.wixpress.com || yarn config set npmRegistryServer https://npm.dev.wixpress.com"
 source "/Users/vaidask/.astra/astra.sh"
+
+# opencode
+export PATH=/Users/vaidask/.opencode/bin:$PATH
