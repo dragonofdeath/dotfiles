@@ -188,6 +188,7 @@ let g:coc_global_extensions = [
 \ 'coc-spell-checker',
 \ 'coc-sh',
 \ '@yaegassy/coc-tailwindcss3',
+\ 'coc-oxc',
 \ ]
 
 nnoremap <silent> <leader> :WhichKey ' '<CR>

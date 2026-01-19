@@ -1,0 +1,25 @@
+{
+  "tsserver.enable": false,
+  "eslint.validate": [],
+  "languageserver": {
+    "typescript-native": {
+      "command": "sh",
+      "args": [
+        "-c",
+        "./node_modules/.bin/tsgo --lsp --stdio"
+      ],
+      "filetypes": ["typescript", "typescriptreact", "javascript", "javascriptreact"],
+      "rootPatterns": ["tsconfig.json", "package.json", ".git"]
+    }
+  },
+  "oxc.oxfmt.enable": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "typescript.format.enable": false,
+  "biome.format.enable": false,
+  "prettier.enable": false
+}
